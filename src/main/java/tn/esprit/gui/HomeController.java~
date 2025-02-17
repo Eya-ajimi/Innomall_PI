@@ -1,0 +1,58 @@
+package tn.esprit.gui;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+
+public class HomeController {
+
+    /*@FXML private VBox postsBox;
+    @FXML private TextField postTextField;
+    @FXML private WebView mallMap;
+    @FXML private ListView<String> atmList;
+
+    public void initialize() {
+        // Charger la carte du mall
+        WebEngine webEngine = mallMap.getEngine();
+        webEngine.load("https://www.openstreetmap.org");
+
+        // Charger la liste des ATMs
+        atmList.getItems().addAll("ATM 1 - In Service", "ATM 2 - Out of Service", "ATM 3 - In Service");
+    }
+
+    @FXML
+    private void handleAddPost() {
+        String postText = postTextField.getText();
+        if (postText.isEmpty()) return;
+
+        // Créer une carte de post
+        VBox postCard = new VBox(10);
+        postCard.setStyle("-fx-border-color: #ccc; -fx-padding: 10; -fx-background-radius: 10;");
+
+        Label userLabel = new Label("User:");
+        userLabel.setStyle("-fx-font-weight: bold;");
+        Label postContent = new Label(postText);
+        postContent.setWrapText(true);
+
+        // Zone pour les commentaires
+        VBox commentsBox = new VBox(5);
+        commentsBox.setStyle("-fx-padding: 10; -fx-background-color: #f9f9f9;");
+
+        TextField commentField = new TextField();
+        commentField.setPromptText("Write a comment...");
+        Button addCommentButton = new Button("Comment");
+
+        addCommentButton.setOnAction(e -> {
+            if (!commentField.getText().isEmpty()) {
+                Label commentLabel = new Label("🗨 " + commentField.getText());
+                commentsBox.getChildren().add(commentLabel);
+                commentField.clear();
+            }
+        });
+
+        postCard.getChildren().addAll(userLabel, postContent, commentField, addCommentButton, commentsBox);
+        postsBox.getChildren().add(postCard);
+        postTextField.clear();
+    }*/
+}

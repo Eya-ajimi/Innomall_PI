@@ -1,0 +1,50 @@
+package tn.esprit.gui;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import tn.esprit.entites.Utilisateur;
+import tn.esprit.services.UtilisateurService;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+public class ShopsController {
+    @FXML private GridPane shopGrid;
+
+    private UtilisateurService utilisateurService = new UtilisateurService();
+    private int utilisateurId = 1; // Replace with the actual current user ID (e.g., from session or login)
+
+    @FXML
+    public void initialize() {
+        try {
+            List<Utilisateur> shops = utilisateurService.getAllShops();
+            System.out.println("Shops retrieved: " + shops.size()); // Debugging
+
+            int column = 0;
+            int row = 0;
+
+            for (Utilisateur shop : shops) {
+                System.out.println("Adding shop: " + shop.getNom()); // Debugging
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/shop_card.fxml"));
+                Pane shopCard = loader.load();
+
+                ShopCardController controller = loader.getController();
+                controller.setData(shop, utilisateurId); // Pass the current user ID
+
+                shopGrid.add(shopCard, column, row);
+
+                column++;
+                if (column == 3) { // 3 columns per row
+                    column = 0;
+                    row++;
+                }
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane fx:id="cardPane" prefWidth="200" prefHeight="250" style="-fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC; -fx-border-radius: 10; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.ShopCardController">
+    <children>
+        <VBox alignment="CENTER" spacing="10" layoutX="10" layoutY="10">
+            <!-- Shop Name -->
+            <Label fx:id="shopName" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Shop Name" />
+            <!-- Shop Address -->
+            <Label fx:id="shopAddress" style="-fx-font-size: 12px;" text="Address" />
+            <!-- Shop Contact -->
+            <Label fx:id="shopContact" style="-fx-font-size: 12px;" text="Contact" />
+            <!-- View Details Button -->
+            <Button text="View Details" fx:id="viewButton" style="-fx-background-color: #007BFF; -fx-text-fill: white;"/>
+        </VBox>
+    </children>
+</AnchorPane>

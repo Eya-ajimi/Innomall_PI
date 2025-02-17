@@ -1,0 +1,23 @@
+package tn.esprit.gui;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import tn.esprit.entites.SousCommentaire;
+
+public class SousCommentItemController {
+
+    @FXML
+    private Label sousCommentUser;
+    @FXML
+    private Label sousCommentContent;
+    @FXML
+    private Label sousCommentTime;
+
+    // Set the SousCommentaire data
+    public void setSousCommentaire(SousCommentaire sousCommentaire) {
+        // Display userId instead of userName
+        sousCommentUser.setText("User ID: " + sousCommentaire.getUtilisateurId());
+        sousCommentContent.setText(sousCommentaire.getContenu());
+        sousCommentTime.setText(sousCommentaire.getDateCreation()); // Adjust if date is available
+    }
+}

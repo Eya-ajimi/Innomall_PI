@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+
+<VBox fx:id="postCard" spacing="10.0" styleClass="post-card" stylesheets="@../css/Styles.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.PostItemController">
+    <!-- Post Header -->
+    <HBox spacing="10.0">
+        <ImageView fitHeight="20.0" fitWidth="18.0" styleClass="profile-pic">
+            <image>
+                <Image url="@../assets/user3.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="postUsername" styleClass="username" />
+        <Label fx:id="postDate" style="-fx-font-size: 10px;" />
+        <HBox HBox.hgrow="ALWAYS" />
+
+        <!-- Button to trigger context menu for edit/delete -->
+        <Button fx:id="editDeleteButton" styleClass="edit-delete-button" text="⋮" />
+    </HBox>
+
+    <!-- Post Content -->
+    <Label fx:id="postContent" contentDisplay="CENTER" styleClass="post-text" textAlignment="CENTER" />
+
+    <!-- Comment Section -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <TextField fx:id="commentInputField" promptText="Add a comment..." />
+        <Button fx:id="addCommentButton" text="➕" styleClass="button1" onAction="#handleAddComment"/>
+    </HBox>
+
+    <!-- Comments Section -->
+    <VBox fx:id="commentsContainer" spacing="10.0" styleClass="comments-container">
+        <!-- Comments will be dynamically loaded here -->
+    </VBox>
+</VBox>

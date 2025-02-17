@@ -1,0 +1,241 @@
+package tn.esprit.gui;
+
+import javafx.animation.FadeTransition;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+import tn.esprit.entites.Commentaire;
+import tn.esprit.entites.Poste;
+import tn.esprit.services.CommentaireService;
+import tn.esprit.services.PostService;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+
+public class PostItemController {
+
+    @FXML
+    private VBox postCard;  // VBox for the post card layout
+
+    @FXML
+    private VBox commentsContainer;  // Comments container
+
+    @FXML
+    private Label postUsername;  // Username label
+
+    @FXML
+    private Label postDate;  // Date label
+    @FXML
+    private TextField commentInputField;
+    @FXML
+    private Button addCommentButton;
+
+    @FXML
+    private Label postContent;  // Post content label
+
+    @FXML
+    private Button editDeleteButton; // Button to trigger context menu
+
+    private final PostService postService = new PostService();  // Post service for CRUD operations
+    private final CommentaireService commentaireService = new CommentaireService();
+    // Method to set the post data
+
+
+/*********** commenatire ********/
+
+
+
+private Poste currentPost;
+
+    public void setPostData(Poste post) {
+
+        postUsername.setText("Utilisateur " + post.getUtilisateurId());
+        postDate.setText(post.getDateCreation());
+        postContent.setText(post.getContenu());
+        setupEditDeleteMenu(post);
+        loadComments(post.getId());
+    }
+
+
+
+
+    @FXML
+    private void handleAddComment() {
+        String content = commentInputField.getText().trim();
+        if (content.isEmpty()) {
+            System.out.println("Le commentaire est vide !");
+            return;
+        }
+
+        Commentaire newComment = new Commentaire();
+        newComment.setPostId(16);
+        newComment.setUtilisateurId(30); // Utilise currentUserId au lieu de getUserId()
+        newComment.setContenu(content);
+
+        try {
+            if (commentaireService.insert(newComment) > 0) {
+                System.out.println("Commentaire ajouté avec succès !");
+                commentInputField.clear();
+                loadComments(16);
+            } else {
+                System.out.println("Erreur : Aucun commentaire ajouté.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors de l'ajout du commentaire.");
+        }
+    }
+
+
+
+    private void loadComments(int postId) {
+        try {
+            // Fetch comments associated with the post
+            List<Commentaire> commentaires = commentaireService.getCommentairesByPoste(postId);
+
+            // Check if there are comments to show
+            if (commentaires == null || commentaires.isEmpty()) {
+                // Show a message if no comments exist for this post
+                Label noCommentsLabel = new Label("No comments yet.");
+                commentsContainer.getChildren().add(noCommentsLabel);
+            } else {
+                // Loop through the comments and add them to the comments container
+                for (Commentaire commentaire : commentaires) {
+                    FXMLLoader commentLoader = new FXMLLoader(getClass().getResource("/fxml/CommentItem.fxml"));
+                    HBox commentBox = commentLoader.load();
+
+                    // Get the CommentItemController to set the comment data
+                    CommentItemController commentController = commentLoader.getController();
+                    commentController.setCommentData(commentaire);
+
+                    // Add the comment to the comments container
+                    commentBox.getStyleClass().add("comment-box"); // Apply CSS class for styling
+                    commentsContainer.getChildren().add(commentBox);
+                }
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace(); // Log the error
+            // Optionally, display a user-friendly message
+            Label errorLabel = new Label("Error loading comments.");
+            commentsContainer.getChildren().add(errorLabel);
+
+
+        }
+    }
+
+
+
+
+
+
+    // Method to setup context menu for edit/delete actions
+    private void setupEditDeleteMenu(Poste post) {
+        // Create the context menu
+        ContextMenu contextMenu = new ContextMenu();
+
+        // Menu item for editing the post
+        MenuItem editMenuItem = new MenuItem("Edit Post");
+        editMenuItem.setOnAction(e -> editPost(post));
+
+        // Menu item for deleting the post
+        MenuItem deleteMenuItem = new MenuItem("Delete Post");
+        deleteMenuItem.setOnAction(e -> deletePost(post));
+
+        // Add the menu items to the context menu
+        contextMenu.getItems().addAll(editMenuItem, deleteMenuItem);
+
+        // Set the button action to show the menu on click
+        editDeleteButton.setOnMouseClicked(event -> {
+            contextMenu.show(editDeleteButton, event.getScreenX(), event.getScreenY());
+        });
+    }
+
+
+    // Method to edit a post
+    private void editPost(Poste post) {
+        // Création de la boîte de dialogue personnalisée
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Modifier le Post");
+
+        // Ajout des boutons OK et Annuler
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
+
+        // Création d'un champ de texte stylisé
+        TextField textField = new TextField(post.getContenu());
+        textField.setPrefWidth(300);
+        textField.setStyle("-fx-font-size: 14px; -fx-padding: 8px; -fx-border-radius: 5px;");
+
+        // Mise en page
+        VBox vbox = new VBox(10, textField);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(15));
+
+        // Appliquer un style à la boîte de dialogue
+        dialog.getDialogPane().setContent(vbox);
+        dialog.getDialogPane().setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-radius: 10px;");
+
+        // Effets d'animation à l'ouverture
+        dialog.setOnShowing(event -> {
+            dialog.getDialogPane().setOpacity(0);
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(300), dialog.getDialogPane());
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+            fadeIn.play();
+        });
+
+        // Récupérer la réponse de l'utilisateur
+        dialog.setResultConverter(button -> {
+            if (button == okButton) {
+                return textField.getText();
+            }
+            return null;
+        });
+
+        // Afficher la boîte de dialogue
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(newContent -> {
+            if (!newContent.trim().isEmpty()) {
+                post.setContenu(newContent); // Mettre à jour l'objet en mémoire
+                postContent.setText(newContent); // Mettre à jour l'affichage
+
+                updatePostInDatabase(post); // Mettre à jour en base de données
+            }
+        });
+    }
+
+    private void updatePostInDatabase(Poste post) {
+        PostService postService = new PostService(); // Instancier le service des posts
+
+        try {
+            postService.update(post); // Appel de la méthode update dans le service
+            System.out.println("Post mis à jour avec succès !");
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la mise à jour du post : " + e.getMessage());
+        }
+    }
+
+
+    // Method to delete a post
+    private void deletePost(Poste post) {
+        System.out.println("Deleting post: " + post.getId());
+        try {
+            int rowsAffected = postService.delete(post);  // Delete the post using the service
+            if (rowsAffected > 0) {
+                postCard.setVisible(false);  // Hide the post card after deletion
+                System.out.println("Post deleted successfully.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  // Handle error
+        }
+    }
+}

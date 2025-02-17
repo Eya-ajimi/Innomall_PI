@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.SousCommentItemController">
+    <children>
+        <!-- Display userId -->
+        <Label fx:id="userIdLabel" layoutX="10" layoutY="10" />
+
+        <!-- Display comment content -->
+        <Label fx:id="contentLabel" layoutX="10" layoutY="40" />
+
+        <!-- Display comment time -->
+        <Label fx:id="timeLabel" layoutX="10" layoutY="70" />
+    </children>
+</AnchorPane>
