@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="15" styleClass="dialog-content" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets top="20" right="25" bottom="20" left="25"/>
+    </padding>
+
+    <stylesheets>
+        <URL value="@/css/style.css" />
+    </stylesheets>
+
+    <Text styleClass="dialog-header" text="Reserve Your Parking Spot"/>
+
+    <VBox spacing="5">
+        <Label text="Date" styleClass="field-label"/>
+        <DatePicker fx:id="datePicker" styleClass="date-picker" promptText="Select date"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Time" styleClass="field-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Spinner fx:id="hourSpinner" prefWidth="100" styleClass="time-spinner">
+                <valueFactory>
+                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23" initialValue="12"
+                                                                    amountToStepBy="1"/>
+                </valueFactory>
+            </Spinner>
+            <Label text=":" styleClass="time-separator"/>
+            <Spinner fx:id="minuteSpinner" prefWidth="100" styleClass="time-spinner">
+                <valueFactory>
+                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59" initialValue="0"
+                                                                    amountToStepBy="5"/>
+                </valueFactory>
+            </Spinner>
+        </HBox>
+    </VBox>
+
+    <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false"/>
+</VBox>
