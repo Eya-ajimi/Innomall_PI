@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.ClientReclamationController">
+    <VBox spacing="20" alignment="CENTER" style="-fx-background-color: #E1F4FF; -fx-padding: 20;">
+        <!-- Title -->
+        <Label text="Add Reclamation" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+
+        <!-- Description Field -->
+        <TextField fx:id="descriptionField" promptText="Description" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #ADE2EE; -fx-border-width: 2; -fx-padding: 5;" prefWidth="300"/>
+
+        <!-- Shop Name Field -->
+        <TextField fx:id="nomshopField" promptText="Shop Name" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #ADE2EE; -fx-border-width: 2; -fx-padding: 5;" prefWidth="300"/>
+
+        <!-- Submit Button -->
+        <Button text="Submit" onAction="#handleSubmit" style="-fx-background-color: #F9A66A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 20;"/>
+    </VBox>
+</AnchorPane>

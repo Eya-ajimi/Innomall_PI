@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.AdminReclamationController">
+    <VBox spacing="20" alignment="CENTER" style="-fx-background-color: #E1F4FF; -fx-padding: 20;">
+        <!-- Title -->
+        <Label text="Reclamations" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;"/>
+
+        <!-- ListView with rounded corners and padding -->
+        <ListView fx:id="reclamationList" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #ADE2EE; -fx-border-width: 2; -fx-padding: 10;" prefWidth="400" prefHeight="200">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </ListView>
+
+        <!-- Commentaire Field -->
+        <TextField fx:id="commentaireField" promptText="Commentaire" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #ADE2EE; -fx-border-width: 2; -fx-padding: 5;" prefWidth="300"/>
+
+        <!-- Update Button -->
+        <Button text="Update" onAction="#handleUpdate" style="-fx-background-color: #F9A66A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 20;"/>
+    </VBox>
+</AnchorPane>
