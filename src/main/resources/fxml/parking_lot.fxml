@@ -6,6 +6,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import java.net.URL?>
 
+<?import javafx.scene.control.Button?>
 <VBox fx:id="root" spacing="20" styleClass="main-container"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -44,7 +45,10 @@
                 <Label text="Occupied" styleClass="legend-label"/>
             </HBox>
         </HBox>
-
+        <HBox spacing="20" alignment="CENTER">
+            <Label text="Parking Management System" styleClass="title-label"/>
+            <Button text="View Reserved Spots" onAction="#handleViewReservedSpotsButtonAction" />
+        </HBox>
         <!-- Top Row with Zones -->
         <VBox spacing="10">
             <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row"/>

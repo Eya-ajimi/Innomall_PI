@@ -68,8 +68,12 @@ public class ReservationService implements CRUD<Reservation> {
     public List<Reservation> showAll() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
         String sql = "SELECT * FROM Reservation";
-        try (Connection connection = DataBase.getInstance().getCnx();
-             Statement statement = connection.createStatement();
+        Connection connection = DataBase.getInstance().getCnx();
+        if (connection == null || connection.isClosed()) {
+            System.err.println("Connection is closed or null!");
+            return reservations;
+        }
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 Reservation reservation = new Reservation(

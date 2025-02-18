@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="root" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.ReservedSpotsController">
+    <TableView fx:id="reservationTable">
+        <columns>
+
+
+            <TableColumn text="Parking Spot" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="idParking" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Reservation Date" prefWidth="150">
+                <cellValueFactory>
+                    <PropertyValueFactory property="dateReservation" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Expiration Date" prefWidth="150">
+                <cellValueFactory>
+                    <PropertyValueFactory property="dateExpiration" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Status" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="statut" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+    <Button text="Close" onAction="#handleCloseButtonAction" />
+</VBox>

@@ -1,14 +1,18 @@
 package tn.esprit.gui;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import tn.esprit.entities.PlaceParking;
 import tn.esprit.enums.StatutPlace;
@@ -25,6 +29,7 @@ public class ParkingLotController implements Initializable {
     private PlaceParkingService parkingService = new PlaceParkingService();
     private Image carImage;
     private Timeline pulseAnimation;
+    @FXML private Button viewReservedSpotsButton;
 
     @FXML private Label counterLabel;
     @FXML private Label occupancyLabel;
@@ -40,6 +45,23 @@ public class ParkingLotController implements Initializable {
 
     // Map to track whether the animation has been played for each parking spot
     private Map<Integer, Boolean> animationPlayedMap = new HashMap<>();
+    @FXML
+    private void handleViewReservedSpotsButtonAction() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/reserved_spots_dialog.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Reserved Spots");
+
+            // Get the controller and refresh the data
+            ReservedSpotsController controller = loader.getController();
+            controller.refreshData();
+
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -269,10 +291,12 @@ public class ParkingLotController implements Initializable {
     }
 
     private void showErrorAlert(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(header);
+            alert.setContentText(content);
+            alert.show(); // Use show() instead of showAndWait()
+        });
     }
 }
