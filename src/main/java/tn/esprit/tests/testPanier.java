@@ -29,13 +29,16 @@ public class testPanier {
         CommandeService cs=new CommandeService();
 
         try {
-//            ps.ajouterAuPanier(1,2);
+          ps.ajouterAuPanier(1,3);
 //            List<Panier> panier= ps.showAllClientPanier(3);
 //            System.out.println(panier.get(0));
 //            System.out.println(ps.diminuerQuantite(panier.get(1).getIdCommande(),panier.get(0).getIdProduit()));
             System.out.println(ps.showAllClientPanier(1));
 //            System.out.println("------------------");
 //            cs.payerCommande(3);
+            System.out.println(cs.getCommandeEnCours(1));
+            System.out.println(ps.showAllClientPanier(1));
+
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

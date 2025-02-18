@@ -215,7 +215,7 @@ public class panierService implements CRUD<Panier>{
             return paniers; // Retourner la liste mise à jour
         } else {
             System.out.println("Panier vide");
-            return null;
+            return new ArrayList<>();
         }
     }
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.PanierCardController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <!-- Colonne gauche : Informations produit -->
+    <VBox spacing="5" prefWidth="300">
+        <Label fx:id="nomLabel" style="-fx-font-weight: bold;"/>
+        <Label fx:id="descriptionLabel" style="-fx-text-fill: #666;"/>
+        <Label fx:id="prixLabel" style="-fx-font-weight: bold; -fx-text-fill: #2ecc71;"/>
+    </VBox>
+
+    <!-- Colonne droite : Contrôles quantité -->
+    <HBox spacing="5" alignment="CENTER_RIGHT">
+        <Button text="-" style="-fx-background-radius: 15;" onAction="#handleDiminuerQuantite"/>
+        <Label fx:id="quantiteLabel" style="-fx-padding: 0 10 0 10;"/>
+        <Button text="+" style="-fx-background-radius: 15;" onAction="#handleAugmenterQuantite"/>
+        <Button text="🗑" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 15;"
+                onAction="#handleSupprimerArticle"/>
+    </HBox>
+</HBox>

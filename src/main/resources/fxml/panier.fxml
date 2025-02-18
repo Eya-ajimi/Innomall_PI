@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="tn.esprit.gui.panierController"
-      spacing="20" padding="30" style="-fx-background-color: #f5f5f5;">
+<VBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.PanierController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
 
-    <Label text="Votre Panier" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <!-- Titre de la page -->
+    <Label text="Votre Panier" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
 
-    <VBox fx:id="itemsContainer" spacing="15">
-        <!-- Les cartes des articles seront ajoutées dynamiquement ici -->
-    </VBox>
+    <!-- Liste des articles dans le panier -->
+    <ListView fx:id="panierListView"/>
 
-    <Separator/>
-
-    <HBox spacing="20" alignment="CENTER_RIGHT">
-        <Label text="Total:" style="-fx-font-size: 20;"/>
-        <Label fx:id="totalLabel" text="0.0 DT" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <!-- Total de la commande -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Label text="Total de la commande :"/>
+        <Label fx:id="totalLabel" style="-fx-font-weight: bold;"/>
     </HBox>
 
-    <Button text="Payer la Commande" onAction="#payerCommande"
-            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 10 20;"/>
-
+    <!-- Bouton pour passer la commande -->
+    <Button text="Passer la commande" onAction="#handlePasserCommande" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
 </VBox>

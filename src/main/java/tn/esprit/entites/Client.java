@@ -7,6 +7,7 @@ public class Client extends User {
     private int telephone;
     private int nombrePoint;
     private int nombreGains;
+    private double balance;
 
     public Client(String email, String password, String nom, String prenom, int telephone, int nombrePoint, int nombreGains) {
         super(email, password, Role.client);
