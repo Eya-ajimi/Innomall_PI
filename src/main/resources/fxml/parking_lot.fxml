@@ -1,82 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Rectangle?>
 <?import java.net.URL?>
-
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<VBox fx:id="root" spacing="20" styleClass="main-container"
-      xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="tn.esprit.gui.ParkingLotController">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
+<VBox fx:id="root" spacing="20" styleClass="main-container" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.ParkingLotController">
     <padding>
         <Insets bottom="30" left="30" right="30" top="30" />
     </padding>
 
+    <!-- Navigation Bar -->
+    <HBox alignment="CENTER" prefHeight="73.0" styleClass="nav-bar">
+        <children>
+            <!-- Logo Label -->
+            <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall">
+                <HBox.margin>
+                    <Insets left="-140.0" />
+                </HBox.margin>
+            </Label>
+
+            <!-- Separator -->
+            <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
+
+            <!-- Search Bar -->
+            <HBox alignment="CENTER" spacing="5.0">
+                <TextField prefHeight="26.0" prefWidth="258.0" promptText="Search..."
+                           style="-fx-background-radius: 15; -fx-background-color: white;" />
+                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/searchbare.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="50.0" />
+
+            <!-- Navigation Labels -->
+            <HBox alignment="CENTER" spacing="30.0">
+                <Label fx:id="homeLabel" styleClass="nav-label" text="Home" />
+                <Label styleClass="nav-label" text="Shops" />
+                <Label styleClass="nav-label" text="Events" />
+                <Label styleClass="nav-label" text="Parking" />
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="105.0" />
+
+            <!-- Notifications Icon -->
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/notif.png" />
+                </image>
+            </ImageView>
+
+            <!-- User Profile -->
+            <HBox alignment="CENTER" spacing="10.0">
+                <Label styleClass="user-label" text="Sofiene Zayati" />
+                <ImageView fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/user3.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+        </children>
+    </HBox>
+
     <!-- Header Section -->
-    <HBox spacing="20" alignment="CENTER">
-        <Label text="Parking Management System" styleClass="title-label"/>
+    <HBox alignment="CENTER" spacing="20">
+        <Label styleClass="title-label" text="Parking Management System" />
     </HBox>
 
     <!-- Stats Container -->
-    <HBox spacing="20" alignment="CENTER">
+    <HBox alignment="CENTER" spacing="20">
         <StackPane fx:id="statsCard1" styleClass="stats-card">
-            <Label fx:id="counterLabel" text="Available Spots: 20" styleClass="stats-label"/>
+            <Label fx:id="counterLabel" styleClass="stats-label" text="Available Spots: 20" />
         </StackPane>
 
         <StackPane fx:id="statsCard2" styleClass="stats-card">
-            <Label fx:id="occupancyLabel" text="Occupancy: 0%" styleClass="stats-label"/>
+            <Label fx:id="occupancyLabel" styleClass="stats-label" text="Occupancy: 0%" />
         </StackPane>
     </HBox>
 
     <!-- Parking Layout -->
-    <VBox fx:id="parkingArea" alignment="CENTER" spacing="30" styleClass="parking-container">
-        <!-- Legend -->
-        <HBox spacing="20" alignment="CENTER" styleClass="legend-container">
-            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="legend-item">
-                <Rectangle width="20" height="20" styleClass="available-spot"/>
-                <Label text="Available" styleClass="legend-label"/>
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
+        <VBox fx:id="parkingArea" alignment="CENTER" spacing="30" styleClass="parking-container">
+            <!-- Legend -->
+            <HBox alignment="CENTER" spacing="20" styleClass="legend-container">
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
+                    <Rectangle height="20" styleClass="available-spot" width="20" />
+                    <Label styleClass="legend-label" text="Available" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
+                    <Rectangle height="20" styleClass="occupied-spot" width="20" />
+                    <Label styleClass="legend-label" text="Occupied" />
+                </HBox>
+                <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="View Reserved Spots" />
             </HBox>
-            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="legend-item">
-                <Rectangle width="20" height="20" styleClass="occupied-spot"/>
-                <Label text="Occupied" styleClass="legend-label"/>
-            </HBox>
-        </HBox>
-        <HBox spacing="20" alignment="CENTER">
-            <Label text="Parking Management System" styleClass="title-label"/>
-            <Button text="View Reserved Spots" onAction="#handleViewReservedSpotsButtonAction" />
-        </HBox>
-        <!-- Top Row with Zones -->
-        <VBox spacing="10">
-            <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row"/>
-            <HBox alignment="CENTER" spacing="142">
-                <Label text="Zone A" styleClass="zone-label"/>
-                <Label text="Zone B" styleClass="zone-label"/>
-                <Label text="Zone C" styleClass="zone-label"/>
-                <Label text="Zone D" styleClass="zone-label"/>
-            </HBox>
-        </VBox>
 
-        <!-- Central Passage -->
-        <StackPane>
-            <Rectangle fx:id="passage" height="80" styleClass="passage"/>
-            <Label text="⟵ Driving Lane ⟶" styleClass="passage-label"/>
-        </StackPane>
+            <!-- Top Row with Zones -->
+            <VBox spacing="10">
+                <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row" />
+                <HBox alignment="CENTER" spacing="142">
+                    <Label styleClass="zone-label" text="Zone A" />
+                    <Label styleClass="zone-label" text="Zone B" />
+                    <Label styleClass="zone-label" text="Zone C" />
+                    <Label styleClass="zone-label" text="Zone D" />
+                </HBox>
+            </VBox>
 
-        <!-- Bottom Row with Zones -->
-        <VBox spacing="10">
-            <HBox fx:id="bottomRow" alignment="CENTER" styleClass="parking-row"/>
-            <HBox alignment="CENTER" spacing="142">
-                <Label text="Zone E" styleClass="zone-label"/>
-                <Label text="Zone F" styleClass="zone-label"/>
-                <Label text="Zone G" styleClass="zone-label"/>
-                <Label text="Zone H" styleClass="zone-label"/>
-            </HBox>
+            <!-- Central Passage -->
+            <StackPane>
+                <Rectangle fx:id="passage" height="80" styleClass="passage" />
+                <Label styleClass="passage-label" text="⟵ Driving Lane ⟶" />
+            </StackPane>
+
+            <!-- Bottom Row with Zones -->
+            <VBox spacing="10">
+                <HBox fx:id="bottomRow" alignment="CENTER" styleClass="parking-row" />
+                <HBox alignment="CENTER" spacing="142">
+                    <Label styleClass="zone-label" text="Zone E" />
+                    <Label styleClass="zone-label" text="Zone F" />
+                    <Label styleClass="zone-label" text="Zone G" />
+                    <Label styleClass="zone-label" text="Zone H" />
+                </HBox>
+            </VBox>
         </VBox>
-    </VBox>
+    </ScrollPane>
 
     <stylesheets>
         <URL value="@/css/style.css" />

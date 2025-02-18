@@ -18,25 +18,16 @@ public class ReservationDialog {
         dialog.setTitle("Parking Reservation");
 
         try {
-            // Debug: Print resource paths
+            // Load the FXML and CSS files
             URL fxmlUrl = ReservationDialog.class.getResource("/fxml/reservation_dialog.fxml");
             URL cssUrl = ReservationDialog.class.getResource("/css/style.css");
-
-            System.out.println("FXML Path: " + fxmlUrl);
-            System.out.println("CSS Path: " + cssUrl);
-
-            if (fxmlUrl == null) {
-                throw new RuntimeException("FXML file not found. Ensure the file is in the correct directory.");
-            }
-            if (cssUrl == null) {
-                throw new RuntimeException("CSS file not found. Ensure the file is in the correct directory.");
+            if (fxmlUrl == null || cssUrl == null) {
+                throw new RuntimeException("FXML or CSS file not found.");
             }
 
-            // Load the FXML file
+            // Load content and style
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             VBox content = loader.load();
-
-            // Load the CSS file
             content.getStylesheets().add(cssUrl.toExternalForm());
 
             // Get references to components
@@ -45,7 +36,7 @@ public class ReservationDialog {
             Spinner<Integer> minuteSpinner = (Spinner<Integer>) content.lookup("#minuteSpinner");
             Label errorLabel = (Label) content.lookup("#errorLabel");
 
-            // Set current date as default
+            // Set default date
             datePicker.setValue(LocalDate.now());
 
             // Format spinners to always show two digits
@@ -62,18 +53,8 @@ public class ReservationDialog {
             Button confirmButtonNode = (Button) dialog.getDialogPane().lookupButton(confirmButton);
             confirmButtonNode.setDisable(true);
 
-            // Add validation
-            datePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
-                validateInput(datePicker, hourSpinner, minuteSpinner, errorLabel, confirmButtonNode);
-            });
-
-            hourSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
-                validateInput(datePicker, hourSpinner, minuteSpinner, errorLabel, confirmButtonNode);
-            });
-
-            minuteSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
-                validateInput(datePicker, hourSpinner, minuteSpinner, errorLabel, confirmButtonNode);
-            });
+            // Add validation listeners
+            addValidationListeners(datePicker, hourSpinner, minuteSpinner, errorLabel, confirmButtonNode);
 
             // Set result converter
             dialog.setResultConverter(dialogButton -> {
@@ -95,8 +76,7 @@ public class ReservationDialog {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load reservation dialog: " + e.getMessage(), ButtonType.OK);
-            alert.showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to load reservation dialog: " + e.getMessage(), ButtonType.OK).showAndWait();
             return Optional.empty();
         }
     }
@@ -123,24 +103,26 @@ public class ReservationDialog {
         }
     }
 
+    private static void addValidationListeners(DatePicker datePicker, Spinner<Integer> hourSpinner,
+                                               Spinner<Integer> minuteSpinner, Label errorLabel, Button confirmButton) {
+        datePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateInput(datePicker, hourSpinner, minuteSpinner, errorLabel, confirmButton));
+        hourSpinner.valueProperty().addListener((obs, oldVal, newVal) -> validateInput(datePicker, hourSpinner, minuteSpinner, errorLabel, confirmButton));
+        minuteSpinner.valueProperty().addListener((obs, oldVal, newVal) -> validateInput(datePicker, hourSpinner, minuteSpinner, errorLabel, confirmButton));
+    }
+
     private static void validateInput(DatePicker datePicker, Spinner<Integer> hourSpinner,
                                       Spinner<Integer> minuteSpinner, Label errorLabel, Button confirmButton) {
-
         LocalDateTime selectedDateTime = LocalDateTime.of(
                 datePicker.getValue(),
                 LocalTime.of(hourSpinner.getValue(), minuteSpinner.getValue())
         );
 
-        LocalDateTime now = LocalDateTime.now();
-
-        if (selectedDateTime.isBefore(now)) {
+        if (selectedDateTime.isBefore(LocalDateTime.now())) {
             errorLabel.setText("Please select a future date and time");
             errorLabel.setVisible(true);
-            errorLabel.setManaged(true);
             confirmButton.setDisable(true);
         } else {
             errorLabel.setVisible(false);
-            errorLabel.setManaged(false);
             confirmButton.setDisable(false);
         }
     }

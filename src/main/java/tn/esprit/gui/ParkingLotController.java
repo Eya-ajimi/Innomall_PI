@@ -22,15 +22,12 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 public class ParkingLotController implements Initializable {
     private PlaceParkingService parkingService = new PlaceParkingService();
     private Image carImage;
     private Timeline pulseAnimation;
     @FXML private Button viewReservedSpotsButton;
-
     @FXML private Label counterLabel;
     @FXML private Label occupancyLabel;
     @FXML private VBox parkingArea;
@@ -42,9 +39,8 @@ public class ParkingLotController implements Initializable {
 
     private int availableSpots = 0;
     private int totalSpots = 0;
-
-    // Map to track whether the animation has been played for each parking spot
     private Map<Integer, Boolean> animationPlayedMap = new HashMap<>();
+
     @FXML
     private void handleViewReservedSpotsButtonAction() {
         try {
@@ -52,11 +48,6 @@ public class ParkingLotController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Reserved Spots");
-
-            // Get the controller and refresh the data
-            ReservedSpotsController controller = loader.getController();
-            controller.refreshData();
-
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,14 +65,11 @@ public class ParkingLotController implements Initializable {
         initializeAnimations();
         initializeAutoRefresh();
         loadParkingSpots();
-
-        // Add hover effect to stats cards
         setupStatsCardAnimation(statsCard1);
         setupStatsCardAnimation(statsCard2);
     }
 
     private void initializeAnimations() {
-        // Animate the passage
         Timeline passageAnimation = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(passage.opacityProperty(), 0.7)),
                 new KeyFrame(Duration.seconds(1.5), new KeyValue(passage.opacityProperty(), 1))
@@ -90,7 +78,6 @@ public class ParkingLotController implements Initializable {
         passageAnimation.setCycleCount(Timeline.INDEFINITE);
         passageAnimation.play();
 
-        // Pulse animation for available spots
         pulseAnimation = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(passage.scaleXProperty(), 1)),
                 new KeyFrame(Duration.seconds(0.5), new KeyValue(passage.scaleXProperty(), 1.02)),
@@ -129,7 +116,6 @@ public class ParkingLotController implements Initializable {
             resetCounters();
             totalSpots = parkingSpots.size();
 
-            // Group spots into zones (2 spots per zone)
             for (int i = 0; i < parkingSpots.size(); i++) {
                 PlaceParking place = parkingSpots.get(i);
                 StackPane spotContainer = createParkingSpot(place);
@@ -166,17 +152,15 @@ public class ParkingLotController implements Initializable {
             spotContainer.getChildren().addAll(spot, reserveButton);
             availableSpots++;
 
-            // Add hover animation for available spots
             setupSpotHoverAnimation(spotContainer);
         } else {
             spot.getStyleClass().add("occupied-spot");
             carView.setVisible(true);
             spotContainer.getChildren().addAll(spot, carView);
 
-            // Add car entrance animation (only if it hasn't been played before)
             if (!animationPlayedMap.containsKey(place.getId())) {
                 setupCarEntranceAnimation(carView);
-                animationPlayedMap.put(place.getId(), true); // Mark the animation as played
+                animationPlayedMap.put(place.getId(), true);
             }
         }
 
@@ -187,7 +171,6 @@ public class ParkingLotController implements Initializable {
         Button reserveButton = new Button("Reserve");
         reserveButton.getStyleClass().add("reserve-button");
 
-        // Add button hover animation
         reserveButton.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(200), reserveButton);
             st.setToX(1.1);
@@ -228,7 +211,7 @@ public class ParkingLotController implements Initializable {
     }
 
     private Rectangle createSpotRectangle() {
-        Rectangle spot = new Rectangle(120, 180); // Adjusted size for larger cars
+        Rectangle spot = new Rectangle(120, 180);
         spot.setArcWidth(20);
         spot.setArcHeight(20);
         spot.setStroke(Color.DARKGRAY);
@@ -238,8 +221,8 @@ public class ParkingLotController implements Initializable {
 
     private ImageView createCarImageView() {
         ImageView carView = new ImageView(carImage);
-        carView.setFitWidth(100); // Increased size
-        carView.setFitHeight(150); // Increased size
+        carView.setFitWidth(100);
+        carView.setFitHeight(150);
         carView.setPreserveRatio(true);
         return carView;
     }
@@ -251,11 +234,10 @@ public class ParkingLotController implements Initializable {
 
     private void confirmReservation(PlaceParking place, LocalDateTime dateTime) {
         try {
-            LocalDateTime expirationTime = dateTime.plusHours(2); // Example: reservation lasts 2 hours
-            int utilisateurId = 1; // Hardcoded client ID for testing
+            LocalDateTime expirationTime = dateTime.plusHours(2);
+            int utilisateurId = 1;
             parkingService.reserveSpot(place.getId(), utilisateurId, dateTime, expirationTime);
 
-            // Add success animation
             showSuccessAnimation();
             loadParkingSpots();
 
@@ -275,7 +257,6 @@ public class ParkingLotController implements Initializable {
         dialogPane.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
         dialogPane.getStyleClass().add("success-dialog");
 
-        // Add fade-in animation to the dialog
         FadeTransition ft = new FadeTransition(Duration.millis(1000), dialogPane);
         ft.setFromValue(0);
         ft.setToValue(1);
@@ -296,7 +277,7 @@ public class ParkingLotController implements Initializable {
             alert.setTitle("Error");
             alert.setHeaderText(header);
             alert.setContentText(content);
-            alert.show(); // Use show() instead of showAndWait()
+            alert.show();
         });
     }
 }
