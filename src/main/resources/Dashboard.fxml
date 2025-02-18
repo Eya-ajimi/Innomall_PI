@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane fx:id="mainPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.DashboardController"
+            style="-fx-background-color:#ffffff;" >
+   <children>
+      <BorderPane layoutX="-15.0" layoutY="-5.0" prefHeight="812.0" prefWidth="1333.0" >
+         <left>
+            <VBox alignment="CENTER" prefHeight="812.0" prefWidth="300" styleClass="sidebar" stylesheets="@css/main.css" BorderPane.alignment="CENTER">
+               <!-- Sidebar content -->
+               <children>
+                  <HBox alignment="CENTER" fillHeight="false" layoutX="30.0" layoutY="45.0" prefHeight="79.0" prefWidth="255.0">
+                     <children>
+                        <Pane prefHeight="45.0" prefWidth="45.0" style="-fx-border-radius: 20px; -fx-background-color: #ffffff; -fx-background-radius: 5px;" stylesheets="@css/main.css">
+                           <children>
+                              <ImageView fitHeight="45.0" fitWidth="44.0" layoutX="2.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/logo.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="40.0" prefWidth="315.0">
+                     <VBox.margin>
+                        <Insets  top="1.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label alignment="CENTER" prefHeight="7.0" prefWidth="266.0" text="Bonjour Fatales !">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <VBox alignment="CENTER" spacing="30.0" prefHeight="500.0" prefWidth="300.0">
+                     <children>
+
+                        <Button text="Produits" onAction="#showProduits" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/product.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+
+
+                        <Button text="Promotion" onAction="#showPromotion" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/discount.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+
+                        <Button text="Les Horaires" onAction="#showHoraires" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/calendar.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+
+                        <Button text="Les Événements" onAction="#showEvenements" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/event.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+
+                        <Button text="Les Feedbacks" onAction="#showFeedback" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/feedback.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+
+
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="338.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="50.0" prefWidth="340.0" spacing="10.0">
+                           <children>
+                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                                      prefHeight="15.0" prefWidth="200.0" text="Se Déconnecter" textFill="WHITE"
+                                      styleClass="logout-button" style="-fx-font-size: 17px;">
+                                 <font>
+                                    <Font name="Dubai light"  />
+                                 </font>
+
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </left>
+         <center>
+            <StackPane fx:id="contentPane" prefWidth="955" minWidth="955" maxWidth="955" />  <!-- This is where dynamic content will be loaded -->
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
