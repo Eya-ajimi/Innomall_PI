@@ -7,6 +7,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import tn.esprit.services.ReclamationService;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class AdminReclamationController {
     @FXML private ListView<Reclamation> reclamationList;
@@ -46,6 +48,11 @@ public class AdminReclamationController {
     private void handleUpdate() {
         Reclamation selectedReclamation = reclamationList.getSelectionModel().getSelectedItem();
         if (selectedReclamation != null) {
+            if (commentaireField.getText().isEmpty()) {
+                showAlert("Erreur de saisie", "Le champ commentaire ne peut pas etre vide.");
+                return;
+            }
+
             try {
                 selectedReclamation.setCommentaire(commentaireField.getText());
                 selectedReclamation.setStatut("traite");
@@ -55,6 +62,16 @@ public class AdminReclamationController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            showAlert("Aucune sélection", "Veuillez selectionner une reclamation a mettre a jour.");
         }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
