@@ -26,7 +26,7 @@ public class Main extends Application {
         try {
             System.out.println("🔍 Tentative de chargement de login.fxml...");
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Registre.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Registree.fxml"));
             Parent root = fxmlLoader.load();
 
             System.out.println("✅ login.fxml chargé avec succès !");

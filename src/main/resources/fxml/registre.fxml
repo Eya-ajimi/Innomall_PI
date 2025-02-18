@@ -48,6 +48,8 @@
         <Label text="Adresse:" style="-fx-font-size: 14px;"/>
         <TextField fx:id="adresseField" promptText="Entrez votre adresse"/>
 
+
+
         <!-- Bouton S'inscrire -->
         <Button fx:id="registerButton" text="S'inscrire" onAction="#handleRegister"
                 style="-fx-font-size: 16px;"/>
