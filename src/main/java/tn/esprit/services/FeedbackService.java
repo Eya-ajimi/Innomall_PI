@@ -82,5 +82,28 @@ public class FeedbackService {
         }
         return feedbacks;
     }
+
+    // 🔹 Check if a user has already submitted feedback for a specific shop
+    public Feedback getFeedbackByUserAndShop(int utilisateurId, int shopId) throws SQLException {
+        String query = "SELECT * FROM feedback WHERE utilisateur_id = ? AND shop_id = ?";
+        ps = cnx.prepareStatement(query);
+        ps.setInt(1, utilisateurId);
+        ps.setInt(2, shopId);
+
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Feedback feedback = new Feedback(
+                    rs.getInt("utilisateur_id"),
+                    rs.getInt("shop_id"),
+                    rs.getInt("rating")
+            );
+            feedback.setId(rs.getInt("id"));
+            feedback.setDateFeedback(rs.getTimestamp("date_feedback"));
+            return feedback;
+        }
+        return null; // No feedback found
+    }
+
+
 }
 

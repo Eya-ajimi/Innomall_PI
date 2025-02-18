@@ -1,29 +1,48 @@
 package tn.esprit.gui;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.SVGPath;
+import javafx.stage.Stage;
 import tn.esprit.entites.Feedback;
 import tn.esprit.entites.Utilisateur;
 import tn.esprit.services.FeedbackService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class ShopCardController {
+    public Button viewProductButton;
     @FXML private Label shopName;
     @FXML private Label shopAddress;
     @FXML private Label shopContact;
     @FXML private Button feedbackButton;
+    @FXML private Button deleteFeedbackButton; // Add this
     @FXML private HBox ratingContainer;
     @FXML private SVGPath star1, star2, star3, star4, star5;
-
+    @FXML private Pane shopCardPane;
     private int selectedRating = 0; // Store the selected rating
     private int shopId; // Store the shop ID
-    private int utilisateurId; // Store the current user ID (you can get this from your session or login system)
+    private int utilisateurId; // Store the current user ID
+    private Feedback existingFeedback; // Store existing feedback (if any)
+
+    private BooleanProperty hasFeedback = new SimpleBooleanProperty(false); // Track if feedback exists
 
     private FeedbackService feedbackService = new FeedbackService();
+
+    @FXML
+    public void initialize() {
+        // Bind the visibility of the delete button to the hasFeedback property
+        deleteFeedbackButton.visibleProperty().bind(hasFeedback);
+    }
 
     public void setData(Utilisateur shop, int utilisateurId) {
         this.shopId = shop.getId(); // Set the shop ID
@@ -33,8 +52,44 @@ public class ShopCardController {
         shopAddress.setText(shop.getAdresse());
         shopContact.setText(shop.getTelephone());
 
+        // Check if the user has already submitted feedback for this shop
+        try {
+            existingFeedback = feedbackService.getFeedbackByUserAndShop(utilisateurId, shopId);
+            if (existingFeedback != null) {
+                // If feedback exists, set the selected rating and update the button text
+                selectedRating = existingFeedback.getRating();
+                feedbackButton.setText("Modify Feedback");
+                hasFeedback.set(true); // Set hasFeedback to true
+            } else {
+                hasFeedback.set(false); // Set hasFeedback to false
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Initialize rating stars
         initializeRatingStars();
+        updateRatingStars(); // Highlight stars based on existing feedback
+        shopCardPane.setOnMouseClicked(event -> {
+            try {
+                navigateToProductsView();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    /**** navigation button ***/
+    private void navigateToProductsView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/produitsview.fxml"));
+        Parent root = loader.load();
+
+        // Pass shop ID to produitsview controller
+        ProduitsController controller = loader.getController();
+        controller.setShopId(shopId);
+
+        Stage stage = (Stage) shopCardPane.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML
@@ -44,19 +99,44 @@ public class ShopCardController {
             return;
         }
 
-        // Debug: Print the utilisateur_id and shop_id
-        System.out.println("Submitting feedback for utilisateur_id: " + utilisateurId + ", shop_id: " + shopId);
-
-        // Create a new Feedback object
-        Feedback feedback = new Feedback(utilisateurId, shopId, selectedRating);
-
         try {
-            // Insert the feedback into the database
-            int feedbackId = feedbackService.insert(feedback);
-            System.out.println("Feedback submitted successfully! Feedback ID: " + feedbackId);
+            if (existingFeedback == null) {
+                // Insert new feedback
+                Feedback feedback = new Feedback(utilisateurId, shopId, selectedRating);
+                int feedbackId = feedbackService.insert(feedback);
+                System.out.println("Feedback submitted successfully! Feedback ID: " + feedbackId);
+
+                // Update the button text and store the new feedback
+                feedbackButton.setText("Modify Feedback");
+                existingFeedback = feedback;
+                hasFeedback.set(true); // Set hasFeedback to true
+            } else {
+                // Update existing feedback
+                existingFeedback.setRating(selectedRating);
+                feedbackService.update(existingFeedback);
+                System.out.println("Feedback updated successfully!");
+            }
         } catch (SQLException e) {
             System.out.println("Error submitting feedback: " + e.getMessage());
-            e.printStackTrace(); // Print the full stack trace for debugging
+        }
+    }
+
+    @FXML
+    private void handleDeleteFeedbackButtonClick() {
+        if (existingFeedback != null) {
+            try {
+                feedbackService.delete(existingFeedback.getId());
+                System.out.println("Feedback deleted successfully!");
+
+                // Reset the UI
+                existingFeedback = null;
+                selectedRating = 0;
+                feedbackButton.setText("Add Feedback");
+                hasFeedback.set(false); // Set hasFeedback to false
+                updateRatingStars();
+            } catch (SQLException e) {
+                System.out.println("Error deleting feedback: " + e.getMessage());
+            }
         }
     }
 

@@ -247,10 +247,4 @@ CheckBox:selected {
     -fx-background-color: #0096C7;
     -fx-text-fill: white;
 }
-/*********/
-
-.nav-label:hover {
-    -fx-text-fill: #007BFF; /* Change text color on hover */
-    -fx-cursor: hand; /* Change cursor to a hand pointer */
-}
 

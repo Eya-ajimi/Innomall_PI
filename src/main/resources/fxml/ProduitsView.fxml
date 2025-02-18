@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.ProduitsController" spacing="10" style="-fx-padding: 20;">
+    <Label fx:id="shopNameLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+    <ScrollPane>
+        <VBox fx:id="produitsContainer" spacing="10" />
+    </ScrollPane>
+</VBox>
