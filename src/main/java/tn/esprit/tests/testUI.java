@@ -8,16 +8,14 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
-public class testUI extends Application  {
-
-
+public class testUI extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/panier.fxml")));
-        Scene scene = new Scene(root, 1105, 660);
-        stage.setTitle("Inomall");
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/panier.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {

@@ -70,5 +70,14 @@ public class Commande {
         this.total = total;
     }
 
-
+    @Override
+    public String toString() {
+        return "Commande{" +
+                "id=" + id +
+                ", idClient=" + idClient +
+                ", dateCommande='" + dateCommande + '\'' +
+                ", statut=" + statut +
+                ", total=" + total +
+                '}';
+    }
 }
