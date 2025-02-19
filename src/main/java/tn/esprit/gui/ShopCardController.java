@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -70,33 +71,34 @@ public class ShopCardController {
         // Initialize rating stars
         initializeRatingStars();
         updateRatingStars(); // Highlight stars based on existing feedback
-        shopCardPane.setOnMouseClicked(event -> {
-            try {
-                navigateToProductsView();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+
     }
     /**** navigation button ***/
-    private void navigateToProductsView() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/produitsview.fxml"));
+    // Change from private to public and add @FXML
+    @FXML
+    public void navigateToProductsView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProduitsView.fxml"));
         Parent root = loader.load();
 
-        // Pass shop ID to produitsview controller
         ProduitsController controller = loader.getController();
         controller.setShopId(shopId);
 
-        Stage stage = (Stage) shopCardPane.getScene().getWindow();
+        Stage stage = (Stage) viewProductButton.getScene().getWindow();  // Use button's scene
         stage.setScene(new Scene(root));
         stage.show();
     }
 
     @FXML
     private void handleFeedbackButtonClick() {
+        // Check if no rating is selected
         if (selectedRating == 0) {
-            System.out.println("Please select a rating before submitting feedback.");
-            return;
+            // Show an alert to the user
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Rating Required");
+            alert.setHeaderText("No Rating Selected");
+            alert.setContentText("Please select a rating before submitting feedback.");
+            alert.showAndWait(); // Show the alert and wait for user response
+            return; // Exit the method without proceeding
         }
 
         try {
@@ -120,7 +122,6 @@ public class ShopCardController {
             System.out.println("Error submitting feedback: " + e.getMessage());
         }
     }
-
     @FXML
     private void handleDeleteFeedbackButtonClick() {
         if (existingFeedback != null) {

@@ -36,7 +36,7 @@ public class CommentItemController {
         this.commentaire = commentaire;
 
         // Mise à jour des labels
-        commentUser.setText("Utilsateur " + commentaire.getUtilisateurId());
+        commentUser.setText("User " + commentaire.getUtilisateurId());
         commentContent.setText(commentaire.getContenu());
         commentTime.setText(commentaire.getDateCreation());
 

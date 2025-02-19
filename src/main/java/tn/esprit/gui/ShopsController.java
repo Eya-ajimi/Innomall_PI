@@ -22,7 +22,7 @@ public class ShopsController {
     @FXML private Label homeLabel; // Reference to the Home label
 
     private UtilisateurService utilisateurService = new UtilisateurService();
-    private int utilisateurId = 3; // Replace with the actual current user ID (e.g., from session or login)
+    private int utilisateurId = 15; // Replace with the actual current user ID (e.g., from session or login)
 
     @FXML
     public void initialize() {

@@ -3,14 +3,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 
-<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="tn.esprit.gui.ProduitCardController" spacing="10" style="-fx-padding: 10;">
-    <ImageView fx:id="produitImageView" fitHeight="100" fitWidth="100" />
-    <VBox spacing="5">
-        <Label fx:id="nomLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-        <Label fx:id="prixLabel" />
-        <Label fx:id="stockLabel" />
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.ProduitCardController"
+      spacing="10" styleClass="produit-card">
+
+
+
+    <VBox spacing="5" alignment="CENTER">
+        <Label fx:id="nomLabel" styleClass="produit-nom" />
+        <Label fx:id="prixLabel" styleClass="produit-prix" />
+        <Label fx:id="stockLabel" styleClass="produit-stock" />
+        <Label  fx:id="Description" styleClass="produit-Description" />
+
+
+        <Button fx:id="likeButton" text="Like"   />
     </VBox>
-</HBox>
+
+</VBox>

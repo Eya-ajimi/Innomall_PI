@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="shopCardPane" styleClass="card" prefWidth="250" prefHeight="250"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.gui.ShopCardController">
+<AnchorPane fx:id="shopCardPane" prefHeight="250" prefWidth="250" styleClass="card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.ShopCardController">
     <children>
-        <VBox alignment="CENTER" spacing="12" layoutX="10" layoutY="10">
+        <VBox alignment="CENTER" layoutX="10" layoutY="10" spacing="12">
             <!-- Shop Name -->
             <Label fx:id="shopName" styleClass="shop-name" text="Shop Name" />
 
@@ -20,22 +20,22 @@
             <Label fx:id="shopContact" styleClass="shop-info" text="Contact" />
 
             <!-- Feedback Buttons -->
-            <HBox alignment="CENTER" spacing="10">
-                <Button fx:id="feedbackButton" text="Add Feedback" styleClass="feedback-button" onAction="#handleFeedbackButtonClick" />
-                <Button fx:id="deleteFeedbackButton" text="Delete Feedback" styleClass="delete-button" onAction="#handleDeleteFeedbackButtonClick" />
+            <HBox alignment="CENTER" spacing="10" style="-fx-alignment: center;">
+                <Button fx:id="feedbackButton" onAction="#handleFeedbackButtonClick" style="-fx-alignment: center;" styleClass="feedback-button" text="Add Feedback" />
+                <Button fx:id="deleteFeedbackButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleDeleteFeedbackButtonClick" styleClass="delete-button" text="Delete Feedback" />
             </HBox>
 
             <!-- Rating Stars -->
-            <HBox fx:id="ratingContainer" styleClass="rating-container">
-                <SVGPath fx:id="star1" styleClass="rating-star" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" />
-                <SVGPath fx:id="star2" styleClass="rating-star" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" />
-                <SVGPath fx:id="star3" styleClass="rating-star" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" />
-                <SVGPath fx:id="star4" styleClass="rating-star" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" />
-                <SVGPath fx:id="star5" styleClass="rating-star" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" />
+            <HBox fx:id="ratingContainer" style="-fx-alignment: center;" styleClass="rating-container">
+                <SVGPath fx:id="star1" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
+                <SVGPath fx:id="star2" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
+                <SVGPath fx:id="star3" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
+                <SVGPath fx:id="star4" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
+                <SVGPath fx:id="star5" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
             </HBox>
 
             <!-- View Product Button -->
-            <Button fx:id="viewProductButton" text="View Product" styleClass="view-button"   />
+            <Button fx:id="viewProductButton" onAction="#navigateToProductsView" prefHeight="30.0" prefWidth="108.0" styleClass="view-button" text="View Product" />
         </VBox>
     </children>
 </AnchorPane>

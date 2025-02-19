@@ -122,7 +122,7 @@
 
 /* Comment Card */
 .comment-card {
-    -fx-background-color: #F5F5F5;
+    -fx-background-color: blue;
     -fx-padding: 8px;
     -fx-border-radius: 20px;
     -fx-max-width: 300px;
@@ -254,3 +254,100 @@ CheckBox:selected {
     -fx-cursor: hand; /* Change cursor to a hand pointer */
 }
 
+/************* produit *********/
+/* Root style for the product card */
+.produit-card {
+    -fx-background-color: #ffffff; /* White background */
+    -fx-border-color: #e0e0e0; /* Light gray border */
+    -fx-border-radius: 10px; /* Rounded corners */
+    -fx-background-radius: 10px; /* Rounded corners for background */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0); /* Soft shadow */
+    -fx-padding: 15px; /* Padding inside the card */
+    -fx-spacing: 10px; /* Spacing between elements */
+    -fx-alignment: center; /* Center align content */
+    -fx-min-width: 300px; /* Minimum width of the card */
+    -fx-min-height: 300px; /* Minimum height of the card */
+    -fx-max-width: 300px; /* Maximum width of the card */
+    -fx-max-height: 300px; /* Maximum height of the card */
+}
+
+/* Style for the product name label */
+.produit-nom {
+    -fx-font-size: 16px; /* Font size */
+    -fx-font-weight: bold; /* Bold text */
+    -fx-text-fill: #333333; /* Dark gray text color */
+    -fx-alignment: center; /* Center align text */
+}
+
+.produit-Description
+{
+    -fx-font-size: 14px; /* Font size */
+    -fx-font-weight: bold; /* Bold text */
+    -fx-text-fill: #333333; /* Dark gray text color */
+    -fx-alignment: center;
+}
+
+/* Style for the product price label */
+.produit-prix {
+    -fx-font-size: 14px; /* Font size */
+    -fx-text-fill: #007bff; /* Blue text color */
+    -fx-alignment: center; /* Center align text */
+}
+
+/* Style for the product stock label */
+.produit-stock {
+    -fx-font-size: 12px; /* Font size */
+    -fx-text-fill: #28a745; /* Green text color */
+    -fx-alignment: center; /* Center align text */
+}
+
+/* Hover effect for the product card */
+.produit-card:hover {
+    -fx-background-color: #f8f9fa; /* Light gray background on hover */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 15, 0, 0, 0); /* Stronger shadow on hover */
+    -fx-cursor: hand; /* Change cursor to hand on hover */
+}
+
+/* Style for the image view (if you add an image later) */
+.produit-image {
+    -fx-fit-width: 100px; /* Set image width */
+    -fx-fit-height: 100px; /* Set image height */
+    -fx-preserve-ratio: true; /* Preserve image aspect ratio */
+}
+
+/* Style for the "No products available" message */
+.no-products-label {
+    -fx-font-size: 24px; /* Big font size */
+    -fx-font-weight: bold; /* Bold text */
+    -fx-text-fill: #666666; /* Gray text color */
+    -fx-alignment: center; /* Center align text */
+}
+
+/******button********/
+/* Style for the like button */
+.like-button {
+    -fx-background-color: #94bee4; /* Blue background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 10px;
+}
+
+.like-button:hover {
+    -fx-background-color: #379fe6; /* Darker blue on hover */
+}
+
+/* Style for the dislike button */
+.dislike-button {
+    -fx-background-color: #e86f73; /* Red background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 10px;
+}
+
+.dislike-button:hover {
+    -fx-background-color: #a71d2a; /* Darker red on hover */
+}
