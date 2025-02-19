@@ -5,22 +5,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.gui.MainController"
-            prefHeight="600.0"
-            prefWidth="800.0"
-            style="-fx-background-color: #E1F4FF;">
+<AnchorPane prefHeight="678.0" prefWidth="902.0" style="-fx-background-color: #E1F4FF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.MainController">
 
     <!-- ScrollPane to hold the event cards -->
-    <ScrollPane fx:id="scrollPane" layoutX="10.0" layoutY="50.0" prefHeight="520.0" prefWidth="780.0" fitToWidth="true">
-        <FlowPane fx:id="eventsContainer" hgap="10" vgap="10" style="-fx-padding: 10;" />
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="10.0" layoutY="50.0" prefHeight="520.0" prefWidth="862.0">
+        <FlowPane fx:id="eventsContainer" hgap="10" style="-fx-padding: 10;" vgap="10" />
     </ScrollPane>
 
     <!-- "Refresh" button at the top right -->
-    <Button layoutX="700.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleRefresh" text="Refresh" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;"/>
+    <Button layoutX="700.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleRefresh" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;" text="Refresh" />
 
     <!-- "Add Event" button at the bottom -->
-    <Button layoutX="350.0" layoutY="540.0" mnemonicParsing="false" onAction="#handleAddEvent" text="Add Event" style="-fx-background-color: #F9A66A; -fx-text-fill: white; -fx-font-size: 14px;"/>
+    <Button layoutX="375.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleAddEvent" style="-fx-background-color: #F9A66A; -fx-text-fill: white; -fx-font-size: 14px;" text="Add Event" />
 
 </AnchorPane>

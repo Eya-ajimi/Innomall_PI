@@ -51,6 +51,7 @@
                 <configuration>
                     <mainClass>tn.esprit.tests.Main</mainClass>
                 </configuration>
+
             </plugin>
         </plugins>
     </build>

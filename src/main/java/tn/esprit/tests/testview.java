@@ -6,13 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class testview extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/client_event_view.fxml"));
         Scene scene = new Scene(root, 800, 600);
-        stage.setTitle("Shop owner add event");
+        stage.setTitle("Client Event View");
         stage.setScene(scene);
         stage.show();
     }
