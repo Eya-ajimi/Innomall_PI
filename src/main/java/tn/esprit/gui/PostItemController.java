@@ -59,43 +59,42 @@ public class PostItemController {
         loadComments(post.getId());  // Load comments for this post
     }
 
-    /**
-     * Handle the "Add Comment" button click.
-     */
+
     @FXML
+
     private void handleAddComment() {
         String content = commentInputField.getText().trim();
         if (content.isEmpty()) {
-            System.out.println("Le commentaire est vide !");
+            showAlert("Erreur", "Le commentaire ne peut pas être vide !", Alert.AlertType.ERROR);
             return;
         }
 
-        // Create a new comment
         Commentaire newComment = new Commentaire();
-        newComment.setPostId(currentPost.getId());  // Use the current post's ID
-        newComment.setUtilisateurId(15);  // Hardcoded utilisateurId (replace with dynamic value if needed)
+        newComment.setPostId(currentPost.getId());
+        newComment.setUtilisateurId(15);
         newComment.setContenu(content);
 
         try {
-            // Insert the comment into the database
             if (commentaireService.insert(newComment) > 0) {
-                System.out.println("Commentaire ajouté avec succès !");
-                commentInputField.clear();  // Clear the input field
-                loadComments(currentPost.getId());  // Reload comments for the current post
+                commentInputField.clear();
+                loadComments(currentPost.getId());
             } else {
-                System.out.println("Erreur : Aucun commentaire ajouté.");
+                showAlert("Erreur", "Échec de l'ajout du commentaire.", Alert.AlertType.ERROR);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Erreur lors de l'ajout du commentaire.");
+            showAlert("Erreur", "Problème lors de l'ajout du commentaire.", Alert.AlertType.ERROR);
         }
     }
 
-    /**
-     * Load comments for the specified post.
-     *
-     * @param postId The ID of the post to load comments for.
-     */
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     private void loadComments(int postId) {
         try {
             // Fetch comments associated with the post
@@ -132,11 +131,7 @@ public class PostItemController {
         }
     }
 
-    /**
-     * Set up the context menu for edit/delete actions.
-     *
-     * @param post The post to edit or delete.
-     */
+
     private void setupEditDeleteMenu(Poste post) {
         // Create the context menu
         ContextMenu contextMenu = new ContextMenu();
@@ -158,11 +153,7 @@ public class PostItemController {
         });
     }
 
-    /**
-     * Edit the post content.
-     *
-     * @param post The post to edit.
-     */
+
     private void editPost(Poste post) {
         // Create a custom dialog
         Dialog<String> dialog = new Dialog<>();
@@ -216,11 +207,7 @@ public class PostItemController {
         });
     }
 
-    /**
-     * Update the post in the database.
-     *
-     * @param post The post to update.
-     */
+
     private void updatePostInDatabase(Poste post) {
         try {
             postService.update(post);  // Call the update method in the service
@@ -230,11 +217,7 @@ public class PostItemController {
         }
     }
 
-    /**
-     * Delete the post.
-     *
-     * @param post The post to delete.
-     */
+
     private void deletePost(Poste post) {
         System.out.println("Deleting post: " + post.getId());
         try {

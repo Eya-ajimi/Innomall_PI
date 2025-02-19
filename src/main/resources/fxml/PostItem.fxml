@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="postCard" spacing="10.0" styleClass="post-card" stylesheets="@../css/Styles.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="tn.esprit.gui.PostItemController">
+<VBox fx:id="postCard" spacing="10.0" styleClass="post-card" stylesheets="@../css/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.PostItemController">
     <!-- Post Header -->
     <HBox spacing="10.0">
         <ImageView fitHeight="20.0" fitWidth="18.0" styleClass="profile-pic">
@@ -29,7 +29,7 @@
 
     <!-- Comment Section -->
     <HBox alignment="CENTER_RIGHT" spacing="10">
-        <TextField fx:id="commentInputField" prefHeight="34.0" prefWidth="757.0" promptText="Add a comment..." />
+        <TextField fx:id="commentInputField" prefHeight="34.0" prefWidth="785.0" promptText="Add a comment..." />
         <Button fx:id="addCommentButton" onAction="#handleAddComment" styleClass="button1" text="➕" />
     </HBox>
 

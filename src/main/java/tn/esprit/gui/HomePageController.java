@@ -3,6 +3,7 @@ package tn.esprit.gui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -34,11 +35,14 @@ public class HomePageController {
         setupAddPostButton();  // Setup the button to add a post
     }
 
+
     // Setup the Add Post button's action
     private void setupAddPostButton() {
         addPostButton.setOnAction(event -> {
-            String postContent = postTextField.getText();  // Get the text from the TextField
-            if (!postContent.isEmpty()) {
+            String postContent = postTextField.getText().trim();  // Trim to remove extra spaces
+            if (postContent.isEmpty()) {
+                showAlert("Erreur", "you can't add an empty post !");
+            } else {
                 Poste newPost = new Poste();
                 newPost.setContenu(postContent);
                 newPost.setUtilisateurId(15);  // Example user ID, replace with actual user ID if needed
@@ -55,6 +59,15 @@ public class HomePageController {
                 }
             }
         });
+    }
+
+    // Method to show an alert dialog
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     // Add the new post to the posts container (UI)
