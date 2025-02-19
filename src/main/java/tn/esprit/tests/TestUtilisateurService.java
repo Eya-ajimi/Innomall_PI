@@ -12,13 +12,13 @@ public class TestUtilisateurService {
         UtilisateurService utilisateurService = new UtilisateurService();
 
         try {
-            // Création et insertion d'un administrateur
+            // Création et insertion d'administrateur
             Utilisateur admin = new Utilisateur("Zayati", "Sofiene", "sofiene@example.com",
                     "password123", "Rue Tunis", "55321315", Role.ADMIN);
             int adminId = utilisateurService.insert(admin);
             System.out.println("Administrateur ajouté avec ID: " + adminId);
 
-            // Création et insertion d'un utilisateur standard
+            // Création et insertion d'utilisateur standard
             Utilisateur user = new Utilisateur("John", "Doe", "john.doe@example.com",
                     "userpass", "Avenue Habib", "123456789", Role.CLIENT);
             int userId = utilisateurService.insert(user);

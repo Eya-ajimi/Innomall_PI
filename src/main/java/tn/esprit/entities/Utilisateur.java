@@ -30,7 +30,6 @@ public class Utilisateur {
         this.role = role;
     }
 
-    //sans id
 
     public Utilisateur(int id,String nom, String prenom, String email, String motDePasse, int points, int nombreDeGain, String adresse, String telephone, String statut, Role role) {
         this.id=id;

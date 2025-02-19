@@ -30,13 +30,10 @@ public class ReservedSpotsController implements Initializable {
         ));
         statusFilter.setValue("All");
 
-        // Load data
         loadReservations();
 
-        // Setup search functionality
         setupSearch();
 
-        // Setup status filter
         setupStatusFilter();
     }
 
