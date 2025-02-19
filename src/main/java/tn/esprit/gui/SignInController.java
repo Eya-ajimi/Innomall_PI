@@ -26,7 +26,8 @@ public class SignInController {
 
     @FXML
     private Button btn_sigin;
-
+    @FXML
+    private Button btn_sigUp;
     @FXML
     private Text errorMessage;
 
@@ -79,4 +80,29 @@ public class SignInController {
             errorMessage.setText("An error occurred. Please try again.");
             e.printStackTrace();
         }
-    }}
+    }
+    @FXML
+    private void handleSignUp() {
+        try {
+            // Charger le fichier FXML de la page registree.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/registree.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la page chargée
+            Scene scene = new Scene(root);
+
+            // Appliquer le fichier CSS à la nouvelle scène
+            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+
+            // Obtenir la fenêtre actuelle (stage)
+            Stage stage = (Stage) btn_sigUp.getScene().getWindow();
+
+            // Changer la scène de la fenêtre actuelle
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            errorMessage.setText("An error occurred while loading the sign-up page.");
+        }
+    }
+}

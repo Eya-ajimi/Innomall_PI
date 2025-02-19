@@ -1,85 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="866.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.SignInController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.SignInController">
    <right>
-      <HBox prefHeight="578.0" prefWidth="298.0" styleClass="pane" stylesheets="@../css/style.css" BorderPane.alignment="CENTER" />
+      <HBox styleClass="pane" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
+         <VBox alignment="CENTER" prefHeight="700.0" prefWidth="339.0" spacing="20" HBox.hgrow="ALWAYS">
+            <!-- Ajoutez ici des éléments pour la partie droite si nécessaire -->
+         </VBox>
+      </HBox>
    </right>
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <AnchorPane prefHeight="578.0" prefWidth="564.0">
-               <children>
-                  <Text fx:id="root" layoutX="190.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome Back," wrappingWidth="262.0509338378906">
-                     <font>
-                        <Font name="System Bold" size="26.0" />
-                     </font>
-                  </Text>
-                  <VBox layoutX="61.0" layoutY="109.0" prefHeight="442.0" prefWidth="426.0">
-                     <children>
-                        <Text fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="EMAIL" textAlignment="CENTER" wrappingWidth="442.22772216796875">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="emailField" prefHeight="42.0" prefWidth="446.0" styleClass="textfield" stylesheets="@../css/style.css">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextField>
-                        <Text fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" textAlignment="CENTER" wrappingWidth="442.22772216796875">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <PasswordField fx:id="passwordField" prefHeight="41.0" prefWidth="446.0" styleClass="passwordfield" stylesheets="@../css/style.css" />
-                        <Text fx:id="forget_password" fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="Forgot password" textAlignment="CENTER" wrappingWidth="442.22772216796875">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Text>
-                        <Text fx:id="errorMessage" fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="" textAlignment="CENTER" wrappingWidth="442.22772216796875">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Text>
-                        <Button fx:id="btn_sigin" mnemonicParsing="false" onAction="#handleSignIn" prefHeight="50.0" prefWidth="350.0" styleClass="btn_signin" stylesheets="@../css/style.css" text="SIGN IN">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets left="45.0" top="60.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="btn_sigUp" mnemonicParsing="false" prefHeight="50.0" prefWidth="350.0" styleClass="btn_signup" stylesheets="@../css/style.css" text="SIGN UP">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets left="45.0" top="30.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-         </children>
-      </HBox>
+      <VBox alignment="CENTER" spacing="30" BorderPane.alignment="CENTER">
+         <Text fx:id="root" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome Back,">
+            <font>
+               <Font name="System Bold" size="36.0" />
+            </font>
+         </Text>
+         <VBox alignment="CENTER" prefWidth="500" spacing="20">
+            <Text fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="EMAIL" textAlignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <TextField fx:id="emailField" prefHeight="50" prefWidth="400" styleClass="textfield" stylesheets="@../css/style.css">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Text fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" textAlignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <PasswordField fx:id="passwordField" prefHeight="50" prefWidth="400" styleClass="passwordfield" stylesheets="@../css/style.css" />
+            <Text fx:id="forget_password" fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="Forgot password" textAlignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text fx:id="errorMessage" fill="#5b5a5a" strokeType="OUTSIDE" strokeWidth="0.0" text="" textAlignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Button fx:id="btn_sigin" mnemonicParsing="false" onAction="#handleSignIn" prefHeight="60" prefWidth="300" styleClass="btn_signin" stylesheets="@../css/style.css" text="SIGN IN">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btn_sigUp" onAction="#handleSignUp" mnemonicParsing="false" prefHeight="60" prefWidth="300" styleClass="btn_signup" stylesheets="@../css/style.css" text="SIGN UP">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+
+            </Button>
+         </VBox>
+      </VBox>
    </center>
 </BorderPane>

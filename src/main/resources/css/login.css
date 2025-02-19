@@ -1,0 +1,85 @@
+.root {
+    -fx-background-color: #F5F5F5; /* Fond légèrement gris pour un effet doux */
+}
+
+/* ✅ Partie droite avec un fond bleu clair (assorti au logo) */
+.pane {
+    -fx-background-color: #A8D8FF;
+}
+
+/* ✅ Champs de texte stylisés */
+.textfield, .passwordfield {
+    -fx-background-color: transparent;
+    -fx-border-color: #555555;
+    -fx-border-width: 0 0 1.5 0;
+    -fx-font-size: 15px;
+    -fx-text-fill: #333;
+    -fx-padding: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 2, 0, 0, 1);
+}
+
+/* ✅ Effet au focus */
+.textfield:focused, .passwordfield:focused {
+    -fx-border-color: #353A56; /* Bleu foncé au focus */
+    -fx-border-width: 0 0 2px 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(53, 58, 86, 0.5), 5, 0, 0, 2);
+}
+
+/* ✅ Lien "Mot de passe oublié" */
+.forgot-password {
+    -fx-font-style: italic;
+    -fx-text-fill: #353A56;
+    -fx-underline: true;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+
+.forgot-password:hover {
+    -fx-text-fill: #1D2540;
+}
+
+/* ✅ Boutons stylisés */
+.btn_signin {
+    -fx-background-color: #A8D8FF;
+    -fx-border-color: #353A56;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 28px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.btn_signup {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #353A56;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-text-fill: #353A56;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 24px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Effet au survol */
+.btn_signin:hover, .btn_signup:hover {
+    -fx-background-color: #7BB1E8; /* Bleu plus foncé pour un meilleur contraste */
+    -fx-border-color: #1D2540;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* ✅ Effet au clic */
+.btn_signin:pressed, .btn_signup:pressed {
+    -fx-background-color: #5F8DCB; /* Bleu encore plus foncé au clic */
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}

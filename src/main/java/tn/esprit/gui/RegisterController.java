@@ -26,6 +26,7 @@ public class RegisterController {
     @FXML
     private Button registerButton, utilisateurButton, shopOwnerButton;
 
+
     @FXML
     private VBox formContainer; // Conteneur du formulaire
 
@@ -127,4 +128,5 @@ public class RegisterController {
             e.printStackTrace();
         }
     }
+
 }
