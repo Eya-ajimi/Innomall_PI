@@ -38,14 +38,14 @@ public class CommandeService implements CRUD<Commande> {
         return -1;
     }
 
-//rendre le statut confirme
+    //rendre le statut confirme
     @Override
     public int update(Commande commande) throws SQLException {
-    String query = "UPDATE Commande SET statut = ? WHERE id = ?";
-    try (PreparedStatement ps = cnx.prepareStatement(query)) {
-        ps.setString(1, commande.getStatut().toString());
-        ps.setInt(2, commande.getId());
-        return ps.executeUpdate();
+        String query = "UPDATE Commande SET statut = ? WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, commande.getStatut().toString());
+            ps.setInt(2, commande.getId());
+            return ps.executeUpdate();
         }
     }
 
@@ -79,6 +79,17 @@ public class CommandeService implements CRUD<Commande> {
         return 0;
     }
 
+    public void delete(int idCommande) throws SQLException {
+        String queryDeleteCommande = "DELETE FROM commande WHERE id = ?";
+        try (PreparedStatement psDeleteCommande = cnx.prepareStatement(queryDeleteCommande)) {
+            psDeleteCommande.setInt(1, idCommande);
+            psDeleteCommande.executeUpdate();
+            System.out.println("La commande a été supprimée car le panier est vide.");
+        }
+    }
+
+
+
     @Override
     public List<Commande> showAll() throws SQLException {
         return List.of();
@@ -110,7 +121,7 @@ public class CommandeService implements CRUD<Commande> {
     }
 
 
-
+    //pour l'interface de shops
     public Commande getCommandeConfirme(int idClient) throws SQLException {
         String query = "SELECT * FROM commande WHERE idClient = ? AND statut = ?";
         try {
@@ -134,54 +145,45 @@ public class CommandeService implements CRUD<Commande> {
         return null;
     }
 
-/****************************************payement************************************************/
-    //affichage panier pour payment
-    public List<Panier> showAllClientPanierForPayement(int idClient) throws SQLException {
+    /****************************************payement***************************************************/
+    //affichage panier payé
+    public List<Panier> showAllClientPanierPaye(int commandeId) throws SQLException {
         List<Panier> paniers = new ArrayList<>();
-        Commande cmd= getCommandeEnCours(idClient);
-        if(cmd!= null) {
-            int commandeId = cmd.getId();
-            String query = "SELECT p.idCommande, p.idProduit, p.quantite, pr.nom, pr.prix, pr.description " +
-                    "FROM panier p " +
-                    "JOIN Produit pr ON p.idProduit = pr.id " +
-                    "WHERE p.idCommande = ?";
+
+        String query = "SELECT p.idCommande, p.idProduit, p.quantite, pr.nom, pr.prix, pr.description " +
+                "FROM panier p " +
+                "JOIN Produit pr ON p.idProduit = pr.id " +
+                "WHERE p.idCommande = ?";
 
 
-            try  {
-                ps = cnx.prepareStatement(query);
-                ps.setInt(1, commandeId);
-                ResultSet rs = ps.executeQuery();
+        try  {
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, commandeId);
+            ResultSet rs = ps.executeQuery();
 
 
-                while (rs.next()) {
-                    Panier panier = new Panier(
-                            rs.getInt("idCommande"),
-                            rs.getInt("idProduit"),
-                            rs.getInt("quantite"),
-                            rs.getString("nom"),
-                            rs.getDouble("prix"),
-                            rs.getString("description")
+            while (rs.next()) {
+                Panier panier = new Panier(
+                        rs.getInt("idCommande"),
+                        rs.getInt("idProduit"),
+                        rs.getInt("quantite"),
+                        rs.getString("nom"),
+                        rs.getDouble("prix"),
+                        rs.getString("description")
 
-                    );
-                    panier.setPrix(panier.getPrix() * panier.getQuantite());
-                    paniers.add(panier);
+                );
+                panier.setPrix(panier.getPrix() * panier.getQuantite());
+                paniers.add(panier);
 
 
 
-                }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
             }
-            return paniers;
-
-
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        else {
-            System.out.println("panier vide");
-            return null;
-        }
+        return paniers;
+
     }
-
     public void updateStockProduit(int idProduit, int quantiteVendue) throws SQLException {
         String query = "UPDATE Produit SET stock = stock - ? WHERE id = ?";
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
@@ -204,8 +206,16 @@ public class CommandeService implements CRUD<Commande> {
         }
         return -1; // Retourne -1 si le client n'est pas trouvé
     }
+    public int updateUserBalance(double totalCommande, int idClient) throws SQLException {
+        String query = "UPDATE user SET balance = ? WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setDouble(1,totalCommande);
+            ps.setInt(2, idClient);
+            return ps.executeUpdate();
+        }
+    }
 
-
+    //cette fonction est appelé dans le fxml
     public void payerCommande(int idClient) throws SQLException {
         // Récupérer le solde du client
         double balanceClient = getBalanceClient(idClient);
@@ -231,37 +241,46 @@ public class CommandeService implements CRUD<Commande> {
             System.out.println("Votre solde est insuffisant pour payer cette commande. Solde : " + balanceClient);
             return;
         }
+        int updateUserBalanceRow= updateUserBalance(commandeEnCours.getTotal(),idClient);
 
-
-        // Mettre à jour le statut de la commande à "payée"
-        Commande commandePayee = new Commande(
-                commandeEnCours.getId(),
-                commandeEnCours.getIdClient(),
-                commandeEnCours.getDateCommande(),
-                commandeEnCours.getTotal(),
-                StatutCommande.confirme // Changer le statut à "payée"
-        );
-
-        // Mettre à jour la commande dans la base de données
-        int rowsUpdated = update(commandePayee);
-        if (rowsUpdated > 0) {
+        if (updateUserBalanceRow > 0) {
             System.out.println("La commande a été payée avec succès.");
 
-            // Diminuer le stock des produits dans le panier
-            List<Panier> paniers = showAllClientPanierForPayement(idClient);
-            if (paniers != null) {
-                for (Panier panier : paniers) {
-                    int idProduit = panier.getIdProduit();
-                    int quantite = panier.getQuantite();
+            // Mettre à jour le statut de la commande à "payée"
+            Commande commandePayee = new Commande(
+                    commandeEnCours.getId(),
+                    commandeEnCours.getIdClient(),
+                    commandeEnCours.getDateCommande(),
+                    commandeEnCours.getTotal(),
+                    StatutCommande.confirme // Changer le statut à "payée"
+            );
 
-                    // Diminuer le stock du produit
-                    updateStockProduit(idProduit, quantite);
+            // Mettre à jour la commande dans la base de données
+            int rowsUpdated = update(commandePayee);
+            if (rowsUpdated > 0) {
+                System.out.println("statut de commande est modifié avec succé.");
+
+                // Diminuer le stock des produits dans le panier
+                List<Panier> paniers = showAllClientPanierPaye(commandePayee.getId());
+                if (paniers != null) {
+                    for (Panier panier : paniers) {
+                        int idProduit = panier.getIdProduit();
+                        int quantite = panier.getQuantite();
+
+                        // Diminuer le stock du produit
+                        updateStockProduit(idProduit, quantite);
+                    }
                 }
+            } else {
+                System.out.println("modification de statut de commande est échoué.");
             }
         } else {
             System.out.println("Erreur lors de la mise à jour de la commande.");
         }
+
     }
+
+
 
 
 }

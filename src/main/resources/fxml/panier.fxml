@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.PanierController">
+<VBox spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.PanierController">
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets bottom="10" left="10" right="10" top="10" />
     </padding>
 
     <!-- Titre de la page -->
-    <Label text="Votre Panier" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Votre Panier" />
 
-    <!-- Liste des articles dans le panier -->
-    <ListView fx:id="panierListView"/>
+    <!-- Zone de défilement pour les cartes -->
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-border-radius: 15;" vbarPolicy="AS_NEEDED">
+        <VBox fx:id="panierVBox" spacing="10" style="-fx-background-color: transparent;" />
+    </ScrollPane>
 
     <!-- Total de la commande -->
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Label text="Total de la commande :"/>
-        <Label fx:id="totalLabel" style="-fx-font-weight: bold;"/>
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Label text="Total de la commande :" />
+        <Label fx:id="totalLabel" style="-fx-font-weight: bold;" />
     </HBox>
 
     <!-- Bouton pour passer la commande -->
-    <Button text="Passer la commande" onAction="#handlePasserCommande" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+    <Button onAction="#handlePasserCommande" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Passer la commande" />
 </VBox>

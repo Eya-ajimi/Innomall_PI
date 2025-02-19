@@ -21,19 +21,23 @@ public class testPanier {
         Produit p2 = new Produit(1,2,"sdfghnj",0,25,1818,"gtggtgt");
         Produit p3 = new Produit(1,2,"sdfghnj",0,25,1818,"gtggtgt");
 
-      List<Produit> p=new ArrayList<>();
-         p.add(p1);
-           p.add(p2);
-      p.add(p3);
+        List<Produit> p=new ArrayList<>();
+        p.add(p1);
+        p.add(p2);
+        p.add(p3);
         panierService ps=new panierService();
         CommandeService cs=new CommandeService();
 
         try {
-          ps.ajouterAuPanier(1,3);
+            ps.ajouterAuPanier(1,1);
+            ps.ajouterAuPanier(1,2);
+            ps.ajouterAuPanier(1,3);
+            ps.ajouterAuPanier(1,4);
+            ps.ajouterAuPanier(1,5);
 //            List<Panier> panier= ps.showAllClientPanier(3);
 //            System.out.println(panier.get(0));
 //            System.out.println(ps.diminuerQuantite(panier.get(1).getIdCommande(),panier.get(0).getIdProduit()));
-            System.out.println(ps.showAllClientPanier(1));
+            //System.out.println(ps.showAllClientPanier(1));
 //            System.out.println("------------------");
 //            cs.payerCommande(3);
             System.out.println(cs.getCommandeEnCours(1));

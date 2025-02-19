@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import tn.esprit.entites.Panier;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class PanierCardController {
@@ -28,26 +29,25 @@ public class PanierCardController {
         nomLabel.setText(panier.getNomProduit());
         descriptionLabel.setText(panier.getDescription());
         quantiteLabel.setText(String.valueOf(panier.getQuantite()));
+        prixLabel.setText(String.format("%.2f dt", panier.getPrix()));
     }
-
-
 
     public void setPanierController(PanierController panierController) {
         this.panierController = panierController;
     }
 
     @FXML
-    private void handleAugmenterQuantite() throws SQLException {
+    private void handleAugmenterQuantite() throws SQLException, IOException {
         panierController.handleAugmenterQuantite(panier);
     }
 
     @FXML
-    private void handleDiminuerQuantite() throws SQLException {
+    private void handleDiminuerQuantite() throws SQLException, IOException {
         panierController.handleDiminuerQuantite(panier);
     }
 
     @FXML
-    private void handleSupprimerArticle() throws SQLException {
+    private void handleSupprimerArticle() throws SQLException, IOException {
         panierController.handleSupprimerArticle(panier);
     }
 }

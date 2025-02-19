@@ -48,17 +48,17 @@ public class panierService implements CRUD<Panier>{
     }
 
 
-/*----------------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------------*/
 
     // Méthode pour vérifier si un produit existe déjà dans le panier(utiliseé dans ajouterAuPanier)
     public boolean produitExisteDansPanier(int idCommande, int idProduit) throws SQLException {
         String query = "SELECT * FROM panier WHERE idCommande = ? AND idProduit = ?";
-         ps = cnx.prepareStatement(query);
+        ps = cnx.prepareStatement(query);
 
-            ps.setInt(1, idCommande);
-            ps.setInt(2, idProduit);
-            ResultSet resultSet = ps.executeQuery();
-              return resultSet.next();
+        ps.setInt(1, idCommande);
+        ps.setInt(2, idProduit);
+        ResultSet resultSet = ps.executeQuery();
+        return resultSet.next();
 
 
 
@@ -72,10 +72,10 @@ public class panierService implements CRUD<Panier>{
         String query = "INSERT INTO panier (`idCommande` , `idProduit`, `quantite`) VALUES (?, ?, ?)";
         ps = cnx.prepareStatement(query);
 
-            ps.setInt(1, newProduct.getIdCommande());
-            ps.setInt(2, newProduct.getIdProduit());
-            ps.setInt(3, newProduct.getQuantite());
-            return ps.executeUpdate();
+        ps.setInt(1, newProduct.getIdCommande());
+        ps.setInt(2, newProduct.getIdProduit());
+        ps.setInt(3, newProduct.getQuantite());
+        return ps.executeUpdate();
 
     }
 
@@ -89,8 +89,11 @@ public class panierService implements CRUD<Panier>{
         return 0;
     }
 
-/************************************************************************************************************************************/
+    /************************************************************************************************************************************/
     public boolean deletePanier(int idCommande, int idProduit) throws SQLException {
+        Panier deletedPanier= getPanierByIdCommandeAndIdProduit( idCommande,  idProduit);
+        Produit produit= getProduitById( idProduit);
+        double prix= produit.getPrix()*deletedPanier.getQuantite();
         // Étape 1 : Supprimer l'article du panier
         String queryDeletePanier = "DELETE FROM panier WHERE idCommande = ? AND idProduit = ?";
         try (PreparedStatement psDeletePanier = cnx.prepareStatement(queryDeletePanier)) {
@@ -98,6 +101,7 @@ public class panierService implements CRUD<Panier>{
             psDeletePanier.setInt(2, idProduit);
 
             int rowsAffected = psDeletePanier.executeUpdate();
+            commandeService.updateTotalCommandedown( idCommande,  prix);
             if (rowsAffected > 0) {
                 // Étape 2 : Vérifier si la liste des paniers de la commande est vide
                 String queryCheckPanier = "SELECT COUNT(*) FROM panier WHERE idCommande = ?";
@@ -108,12 +112,7 @@ public class panierService implements CRUD<Panier>{
                             int count = rs.getInt(1); // Nombre d'articles restants dans le panier
                             if (count == 0) {
                                 // Étape 3 : Supprimer la commande si le panier est vide
-                                String queryDeleteCommande = "DELETE FROM commande WHERE id = ?";
-                                try (PreparedStatement psDeleteCommande = cnx.prepareStatement(queryDeleteCommande)) {
-                                    psDeleteCommande.setInt(1, idCommande);
-                                    psDeleteCommande.executeUpdate();
-                                    System.out.println("La commande a été supprimée car le panier est vide.");
-                                }
+                                commandeService.delete(idCommande);
                             }
                         }
                     }
@@ -125,7 +124,7 @@ public class panierService implements CRUD<Panier>{
     }
 
 
-//cette fonction n'est pas utilisable
+    //cette fonction n'est pas utilisable
     @Override
     public List<Panier> showAll() throws SQLException {
         List<Panier> paniers = new ArrayList<>();
@@ -147,7 +146,7 @@ public class panierService implements CRUD<Panier>{
 
                 );
                 panier.setPrix(panier.getPrix()*panier.getQuantite());
-            paniers.add(panier);
+                paniers.add(panier);
             }
         }
 
@@ -215,7 +214,7 @@ public class panierService implements CRUD<Panier>{
             return paniers; // Retourner la liste mise à jour
         } else {
             System.out.println("Panier vide");
-            return new ArrayList<>();
+            return null;
         }
     }
 
@@ -257,8 +256,8 @@ public class panierService implements CRUD<Panier>{
                         }
                         else{
                             // Étape 5 : Ajouter le produit au panier
-                                Panier newProduct = new Panier(commande.getId(),idProduit,1);
-                                    insert(newProduct);
+                            Panier newProduct = new Panier(commande.getId(),idProduit,1);
+                            insert(newProduct);
 
                             // Étape 6 : Mettre à jour le total de la commande
                             commandeService.updateTotalCommandeUp(commande.getId(), produit.getPrix());
@@ -267,7 +266,7 @@ public class panierService implements CRUD<Panier>{
 
                     } else {
                         // Étape 7 : Créer une nouvelle commande
-                         commande=new Commande(idClient,Date.valueOf(LocalDate.now()).toString(),StatutCommande.enCours);
+                        commande=new Commande(idClient,Date.valueOf(LocalDate.now()).toString(),StatutCommande.enCours);
 
                         int commandeId = commandeService.insert(commande);
 
@@ -345,7 +344,7 @@ public class panierService implements CRUD<Panier>{
     }
 
 
-/*"c'ette fonction que sera applé dans l'interface "*/
+    /*"c'ette fonction que sera applé dans l'interface "*/
     public int augmenterQuantite(int idCommande, int idProduit) throws SQLException {
         // Récupérer le produit correspondant à idProduit
         Produit pr = getProduitById(idProduit);
