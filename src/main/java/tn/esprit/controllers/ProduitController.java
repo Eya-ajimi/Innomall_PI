@@ -89,7 +89,7 @@ public class ProduitController {
                 "-fx-background-radius: 15px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
 
-        // Product header with ID
+        // Product header
         VBox productHeader = new VBox();
         productHeader.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
                 "-fx-border-radius: 15px 15px 0 0; " +
@@ -103,12 +103,12 @@ public class ProduitController {
         idLabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 15px;");
         productHeader.getChildren().add(idLabel);
 
-        // Product body with description
+        // Product body
         VBox productBody = new VBox();
         productBody.setStyle("-fx-padding: 15;");
 
         Label descLabel = new Label("Description: " + product.getDescription());
-        descLabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px;"); // Increased font size
+        descLabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px;");
         descLabel.setWrapText(true);
         productBody.getChildren().add(descLabel);
 
@@ -123,23 +123,23 @@ public class ProduitController {
         productFooter.setMinHeight(5);  // Set minHeight to avoid excess space
 
         Label priceLabel = new Label("Price: " + product.getPrice() + " DT");
-        priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill:#000000; -fx-font-size: 16px;"); // Increased font size
+        priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill:#000000; -fx-font-size: 16px;");
 
         Label stockLabel = new Label("Stock: " + product.getStock());
 
-// Change stock label color based on stock level
+// Change stock  color based on stock level
         if (product.getStock() > 10) {
-            stockLabel.setStyle("-fx-text-fill: #10813f; -fx-font-size: 14px;"); // Green for high stock, increased font size
+            stockLabel.setStyle("-fx-text-fill: #10813f; -fx-font-size: 14px;");
         } else if (product.getStock() > 0) {
-            stockLabel.setStyle("-fx-text-fill: #ed8936; -fx-font-size: 14px;"); // Orange for low stock, increased font size
+            stockLabel.setStyle("-fx-text-fill: #ed8936; -fx-font-size: 14px;");
         } else {
-            stockLabel.setStyle("-fx-text-fill: #e53e3e; -fx-font-size: 14px;"); // Red for out of stock, increased font size
+            stockLabel.setStyle("-fx-text-fill: #e53e3e; -fx-font-size: 14px;");
         }
 
 
         productFooter.getChildren().addAll(priceLabel, stockLabel);
 
-        // Add all sections to the product card
+        //productBox=headerboyd+footer
         productBox.getChildren().addAll(productHeader, productBody, productFooter);
 
         // Add hover effect
@@ -159,7 +159,7 @@ public class ProduitController {
 
     private void showAddProductPopup() {
         try {
-            // Change this line
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutProduit.fxml"));
             Parent root = loader.load();
 
@@ -169,7 +169,7 @@ public class ProduitController {
             popupStage.setScene(new Scene(root));
             popupStage.showAndWait();
 
-            // If you need to refresh the product list after adding a new product
+
             loadProducts();
         } catch (IOException e) {
             e.printStackTrace();

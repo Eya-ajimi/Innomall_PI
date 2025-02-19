@@ -55,73 +55,71 @@ public class AjoutProduitController {
 
     private void saveProduct() {
         try {
-            // Validate input fields
+        // Validate inputs fields
             if (descriptionField.getText().isEmpty()) {
-                showAlert("Description is required.", Alert.AlertType.ERROR);
+                showAlert(" Remplissez le champ de description.", Alert.AlertType.ERROR);
                 return;
             }
 
-            // Parse price with validation
             float price;
             try {
                 price = Float.parseFloat(priceField.getText());
                 if (price < 0) {
-                    showAlert("Price cannot be negative.", Alert.AlertType.ERROR);
+                    showAlert("Entrez un valeur positive.", Alert.AlertType.ERROR);
                     return;
                 }
             } catch (NumberFormatException e) {
-                showAlert("Invalid price format. Please enter a decimal number.", Alert.AlertType.ERROR);
+                showAlert("Format prix est invalide veillez .Entrez une valeur decimale .", Alert.AlertType.ERROR);
                 return;
             }
 
-            // Parse stock with validation
+
             int stock;
             try {
                 stock = Integer.parseInt(stockField.getText());
                 if (stock < 0) {
-                    showAlert("Stock cannot be negative.", Alert.AlertType.ERROR);
+                    showAlert("Entrez un valeur positive.", Alert.AlertType.ERROR);
                     return;
                 }
             } catch (NumberFormatException e) {
-                showAlert("Invalid stock format. Please enter an integer.", Alert.AlertType.ERROR);
+                showAlert("Format prix est invalide veillez .Entrez une valeur entière", Alert.AlertType.ERROR);
                 return;
             }
 
-            // Parse discount ID (optional)
             Integer discountId = null;
             if (!discountField.getText().isEmpty()) {
                 try {
                     discountId = Integer.parseInt(discountField.getText());
                     if (discountId < 0) {
-                        showAlert("Discount ID cannot be negative.", Alert.AlertType.ERROR);
+                        showAlert("Entrez un valeur positive.", Alert.AlertType.ERROR);
                         return;
                     }
                 } catch (NumberFormatException e) {
-                    showAlert("Invalid discount ID format. Please enter an integer or leave blank.", Alert.AlertType.ERROR);
+                    showAlert("Format prix est invalide veillez .Entrez une valeur entière ou laissez le champ vide", Alert.AlertType.ERROR);
                     return;
                 }
             }
 
-            // Create the product object
+
             Product product = new Product();
             product.setDescription(descriptionField.getText());
             product.setPrice(price);
             product.setStock(stock);
 
-            // For shop_id, you might need to get it from your app's state or context
-            product.setShop_id(1);  // Default value, adjust as needed
 
-            // Set discount_id (will be null if field was empty)
+            product.setShop_id(1);
+
+
             product.setDiscount_id(discountId);
 
-            // Insert product using service
+            // Insert product
             int result = productService.insert(product);
 
             if (result > 0) {
-                showAlert("Product added successfully!", Alert.AlertType.INFORMATION);
+                showAlert("Produit est ajouté avec succès!", Alert.AlertType.INFORMATION);
                 closePopup();
             } else {
-                showAlert("Failed to add product.", Alert.AlertType.ERROR);
+                showAlert("Ajout echoué.", Alert.AlertType.ERROR);
             }
 
         } catch (SQLException e) {

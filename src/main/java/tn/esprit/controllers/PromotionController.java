@@ -24,7 +24,7 @@ public class PromotionController {
     @FXML
     private TextField searchField;
     @FXML
-    private Button addButton;  // Added button reference
+    private Button addButton;
 
     private final DiscountService discountService = new DiscountService();
 
@@ -34,10 +34,8 @@ public class PromotionController {
             List<Discount> discounts = discountService.showAll();
             loadPromotions(discounts);
 
-            // Set up the add button handler
             addButton.setOnAction(event -> showAddPromotionPopup());
 
-            // Search functionality
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
                 discountContainer.getChildren().clear();
                 try {
@@ -126,7 +124,7 @@ public class PromotionController {
             popupStage.setTitle("Ajouter une promotion");
             popupStage.setScene(new Scene(root));
 
-            // Show the dialog and wait for it to close
+            // display popup and wait for it to close
             popupStage.showAndWait();
 
             try {

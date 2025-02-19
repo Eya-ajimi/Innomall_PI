@@ -48,7 +48,8 @@ public class EvenementController {
         } catch (SQLException e) {
         }
         addButton.setOnAction(event -> showAddEvenementPopup());
-        // Button hover & click effects
+
+        // Button hover + click effects
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4;"));
         addButton.setOnMouseExited(event -> addButton.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #ff791f; -fx-background-radius: 4;"));
         addButton.setOnMousePressed(event -> addButton.setStyle("-fx-background-color: #cc5f1a; -fx-text-fill: white; -fx-background-radius: 4;"));

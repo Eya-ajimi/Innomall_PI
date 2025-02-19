@@ -11,7 +11,7 @@ public class Event {
     private Timestamp end;
     private String place;
 
-    //with Id
+    //constru with Id
     public Event(int id, int organizer_id, String event_title,
                  String description, Timestamp start,
                  Timestamp end, String place) {
