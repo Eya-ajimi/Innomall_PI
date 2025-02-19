@@ -13,7 +13,7 @@
     </ScrollPane>
 
     <!-- "Refresh" button at the top right -->
-    <Button layoutX="700.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleRefresh" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;" text="Refresh" />
+    <Button layoutX="806.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRefresh" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;" text="Refresh" />
 
     <!-- "Add Event" button at the bottom -->
     <Button layoutX="375.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleAddEvent" style="-fx-background-color: #F9A66A; -fx-text-fill: white; -fx-font-size: 14px;" text="Add Event" />

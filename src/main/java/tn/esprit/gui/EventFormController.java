@@ -105,7 +105,7 @@ public class EventFormController {
 
         // Set the idOrganisateur (you need to get this value from somewhere)
         // For example, you can hardcode it for testing, or get it from the logged-in user
-        int idOrganisateur = 1; // Replace this with the actual idOrganisateur
+        int idOrganisateur = 2; // Replace this with the actual idOrganisateur
         event.setIdOrganisateur(idOrganisateur);
 
         // Mark the event as updated
