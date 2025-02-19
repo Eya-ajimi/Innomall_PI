@@ -15,7 +15,7 @@ public class TestCrudEvent {
     public static void main(String[] args) {
         DataBase m1 = DataBase.getInstance();
 
-//      testAddEvent();
+      testAddEvent();
 //        testGetAllShopEvents();
 //        testGetEventById();
 //        testUpdateEvent();
@@ -23,7 +23,7 @@ public class TestCrudEvent {
     }
 
     public static void testAddEvent() {
-        Event e1 = new Event(1, "meow", "katussa <3 ",
+        Event e1 = new Event(1, "test", "testetstets <3 ",
                 Timestamp.valueOf("2025-03-05 10:00:00"),
                 Timestamp.valueOf("2025-03-05 18:00:00"), "Left Hall");
         try {

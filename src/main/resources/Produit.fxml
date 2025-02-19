@@ -8,43 +8,50 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.control.Button?>
+
 <AnchorPane prefWidth="Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-            style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.ProduitController">
+            style="-fx-background-color:rgba(255,255,255,0) ;" xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.ProduitController">
 
     <children>
-        <VBox style="-fx-background-color: #ffffff; -fx-padding: 20 20 20 20;" spacing="20"
+        <VBox style="-fx-background-color: #f5f6fa; -fx-padding: 20 20 20 20; " spacing="20"
               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
           <children>
-               <HBox prefWidth="-Infinity" alignment="CENTER_LEFT"
-                     style="-fx-background-color: rgba(255,121,31,0.62); -fx-padding: 15; -fx-background-radius: 5 5 5 5;">
-                  <children>
-                      <Label text="Catalogue des produits" textFill="#ffffff">
-                          <font>
-                              <Font name="Dubai " size="18.0" />
-                          </font>
-                      </Label>
+              <HBox prefWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: rgba(191, 226, 246, 0.82);
+             -fx-padding: 15;
+             -fx-background-radius: 15;
+             -fx-border-color: black;
+             -fx-border-width: 0;
+             -fx-border-radius: 15;">
+
+              <children>
+                  <Label text="Catalogue des produits" textFill="#000000">
+                      <font>
+                          <Font name="System Bold" size="18.0" />
+                      </font>
+                  </Label>
+
 
                       <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" spacing="10">
                         <children>
                             <TextField fx:id="searchField" prefHeight="30.0" prefWidth="250.0" promptText="chercher produits..."
                                        style="-fx-background-radius: 4; -fx-border-radius: 4; -fx-border-color: #bfe2f6; -fx-background-color: white;" />
                             <Button text="Ajouter Un Produit" prefHeight="30.0" fx:id="addButton"
-                                    style="-fx-background-color: #ffffff; -fx-text-fill:#ff791f ; -fx-background-radius: 4;" />
+                                    style="-fx-background-color: #ffffff; -fx-text-fill:rgba(255, 165, 0, 0.77) ; -fx-font-weight:bold ;-fx-background-radius: 4;" />
 
                         </children>
                      </HBox>
                   </children>
                </HBox>
 
-               <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" style="-fx-background-color:#ffffff; -fx-border-color: #ffffff;" VBox.vgrow="ALWAYS">
+               <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" style="-fx-background-color:#f5f6fa;" VBox.vgrow="ALWAYS">
                     <content>
                         <FlowPane fx:id="productContainer" hgap="50.0" vgap="50.0"
                                   prefHeight="200.0" prefWidth="200.0"
-                                  style="-fx-background-color: #ffffff; -fx-padding: 10;"
+                                  style="-fx-background-color: #f5f6fa; -fx-padding: 10;"
                                   alignment="CENTER" />
 
                     </content>

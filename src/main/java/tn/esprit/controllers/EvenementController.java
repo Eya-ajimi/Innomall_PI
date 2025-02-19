@@ -75,26 +75,28 @@ public class EvenementController {
     private VBox createEvenetCard(Event event) {
         VBox productBox = new VBox();
 
-        productBox.setPrefWidth(400);
+        productBox.setPrefWidth(300);
         productBox.setMaxWidth(400);
         productBox.setMinHeight(200);
         productBox.getStyleClass().add("event-card");
         productBox.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #cccccc; " +  // Border color
-                "-fx-border-width: 1; " +       // Border width
-                "-fx-border-radius: 8; " +      // Rounded border
-                "-fx-background-radius: 8; " +
+                "-fx-border-color: #cccccc; " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 15px; " +
+                "-fx-background-radius: 15px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
 
         // ------Event header
         VBox productHeader = new VBox();
-        productHeader.setStyle("-fx-background-color: #bfe2f6; " +
+        productHeader.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
+                "-fx-border-radius: 15px 15px 0 0; " +
+                "-fx-background-radius: 15px 15px 0 0; " +
                 "-fx-padding: 12 15; " +
                 "-fx-border-color: #e2e8f0; " +
                 "-fx-border-width: 0 0 1 0;");
         //event title
         Label titlelabel = new Label("Titre de l'evenement:\n" + event.getEventTitle());
-        titlelabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 16px;");
+        titlelabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 15px;");
         productHeader.getChildren().add(titlelabel);
 
         //------ Event body
@@ -113,6 +115,8 @@ public class EvenementController {
         // Product footer
         VBox productFooter = new VBox();
         productFooter.setStyle("-fx-background-color: rgb(255,255,255); " +
+                "-fx-border-radius: 0 0 15px 15px; " +
+                "-fx-background-radius: 0 0 15px 15px; " +
                 "-fx-padding: 10 15; " +
                 "-fx-border-color: #e2e8f0; " +
                 "-fx-border-width: 1 0 0 0;");
@@ -124,7 +128,7 @@ public class EvenementController {
         endlable.setStyle("-fx-font-weight: light; -fx-text-fill: #000000; -fx-font-size: 12px;");
 
         Label placelabel = new Label("L'emplacement: " + event.getPlace());
-        placelabel.setStyle("-fx-font-weight:bold; -fx-text-fill: #ff791f; -fx-font-size: 14px;");
+        placelabel.setStyle("-fx-font-weight:bold; -fx-text-fill: #000000; -fx-font-size: 14px;");
 
         productFooter.getChildren().addAll(startlabel,endlable, placelabel);
 

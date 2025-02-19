@@ -80,24 +80,27 @@ public class ProduitController {
 
         productBox.setPrefWidth(250);
         productBox.setMaxWidth(250);
-        productBox.setMinHeight(200);
+        productBox.setMinHeight(150);
         productBox.getStyleClass().add("product-card");
         productBox.setStyle("-fx-background-color: white; " +
                 "-fx-border-color: #cccccc; " +
-                "-fx-border-width: 1; " +
-                "-fx-border-radius: 8; " +
-                "-fx-background-radius: 8; " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 15px; " +
+                "-fx-background-radius: 15px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
 
         // Product header with ID
         VBox productHeader = new VBox();
-        productHeader.setStyle("-fx-background-color: #bfe2f6; " +
+        productHeader.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
+                "-fx-border-radius: 15px 15px 0 0; " +
+                "-fx-background-radius: 15px 15px 0 0; " +
                 "-fx-padding: 12 15; " +
                 "-fx-border-color: #e2e8f0; " +
                 "-fx-border-width: 0 0 1 0;");
 
+
         Label idLabel = new Label("ID: " + product.getId());
-        idLabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 17px;");
+        idLabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 15px;");
         productHeader.getChildren().add(idLabel);
 
         // Product body with description
@@ -112,13 +115,15 @@ public class ProduitController {
 // Product footer with price and stock
         VBox productFooter = new VBox();
         productFooter.setStyle("-fx-background-color: rgb(255,255,255); " +
+                "-fx-border-radius: 0 0 15px 15px; " +
+                "-fx-background-radius: 0 0 15px 15px; " +
                 "-fx-padding: 10 15; " +
                 "-fx-border-color: #e2e8f0; " +
                 "-fx-border-width: 1 0 0 0;");
         productFooter.setMinHeight(5);  // Set minHeight to avoid excess space
 
         Label priceLabel = new Label("Price: " + product.getPrice() + " DT");
-        priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #ff791f; -fx-font-size: 16px;"); // Increased font size
+        priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill:#000000; -fx-font-size: 16px;"); // Increased font size
 
         Label stockLabel = new Label("Stock: " + product.getStock());
 

@@ -83,13 +83,22 @@ public class PromotionController {
         discountBox.setPrefWidth(250);
         discountBox.setMaxWidth(250);
         discountBox.setMinHeight(100);
-        discountBox.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8;");
-
+        discountBox.setStyle("-fx-background-color: white; " +
+                "-fx-border-color: #cccccc; " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-radius: 15px; " +
+                "-fx-background-radius: 15px; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
         // Discount header
         VBox header = new VBox();
-        header.setStyle("-fx-background-color: #bfe2f6; -fx-padding: 12 15;");
+        header.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
+                "-fx-border-radius: 15px 15px 0 0; " +
+                "-fx-background-radius: 15px 15px 0 0; " +
+                "-fx-padding: 12 15; " +
+                "-fx-border-color: #e2e8f0; " +
+                "-fx-border-width: 0 0 1 0;");
         Label idLabel = new Label("Pourcentage de promotion: \n" + discount.getDiscountPercentage() +"%");
-        idLabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 16px;");
+        idLabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 15px;");
         header.getChildren().add(idLabel);
 
         // Discount details

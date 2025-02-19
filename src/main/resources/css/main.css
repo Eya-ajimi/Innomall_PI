@@ -1,4 +1,3 @@
-/* Define color variables */
 :root {
     -fx-blue: #97d4f5;
     -fx-blue-light: #bfe2f6;
@@ -7,71 +6,82 @@
     -fx-grey_light: #e6e6e6;
 }
 .root {
-    -fx-background-color: #f5f7fa;
+    -fx-background-color: #ffffff;
 }
 
 .sidebar {
-    -fx-background-color:#bfe2f6;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);
 }
+
 .whitebox {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 20px; /* Apply rounded corners */
-    -fx-border-radius: 20px; /* Ensure border follows the same shape */
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
 }
+
 .button {
     -fx-background-color: #ff791f;
-    -fx-background-radius: 20px; /* Apply rounded corners */
-    -fx-border-radius: 20px; /* Ensure border follows the same shape */
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
 }
-.button_two {
-    -fx-background-color: white; /* White background */
-    -fx-background-radius: 20px; /* Rounded corners */
 
-    -fx-border-color: #ff791f; /* Orange border */
-    -fx-border-width: 2px; /* Border thickness */
-    -fx-border-radius: 20px; /* Match border radius */
+.button_two {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-border-color: #ff791f;
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
 }
+
 .button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-text-fill: #7c7876;
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(191, 226, 246, 0.82);
+    -fx-border-width: 0.7px;
+    -fx-border-radius: 10px;
+    -fx-text-fill: #000000;
     -fx-font-size: 16px;
-    -fx-font-weight: bold;
+    -fx-font-weight: light;
     -fx-padding: 10px;
     -fx-alignment: CENTER_LEFT;
-    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0.2, 0, 2);
 }
 
 .button:hover {
-    -fx-background-color: #FFA500; /* Orange shade */
+    -fx-background-color: rgba(255, 165, 0, 0.90);
     -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.6, 0, 4);
 }
 
 .button:pressed {
-    -fx-background-color: #E69500; /* Slightly darker orange */
+    -fx-background-color: #E69500;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 14, 0.7, 0, 5);
 }
-.logout-button {
-    -fx-background-color: #FFA500; /* Orange by default */
-    -fx-text-fill: white; /* White text by default */
-    -fx-font-size: 25px;
-    -fx-font-weight: bold;
-    -fx-border-radius: 5px;
-    -fx-alignment: center;
 
+.logout-button {
+    -fx-background-color: rgba(191, 226, 246, 0.82);
+    -fx-text-fill: black;
+    -fx-font-size: 25px;
+    -fx-font-weight: light;
+    -fx-border-radius: 2px;
+    -fx-border-color: rgba(255, 255, 255, 0);
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 4, 0.2, 0, 2);
 }
 
 .logout-button:hover,
 .logout-button:pressed {
-    -fx-background-color: white; /* White on hover/click */
-    -fx-text-fill: #FFA500; /* Orange text on hover/click */
+    -fx-background-color:#FFA500;
+    -fx-text-fill: white;
     -fx-border-color: #FFA500;
-    -fx-border-color: #FFA500; /* Orange border */
-    -fx-border-width: 2px;/* Keep the orange border */
+    -fx-border-width: 2px;
 }
 
-
-
-/* Header  */
 .header {
     -fx-background-color: #4a5568;
     -fx-padding: 15;
@@ -84,7 +94,6 @@
     -fx-text-fill: white;
 }
 
-/* Search field  */
 .search-field {
     -fx-background-radius: 4;
     -fx-border-radius: 4;
@@ -94,28 +103,25 @@
     -fx-pref-width: 250.0;
 }
 
-/* ScrollPane styles */
 .transparent-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
-/* Product container styles */
 .product-container {
     -fx-background-color: transparent;
     -fx-hgap: 15.0;
     -fx-vgap: 15.0;
 }
 
-/* Product card styles */
 .product-card {
     -fx-background-color: white;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
     -fx-max-width: 250;
     -fx-pref-width: 250;
-    -fx-min-height: 200;
+    -fx-min-height: 150;
 }
 
 .product-card:hover {
@@ -123,9 +129,8 @@
     -fx-translate-y: -2;
 }
 
-/* Product sections */
 .product-header {
-    -fx-background-color: #ebf4ff;
+    -fx-background-color: rgba(255, 165, 0, 0.77);
     -fx-padding: 12 15;
     -fx-border-color: #e2e8f0;
     -fx-border-width: 0 0 1 0;
@@ -157,23 +162,22 @@
     -fx-text-fill: #2d3748;
 }
 
-/* Stock status colors */
 .stock-high {
-    -fx-text-fill: #48bb78;  /* Green */
+    -fx-text-fill: #48bb78;
 }
 
 .stock-low {
-    -fx-text-fill: #ed8936;  /* Orange */
+    -fx-text-fill: #ed8936;
 }
 
 .stock-out {
-    -fx-text-fill: #e53e3e;  /* Red */
+    -fx-text-fill: #e53e3e;
 }
 
-/* Main layout spacing */
 .main-container {
     -fx-spacing: 15.0;
 }
+
 #addButton {
     -fx-background-color: #ffffff;
     -fx-text-fill: #ff791f;
@@ -183,13 +187,14 @@
 }
 
 #addButton:hover {
-    -fx-background-color: #ff791f;
+    -fx-background-color: rgba(255, 165, 0, 0.77);
     -fx-text-fill: white;
 }
 
 #addButton:pressed {
     -fx-background-color: #cc5f1a;
 }
+
 #cancelButton {
     -fx-background-color: #f0f0f0;
     -fx-text-fill: #333333;
@@ -204,7 +209,6 @@
     -fx-background-color: #bfbfbf;
 }
 
-/* Save Button */
 #saveButton {
     -fx-background-color: #ff791f;
     -fx-text-fill: white;
