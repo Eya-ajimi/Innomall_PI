@@ -14,6 +14,16 @@
         </font>
     </Label>
 
+    <!-- Labels pour afficher les informations de l'utilisateur -->
+    <Label fx:id="nomLabel" layoutX="50" layoutY="100"/>
+    <Label fx:id="prenomLabel" layoutX="50" layoutY="130"/>
+    <Label fx:id="emailLabel" layoutX="50" layoutY="160"/>
+    <Label fx:id="telephoneLabel" layoutX="50" layoutY="190"/>
+    <Label fx:id="adresseLabel" layoutX="50" layoutY="220"/>
+    <Label fx:id="roleLabel" layoutX="50" layoutY="250"/>
+    <Label fx:id="statutLabel" layoutX="50" layoutY="280"/>
+    <Label fx:id="dateInscriptionLabel" layoutX="50" layoutY="310"/>
+    
     <!-- Bouton de déconnexion -->
-    <Button layoutX="50" layoutY="100" text="Déconnexion" onAction="#handleLogout"/>
+    <Button layoutX="50" layoutY="350" text="Déconnexion" onAction="#handleLogout"/>
 </AnchorPane>

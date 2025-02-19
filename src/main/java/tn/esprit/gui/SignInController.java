@@ -59,7 +59,22 @@ public class SignInController {
 
                 if ("Utilisateur".equals(role)) {
                     fxmlFile = "/fxml/userDashboard.fxml"; // Page XML pour l'utilisateur
-                } else if ("Shop Owner".equals(role)) {
+                } else if ("admin".equals(user.getRole())) {
+                    errorMessage.setText("Connexion réussie !");
+
+                    // Définir l'utilisateur connecté dans la session
+
+
+
+                    // Rediriger vers le tableau de bord de l'admin
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/adminDashboard.fxml"));
+                    Parent root = loader.load();
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) btn_sigin.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                }
+                else if ("Shop Owner".equals(role)) {
                     fxmlFile = "/fxml/shopOwnerDashboard.fxml"; // Page XML pour le shopowner
                 } else {
                     errorMessage.setText("Role non reconnu.");
