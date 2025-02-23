@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -36,6 +37,7 @@ public class ParkingLotController implements Initializable {
     @FXML private Rectangle passage;
     @FXML private StackPane statsCard1;
     @FXML private StackPane statsCard2;
+    @FXML private ComboBox<String> floorComboBox;
 
     private int availableSpots = 0;
     private int totalSpots = 0;
@@ -64,6 +66,7 @@ public class ParkingLotController implements Initializable {
 
         initializeAnimations();
         initializeAutoRefresh();
+        initializeFloorComboBox();
         loadParkingSpots();
         setupStatsCardAnimation(statsCard1);
         setupStatsCardAnimation(statsCard2);
@@ -107,20 +110,37 @@ public class ParkingLotController implements Initializable {
         timeline.play();
     }
 
+    private void initializeFloorComboBox() {
+        floorComboBox.getItems().addAll("Level 1", "Level 2");
+        floorComboBox.setValue("Level 1"); // Default selection
+        floorComboBox.setOnAction(event -> loadParkingSpots());
+    }
+
     private void loadParkingSpots() {
         try {
+            String selectedFloor = floorComboBox.getValue();
             List<PlaceParking> parkingSpots = parkingService.showAll();
             topRow.getChildren().clear();
             bottomRow.getChildren().clear();
 
             resetCounters();
-            totalSpots = parkingSpots.size();
 
-            for (int i = 0; i < parkingSpots.size(); i++) {
-                PlaceParking place = parkingSpots.get(i);
+            // Filter spots for the selected floor
+            List<PlaceParking> filteredSpots = new ArrayList<>();
+            for (PlaceParking spot : parkingSpots) {
+                if (spot.getFloor().equals(selectedFloor)) {
+                    filteredSpots.add(spot);
+                }
+            }
+
+            totalSpots = filteredSpots.size(); // Fix: Use only spots from the selected floor
+
+            int half = filteredSpots.size() / 2;
+            for (int i = 0; i < filteredSpots.size(); i++) {
+                PlaceParking place = filteredSpots.get(i);
                 StackPane spotContainer = createParkingSpot(place);
 
-                if (i < parkingSpots.size() / 2) {
+                if (i < half) {
                     topRow.getChildren().add(spotContainer);
                 } else {
                     bottomRow.getChildren().add(spotContainer);
@@ -132,6 +152,7 @@ public class ParkingLotController implements Initializable {
             showErrorAlert("Error loading parking spots", e.getMessage());
         }
     }
+
 
     private void resetCounters() {
         availableSpots = 0;
@@ -145,18 +166,30 @@ public class ParkingLotController implements Initializable {
         Rectangle spot = createSpotRectangle();
         ImageView carView = createCarImageView();
 
+        // Create a label to display the Zone and ID
+        Label infoLabel = new Label( place.getZone() + "\nID: " + place.getId());
+        infoLabel.getStyleClass().add("spot-info-label");
+
         if (place.getStatut() == StatutPlace.free) {
             Button reserveButton = createReserveButton(place);
             spot.getStyleClass().add("available-spot");
             carView.setVisible(false);
-            spotContainer.getChildren().addAll(spot, reserveButton);
-            availableSpots++;
 
+            // Add the label and reserve button to the spot container
+            VBox content = new VBox(5, infoLabel, reserveButton);
+            content.setAlignment(Pos.CENTER);
+            spotContainer.getChildren().addAll(spot, content);
+
+            availableSpots++;
             setupSpotHoverAnimation(spotContainer);
         } else {
             spot.getStyleClass().add("occupied-spot");
             carView.setVisible(true);
-            spotContainer.getChildren().addAll(spot, carView);
+
+            // Add the label and car image to the spot container
+            VBox content = new VBox(5, infoLabel, carView);
+            content.setAlignment(Pos.CENTER);
+            spotContainer.getChildren().addAll(spot, content);
 
             if (!animationPlayedMap.containsKey(place.getId())) {
                 setupCarEntranceAnimation(carView);
@@ -267,8 +300,13 @@ public class ParkingLotController implements Initializable {
 
     private void updateStatistics() {
         counterLabel.setText("Available Spots: " + availableSpots);
-        double occupancyRate = ((totalSpots - availableSpots) / (double) totalSpots) * 100;
-        occupancyLabel.setText(String.format("Occupancy: %.1f%%", occupancyRate));
+
+        if (totalSpots > 0) {
+            double occupancyRate = ((totalSpots - availableSpots) / (double) totalSpots) * 100;
+            occupancyLabel.setText(String.format("Occupancy: %.1f%%", occupancyRate));
+        } else {
+            occupancyLabel.setText("Occupancy: 0.0%"); // Handle division by zero
+        }
     }
 
     private void showErrorAlert(String header, String content) {

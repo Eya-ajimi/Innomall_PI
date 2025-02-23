@@ -84,7 +84,8 @@ public class FetchDataFromDatabase {
                 PlaceParking spot = new PlaceParking(
                         resultSet.getInt("id"),
                         resultSet.getString("zone"),
-                        StatutPlace.valueOf(resultSet.getString("statut"))
+                        StatutPlace.valueOf(resultSet.getString("statut")),
+                        resultSet.getString("floor") // Ajout du champ floor
                 );
                 parkingSpots.add(spot);
             }

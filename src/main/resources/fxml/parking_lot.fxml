@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -20,6 +21,7 @@
         <Insets bottom="30" left="30" right="30" top="30" />
     </padding>
 
+    <!-- Navigation Bar -->
     <HBox alignment="CENTER" prefHeight="73.0" styleClass="nav-bar">
         <children>
             <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall">
@@ -67,10 +69,18 @@
         </children>
     </HBox>
 
+    <!-- Title -->
     <HBox alignment="CENTER" spacing="20">
         <Label styleClass="title-label" text="Parking Management System" />
     </HBox>
 
+    <!-- Floor Selection -->
+    <HBox alignment="CENTER" spacing="20">
+        <Label text="Select Floor:" styleClass="floor-label" />
+        <ComboBox fx:id="floorComboBox" styleClass="floor-combo-box" />
+    </HBox>
+
+    <!-- Statistics Cards -->
     <HBox alignment="CENTER" spacing="20">
         <StackPane fx:id="statsCard1" styleClass="stats-card">
             <Label fx:id="counterLabel" styleClass="stats-label" text="Available Spots: 20" />
@@ -81,8 +91,10 @@
         </StackPane>
     </HBox>
 
+    <!-- Parking Area -->
     <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
         <VBox fx:id="parkingArea" alignment="CENTER" spacing="30" styleClass="parking-container">
+            <!-- Legend -->
             <HBox alignment="CENTER" spacing="20" styleClass="legend-container">
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
                     <Rectangle height="20" styleClass="available-spot" width="20" />
@@ -95,33 +107,25 @@
                 <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="View Reserved Spots" />
             </HBox>
 
+            <!-- Top Row for Parking Spots -->
             <VBox spacing="10">
                 <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row" />
-                <HBox alignment="CENTER" spacing="142">
-                    <Label styleClass="zone-label" text="Zone A" />
-                    <Label styleClass="zone-label" text="Zone B" />
-                    <Label styleClass="zone-label" text="Zone C" />
-                    <Label styleClass="zone-label" text="Zone D" />
-                </HBox>
             </VBox>
 
+            <!-- Driving Lane -->
             <StackPane>
                 <Rectangle fx:id="passage" height="80" styleClass="passage" />
                 <Label styleClass="passage-label" text="⟵ Driving Lane ⟶" />
             </StackPane>
 
+            <!-- Bottom Row for Parking Spots -->
             <VBox spacing="10">
                 <HBox fx:id="bottomRow" alignment="CENTER" styleClass="parking-row" />
-                <HBox alignment="CENTER" spacing="142">
-                    <Label styleClass="zone-label" text="Zone E" />
-                    <Label styleClass="zone-label" text="Zone F" />
-                    <Label styleClass="zone-label" text="Zone G" />
-                    <Label styleClass="zone-label" text="Zone H" />
-                </HBox>
             </VBox>
         </VBox>
     </ScrollPane>
 
+    <!-- CSS Stylesheet -->
     <stylesheets>
         <URL value="@/css/parking_lot_css.css" />
     </stylesheets>

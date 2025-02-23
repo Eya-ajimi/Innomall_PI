@@ -290,3 +290,35 @@
 .close-button:hover {
     -fx-background-color: #757575;
 }
+/* ==================== Floor Selection ==================== */
+.floor-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.floor-combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 15px;
+    -fx-padding: 5px 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.floor-combo-box .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #2c3e50;
+}
+
+.floor-combo-box .list-cell:hover {
+    -fx-background-color: #E1F4FF;
+}
+.spot-info-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+}

@@ -1,8 +1,10 @@
 package tn.esprit.services;
+
 import tn.esprit.enums.StatutReservation;
 import tn.esprit.entities.PlaceParking;
 import tn.esprit.utils.DataBase;
 import tn.esprit.enums.StatutPlace;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,21 +15,23 @@ public class PlaceParkingService implements CRUD<PlaceParking> {
 
     @Override
     public int insert(PlaceParking place) throws SQLException {
-        String query = "INSERT INTO PlaceParking (zone, statut) VALUES (?, ?)";
+        String query = "INSERT INTO PlaceParking (zone, statut, floor) VALUES (?, ?, ?)";
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
             ps.setString(1, place.getZone());
             ps.setString(2, place.getStatut().name()); // Enum to String
+            ps.setString(3, place.getFloor()); // Add floor
             return ps.executeUpdate();
         }
     }
 
     @Override
     public int update(PlaceParking place) throws SQLException {
-        String query = "UPDATE PlaceParking SET zone = ?, statut = ? WHERE id = ?";
+        String query = "UPDATE PlaceParking SET zone = ?, statut = ?, floor = ? WHERE id = ?";
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
             ps.setString(1, place.getZone());
             ps.setString(2, place.getStatut().name()); // Enum to String
-            ps.setInt(3, place.getId());
+            ps.setString(3, place.getFloor()); // Add floor
+            ps.setInt(4, place.getId());
             return ps.executeUpdate();
         }
     }
@@ -53,7 +57,8 @@ public class PlaceParkingService implements CRUD<PlaceParking> {
                 places.add(new PlaceParking(
                         rs.getInt("id"),
                         rs.getString("zone"),
-                        StatutPlace.valueOf(rs.getString("statut")) // Convert String to Enum
+                        StatutPlace.valueOf(rs.getString("statut")), // Convert String to Enum
+                        rs.getString("floor") // Add floor
                 ));
             }
         }
@@ -110,6 +115,4 @@ public class PlaceParkingService implements CRUD<PlaceParking> {
             cnx.setAutoCommit(true);
         }
     }
-
-
 }

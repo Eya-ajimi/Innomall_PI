@@ -1,20 +1,21 @@
 package tn.esprit.entities;
+
 import tn.esprit.enums.StatutPlace;
 
 public class PlaceParking {
-
-
-
     private int id;
     private String zone;
     private StatutPlace statut;
+    private String floor; // New field for floor
 
+    // Constructors
+    public PlaceParking() {}
 
-
-    public PlaceParking(int id, String zone, StatutPlace statut) {
+    public PlaceParking(int id, String zone, StatutPlace statut, String floor) {
         this.id = id;
         this.zone = zone;
         this.statut = statut;
+        this.floor = floor;
     }
 
     // Getters and Setters
@@ -42,12 +43,21 @@ public class PlaceParking {
         this.statut = statut;
     }
 
+    public String getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
     @Override
     public String toString() {
         return "PlaceParking{" +
                 "id=" + id +
                 ", zone='" + zone + '\'' +
                 ", statut=" + statut +
+                ", floor='" + floor + '\'' +
                 '}';
     }
 }
