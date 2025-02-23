@@ -34,7 +34,8 @@ public class TestReservationList {
         }
     }
 
-    // Method to display reservation information
+
+
     public static void displayReservationInfo(Reservation reservation) {
         System.out.println("\n📋 Reservation Information:");
         System.out.println("Reservation ID: " + reservation.getIdReservation());

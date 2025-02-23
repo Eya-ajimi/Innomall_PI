@@ -7,26 +7,28 @@ import tn.esprit.services.PlaceParkingService;
 import java.sql.SQLException;
 
 public class TestPlaceParking {
-
     public static void main(String[] args) {
-        PlaceParkingService placeParkingService = new PlaceParkingService();
+        PlaceParkingService service = new PlaceParkingService();
 
         try {
-            // Zones A to H, each with 2 spots
-            String[] zones = {"A", "B", "C", "D", "E", "F", "G", "H"};
+            //  parking spot with ID 40
+            PlaceParking place = new PlaceParking(40, "Zone A", StatutPlace.free);
+            service.insert(place);
+            System.out.println("Added parking spot ID 40");
 
-            for (String zone : zones) {
-                for (int i = 1; i <= 2; i++) {
-                    PlaceParking newPlace = new PlaceParking(0, "Zone " + zone, StatutPlace.free);
-                    placeParkingService.insert(newPlace);
-                }
-            }
-            System.out.println("✅ New parking spots added: 2 per zone (A-H).");
+            // 2. Update
+            place.setZone("Zone B"); // Changing zone
+            place.setStatut(StatutPlace.taken); // Changing status
+            service.update(place);
+            System.out.println("Updated parking spot ID 40");
 
-            // Display the newly added parking spots
-            placeParkingService.showAll().forEach(place ->
-                    System.out.println("Place ID: " + place.getId() + ", Zone: " + place.getZone() + ", Status: " + place.getStatut())
-            );
+            // 3. Show all
+            System.out.println("All Parking Spots:");
+            service.showAll().forEach(System.out::println);
+
+            // 4. Delete
+            service.delete(place);
+            System.out.println("Deleted parking spot ID 40");
 
         } catch (SQLException e) {
             e.printStackTrace();

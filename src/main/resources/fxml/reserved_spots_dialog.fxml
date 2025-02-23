@@ -18,12 +18,10 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <!-- Header Section -->
     <HBox styleClass="dialog-header" alignment="CENTER">
         <Text styleClass="dialog-title" text="Reserved Parking Spots"/>
     </HBox>
 
-    <!-- Search and Filter Section -->
     <HBox spacing="10" alignment="CENTER_LEFT" styleClass="search-container">
         <TextField fx:id="searchField" promptText="Search reservations..."
                    styleClass="search-field"/>
@@ -31,7 +29,6 @@
                   styleClass="status-filter"/>
     </HBox>
 
-    <!-- Table Section -->
     <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
         <TableView fx:id="reservationTable" styleClass="reservation-table">
             <columns>
@@ -62,7 +59,6 @@
         </TableView>
     </ScrollPane>
 
-    <!-- Action Buttons -->
     <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="button-container">
         <Button text="Refresh" onAction="#handleRefreshAction"
                 styleClass="action-button, refresh-button"/>

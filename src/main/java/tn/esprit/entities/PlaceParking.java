@@ -9,13 +9,8 @@ public class PlaceParking {
     private String zone;
     private StatutPlace statut;
 
-    // Constructor without ID (auto-generated)
-    public PlaceParking(String zone, StatutPlace statut) {
-        this.zone = zone;
-        this.statut = statut;
-    }
 
-    // Constructor with ID (for manual creation)
+
     public PlaceParking(int id, String zone, StatutPlace statut) {
         this.id = id;
         this.zone = zone;

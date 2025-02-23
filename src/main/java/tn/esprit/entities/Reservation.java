@@ -10,15 +10,14 @@ public class Reservation {
     }
 
     private int idReservation;
-    private int idUtilisateur; // Changed from idClient
+    private int idUtilisateur;
     private int idParking;
     private Timestamp dateReservation;
     private Timestamp dateExpiration;
     private StatutReservation statut;
 
-    // Constructor that accepts the expected parameters
     public Reservation(int idUtilisateur, int idParking, Timestamp dateReservation, Timestamp dateExpiration, StatutReservation statut) {
-        this.idUtilisateur = idUtilisateur; // Changed from idClient
+        this.idUtilisateur = idUtilisateur;
         this.idParking = idParking;
         this.dateReservation = dateReservation;
         this.dateExpiration = dateExpiration;

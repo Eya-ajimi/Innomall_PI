@@ -20,20 +20,16 @@
         <Insets bottom="30" left="30" right="30" top="30" />
     </padding>
 
-    <!-- Navigation Bar -->
     <HBox alignment="CENTER" prefHeight="73.0" styleClass="nav-bar">
         <children>
-            <!-- Logo Label -->
             <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall">
                 <HBox.margin>
                     <Insets left="-140.0" />
                 </HBox.margin>
             </Label>
 
-            <!-- Separator -->
             <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
 
-            <!-- Search Bar -->
             <HBox alignment="CENTER" spacing="5.0">
                 <TextField prefHeight="26.0" prefWidth="258.0" promptText="Search..."
                            style="-fx-background-radius: 15; -fx-background-color: white;" />
@@ -43,11 +39,8 @@
                     </image>
                 </ImageView>
             </HBox>
-
-            <!-- Spacer -->
             <Pane prefWidth="50.0" />
 
-            <!-- Navigation Labels -->
             <HBox alignment="CENTER" spacing="30.0">
                 <Label fx:id="homeLabel" styleClass="nav-label" text="Home" />
                 <Label styleClass="nav-label" text="Shops" />
@@ -55,17 +48,14 @@
                 <Label styleClass="nav-label" text="Parking" />
             </HBox>
 
-            <!-- Spacer -->
             <Pane prefWidth="105.0" />
 
-            <!-- Notifications Icon -->
             <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../assets/notif.png" />
                 </image>
             </ImageView>
 
-            <!-- User Profile -->
             <HBox alignment="CENTER" spacing="10.0">
                 <Label styleClass="user-label" text="Sofiene Zayati" />
                 <ImageView fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
@@ -77,12 +67,10 @@
         </children>
     </HBox>
 
-    <!-- Header Section -->
     <HBox alignment="CENTER" spacing="20">
         <Label styleClass="title-label" text="Parking Management System" />
     </HBox>
 
-    <!-- Stats Container -->
     <HBox alignment="CENTER" spacing="20">
         <StackPane fx:id="statsCard1" styleClass="stats-card">
             <Label fx:id="counterLabel" styleClass="stats-label" text="Available Spots: 20" />
@@ -93,10 +81,8 @@
         </StackPane>
     </HBox>
 
-    <!-- Parking Layout -->
     <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
         <VBox fx:id="parkingArea" alignment="CENTER" spacing="30" styleClass="parking-container">
-            <!-- Legend -->
             <HBox alignment="CENTER" spacing="20" styleClass="legend-container">
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
                     <Rectangle height="20" styleClass="available-spot" width="20" />
@@ -109,7 +95,6 @@
                 <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="View Reserved Spots" />
             </HBox>
 
-            <!-- Top Row with Zones -->
             <VBox spacing="10">
                 <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row" />
                 <HBox alignment="CENTER" spacing="142">
@@ -120,13 +105,11 @@
                 </HBox>
             </VBox>
 
-            <!-- Central Passage -->
             <StackPane>
                 <Rectangle fx:id="passage" height="80" styleClass="passage" />
                 <Label styleClass="passage-label" text="⟵ Driving Lane ⟶" />
             </StackPane>
 
-            <!-- Bottom Row with Zones -->
             <VBox spacing="10">
                 <HBox fx:id="bottomRow" alignment="CENTER" styleClass="parking-row" />
                 <HBox alignment="CENTER" spacing="142">
