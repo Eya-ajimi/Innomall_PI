@@ -10,35 +10,103 @@
         <Insets top="20" right="25" bottom="20" left="25"/>
     </padding>
 
-    <stylesheets>
-        <URL value="@/css/style.css" />
-    </stylesheets>
 
     <Text styleClass="dialog-header" text="Reserve Your Parking Spot"/>
 
-    <VBox spacing="5">
-        <Label text="Date" styleClass="field-label"/>
-        <DatePicker fx:id="datePicker" styleClass="date-picker" promptText="Select date"/>
+    <!-- Start Date/Time Section -->
+    <VBox spacing="5" styleClass="section-container">
+        <Label text="Start Date &amp; Time" styleClass="section-header"/>
+        <GridPane hgap="10" vgap="5">
+            <DatePicker fx:id="startDatePicker" promptText="Select start date"
+                        GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+
+            <Label text="Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Spinner fx:id="startHourSpinner" prefWidth="80" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23"
+                                                                        initialValue="12"
+                                                                        amountToStepBy="1"/>
+                    </valueFactory>
+                </Spinner>
+                <Label text=":" styleClass="time-separator"/>
+                <Spinner fx:id="startMinuteSpinner" prefWidth="80" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59"
+                                                                        initialValue="0"
+                                                                        amountToStepBy="5"/>
+                    </valueFactory>
+                </Spinner>
+            </HBox>
+        </GridPane>
     </VBox>
 
-    <VBox spacing="5">
-        <Label text="Time" styleClass="field-label"/>
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Spinner fx:id="hourSpinner" prefWidth="100" styleClass="time-spinner">
-                <valueFactory>
-                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23" initialValue="12"
-                                                                    amountToStepBy="1"/>
-                </valueFactory>
-            </Spinner>
-            <Label text=":" styleClass="time-separator"/>
-            <Spinner fx:id="minuteSpinner" prefWidth="100" styleClass="time-spinner">
-                <valueFactory>
-                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59" initialValue="0"
-                                                                    amountToStepBy="5"/>
-                </valueFactory>
-            </Spinner>
-        </HBox>
+    <!-- End Date/Time Section -->
+    <VBox spacing="5" styleClass="section-container">
+        <Label text="End Date &amp; Time" styleClass="section-header"/>
+        <GridPane hgap="10" vgap="5">
+            <DatePicker fx:id="endDatePicker" promptText="Select end date"
+                        GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+
+            <Label text="Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Spinner fx:id="endHourSpinner" prefWidth="80" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23"
+                                                                        initialValue="12"
+                                                                        amountToStepBy="1"/>
+                    </valueFactory>
+                </Spinner>
+                <Label text=":" styleClass="time-separator"/>
+                <Spinner fx:id="endMinuteSpinner" prefWidth="80" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59"
+                                                                        initialValue="0"
+                                                                        amountToStepBy="5"/>
+                    </valueFactory>
+                </Spinner>
+            </HBox>
+        </GridPane>
     </VBox>
 
-    <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false"/>
+    <!-- Vehicle Information -->
+    <VBox spacing="5" styleClass="section-container">
+        <Label text="Vehicle Information" styleClass="section-header"/>
+        <ComboBox fx:id="vehicleTypeCombo" promptText="Select vehicle type" maxWidth="Infinity"/>
+    </VBox>
+
+    <!-- Additional Notes -->
+    <VBox spacing="5" styleClass="section-container">
+        <Label text="Additional Notes" styleClass="section-header"/>
+        <TextArea fx:id="notesArea" promptText="Enter any special requirements or notes"
+                  wrapText="true" prefRowCount="3" maxWidth="Infinity"/>
+    </VBox>
+
+    <!-- Reservation Summary -->
+    <VBox spacing="5" styleClass="summary-container">
+        <Label text="Reservation Summary" styleClass="section-header"/>
+        <GridPane hgap="10" vgap="5">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="100"/>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+            </columnConstraints>
+
+            <Label text="Duration:" styleClass="summary-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label fx:id="durationLabel" text="--" styleClass="summary-value"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Estimated Price:" styleClass="summary-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label fx:id="priceLabel" text="--" styleClass="summary-value"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        </GridPane>
+    </VBox>
+
+    <!-- Error Message -->
+    <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false"
+           textFill="red" wrapText="true" maxWidth="Infinity"/>
+    <stylesheets>
+        <URL value="@/css/reservation_dialog_css.css" />
+    </stylesheets>
 </VBox>

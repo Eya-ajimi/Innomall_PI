@@ -12,7 +12,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="tn.esprit.gui.ReservedSpotsController">
     <stylesheets>
-        <URL value="@/css/style.css" />
+        <URL value="@/css/reserved_spots_dialog.css" />
     </stylesheets>
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>

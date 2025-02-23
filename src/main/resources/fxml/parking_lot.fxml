@@ -140,6 +140,6 @@
     </ScrollPane>
 
     <stylesheets>
-        <URL value="@/css/style.css" />
+        <URL value="@/css/parking_lot_css.css" />
     </stylesheets>
 </VBox>
