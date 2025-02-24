@@ -66,7 +66,14 @@ public class PlaceParkingService implements CRUD<PlaceParking> {
         }
         return places;
     }
-
+    public void updateParkingSpotStatus(int parkingId, StatutPlace status) throws SQLException {
+        String query = "UPDATE PlaceParking SET statut = ? WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, status.name());
+            ps.setInt(2, parkingId);
+            ps.executeUpdate();
+        }
+    }
     public void reserveSpot(int parkingId, int utilisateurId, LocalDateTime dateReservation, LocalDateTime dateExpiration) throws SQLException {
         String insertQuery = "INSERT INTO Reservation (idUtilisateur, idParking, dateReservation, dateExpiration, statut) VALUES (?, ?, ?, ?, ?)";
         String updateQuery = "UPDATE PlaceParking SET statut = ? WHERE id = ? AND statut = ?";

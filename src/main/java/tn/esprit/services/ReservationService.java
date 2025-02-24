@@ -11,6 +11,7 @@ import java.util.List;
 public class ReservationService implements CRUD<Reservation> {
 
     @Override
+
     public int insert(Reservation reservation) throws SQLException {
         String sql = "INSERT INTO Reservation (idUtilisateur, idParking, dateReservation, dateExpiration, statut, vehicleType, carWashType, notes, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DataBase.getInstance().getCnx();
@@ -31,7 +32,7 @@ public class ReservationService implements CRUD<Reservation> {
                 if (generatedKeys.next()) {
                     reservation.setIdReservation(generatedKeys.getInt(1));
                 }
-                updateParkingStatus(reservation.getIdParking(), "taken");
+                // Do not update the parking spot status here
                 return rowsInserted;
             }
         }
