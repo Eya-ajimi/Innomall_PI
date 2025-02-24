@@ -45,20 +45,22 @@ public class PlaceParkingService implements CRUD<PlaceParking> {
         }
     }
 
+    // In PlaceParkingService
     @Override
     public List<PlaceParking> showAll() throws SQLException {
         List<PlaceParking> places = new ArrayList<>();
         String query = "SELECT * FROM PlaceParking";
 
-        try (Statement st = cnx.createStatement();
+        try (Connection connection = DataBase.getInstance().getCnx();
+             Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(query)) {
 
             while (rs.next()) {
                 places.add(new PlaceParking(
                         rs.getInt("id"),
                         rs.getString("zone"),
-                        StatutPlace.valueOf(rs.getString("statut")), // Convert String to Enum
-                        rs.getString("floor") // Add floor
+                        StatutPlace.valueOf(rs.getString("statut")),
+                        rs.getString("floor")
                 ));
             }
         }

@@ -21,7 +21,17 @@ public class TestReservationCRUD {
 
         // Test insert
         System.out.println("Testing insert...");
-        Reservation reservation = new Reservation(utilisateurId, parkingId, dateReservation, dateExpiration, StatutReservation.reserved);
+        Reservation reservation = new Reservation(
+                utilisateurId,
+                parkingId,
+                dateReservation,
+                dateExpiration,
+                StatutReservation.reserved,
+                "Sedan", // vehicleType
+                "Basic Wash - $8.99", // carWashType
+                "Test reservation", // notes
+                20.0 // price
+        );
         try {
             int rowsInserted = reservationService.insert(reservation);
             System.out.println("Rows inserted: " + rowsInserted);

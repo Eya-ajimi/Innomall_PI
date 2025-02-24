@@ -15,13 +15,21 @@ public class Reservation {
     private Timestamp dateReservation;
     private Timestamp dateExpiration;
     private StatutReservation statut;
+    private String vehicleType;
+    private String carWashType;
+    private String notes;
+    private double price;
 
-    public Reservation(int idUtilisateur, int idParking, Timestamp dateReservation, Timestamp dateExpiration, StatutReservation statut) {
+    public Reservation(int idUtilisateur, int idParking, Timestamp dateReservation, Timestamp dateExpiration, StatutReservation statut, String vehicleType, String carWashType, String notes, double price) {
         this.idUtilisateur = idUtilisateur;
         this.idParking = idParking;
         this.dateReservation = dateReservation;
         this.dateExpiration = dateExpiration;
         this.statut = statut;
+        this.vehicleType = vehicleType;
+        this.carWashType = carWashType;
+        this.notes = notes;
+        this.price = price;
     }
 
     // Getters and Setters
@@ -71,6 +79,37 @@ public class Reservation {
 
     public void setStatut(StatutReservation statut) {
         this.statut = statut;
+    }
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getCarWashType() {
+        return carWashType;
+    }
+
+    public void setCarWashType(String carWashType) {
+        this.carWashType = carWashType;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override

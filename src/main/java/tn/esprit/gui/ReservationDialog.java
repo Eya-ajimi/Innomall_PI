@@ -360,5 +360,17 @@ public class ReservationDialog {
         public String getCarWashType() { return carWashType; }
         public boolean hasCarWash() { return carWashType != null && !carWashType.isEmpty(); }
         public String getNotes() { return notes; }
+
+        public double getTotalPrice() {
+            long hours = ChronoUnit.HOURS.between(startDateTime, endDateTime);
+            long minutes = ChronoUnit.MINUTES.between(startDateTime, endDateTime) % 60;
+            double totalHours = hours + (minutes / 60.0);
+            double vehicleMultiplier = VEHICLE_TYPE_MULTIPLIERS.getOrDefault(vehicleType, 1.0);
+            double parkingPrice = totalHours * BASE_HOURLY_RATE * vehicleMultiplier;
+
+            double carWashPrice = hasCarWash() ? getCarWashPrice(carWashType) : 0.0;
+
+            return parkingPrice + carWashPrice;
+        }
     }
 }

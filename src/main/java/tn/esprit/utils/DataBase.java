@@ -31,6 +31,14 @@ public class DataBase {
     }
 
     public Connection getCnx() {
+        try {
+            if (this.cnx == null || this.cnx.isClosed()) {
+                this.cnx = DriverManager.getConnection(URL, USER, PWD);
+
+            }
+        } catch (SQLException e) {
+            System.err.println("Error re-establishing database connection: " + e.getMessage());
+        }
         return this.cnx;
     }
 

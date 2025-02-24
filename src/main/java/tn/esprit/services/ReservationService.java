@@ -12,14 +12,18 @@ public class ReservationService implements CRUD<Reservation> {
 
     @Override
     public int insert(Reservation reservation) throws SQLException {
-        String sql = "INSERT INTO Reservation (idUtilisateur, idParking, dateReservation, dateExpiration, statut) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Reservation (idUtilisateur, idParking, dateReservation, dateExpiration, statut, vehicleType, carWashType, notes, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DataBase.getInstance().getCnx();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, reservation.getIdUtilisateur());
             statement.setInt(2, reservation.getIdParking());
             statement.setTimestamp(3, reservation.getDateReservation());
             statement.setTimestamp(4, reservation.getDateExpiration());
-            statement.setString(5, reservation.getStatut().toString());  // Store the enum as a string
+            statement.setString(5, reservation.getStatut().toString());
+            statement.setString(6, reservation.getVehicleType());
+            statement.setString(7, reservation.getCarWashType());
+            statement.setString(8, reservation.getNotes());
+            statement.setDouble(9, reservation.getPrice());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -64,24 +68,27 @@ public class ReservationService implements CRUD<Reservation> {
         }
     }
 
+    // In ReservationService
     @Override
     public List<Reservation> showAll() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
         String sql = "SELECT * FROM Reservation";
-        Connection connection = DataBase.getInstance().getCnx();
-        if (connection == null || connection.isClosed()) {
-            System.err.println("Connection is closed or null!");
-            return reservations;
-        }
-        try (Statement statement = connection.createStatement();
+
+        try (Connection connection = DataBase.getInstance().getCnx();
+             Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
+
             while (resultSet.next()) {
                 Reservation reservation = new Reservation(
                         resultSet.getInt("idUtilisateur"),
                         resultSet.getInt("idParking"),
                         resultSet.getTimestamp("dateReservation"),
                         resultSet.getTimestamp("dateExpiration"),
-                        StatutReservation.valueOf(resultSet.getString("statut"))
+                        StatutReservation.valueOf(resultSet.getString("statut")),
+                        resultSet.getString("vehicleType"),
+                        resultSet.getString("carWashType"),
+                        resultSet.getString("notes"),
+                        resultSet.getDouble("price")
                 );
                 reservation.setIdReservation(resultSet.getInt("idReservation"));
                 reservations.add(reservation);
@@ -90,9 +97,20 @@ public class ReservationService implements CRUD<Reservation> {
         return reservations;
     }
 
-    // Add reservation method
     public boolean addReservation(int utilisateurId, int parkingId, Timestamp dateReservation, Timestamp dateExpiration) {
-        Reservation reservation = new Reservation(utilisateurId, parkingId, dateReservation, dateExpiration, StatutReservation.reserved);
+        // Create a new Reservation object with default values for the new fields
+        Reservation reservation = new Reservation(
+                utilisateurId,
+                parkingId,
+                dateReservation,
+                dateExpiration,
+                StatutReservation.reserved,
+                null, // vehicleType (default value)
+                null, // carWashType (default value)
+                null, // notes (default value)
+                0.0   // price (default value)
+        );
+
         try {
             return insert(reservation) > 0;
         } catch (SQLException e) {

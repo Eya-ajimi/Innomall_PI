@@ -110,8 +110,13 @@ public class FetchDataFromDatabase {
                         resultSet.getInt("idParking"),
                         resultSet.getTimestamp("dateReservation"),
                         resultSet.getTimestamp("dateExpiration"),
-                        Reservation.StatutReservation.valueOf(resultSet.getString("statut")) // Conversion de l'énumération
+                        Reservation.StatutReservation.valueOf(resultSet.getString("statut")),
+                        resultSet.getString("vehicleType"), // Nouveau champ
+                        resultSet.getString("carWashType"), // Nouveau champ
+                        resultSet.getString("notes"), // Nouveau champ
+                        resultSet.getDouble("price") // Nouveau champ
                 );
+                reservation.setIdReservation(resultSet.getInt("idReservation")); // Assurez-vous que l'ID est correctement défini
                 reservations.add(reservation);
             }
         } catch (SQLException e) {

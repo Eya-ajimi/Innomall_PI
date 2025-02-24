@@ -19,11 +19,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import tn.esprit.entities.PlaceParking;
+import tn.esprit.entities.Reservation;
 import tn.esprit.enums.StatutPlace;
 import tn.esprit.services.PlaceParkingService;
+import tn.esprit.services.ReservationService;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -340,15 +343,34 @@ public class ParkingLotController implements Initializable {
     }
 
     private void showReservationDialog(PlaceParking place) {
-        Optional<LocalDateTime> result = ReservationDialog.showReservationDialog();
-        result.ifPresent(dateTime -> confirmReservation(place, dateTime));
+        Optional<ReservationDialog.ReservationDetails> result = ReservationDialog.showEnhancedReservationDialog();
+        result.ifPresent(details -> confirmReservation(place, details.getStartDateTime(), details));
     }
 
-    private void confirmReservation(PlaceParking place, LocalDateTime dateTime) {
+    private void confirmReservation(PlaceParking place, LocalDateTime dateTime, ReservationDialog.ReservationDetails details) {
         try {
             LocalDateTime expirationTime = dateTime.plusHours(2);
             int utilisateurId = 1;
-            parkingService.reserveSpot(place.getId(), utilisateurId, dateTime, expirationTime);
+
+            // Calculate the total price
+            double totalPrice = details.getTotalPrice();
+
+            // Create a new Reservation object with all details
+            Reservation reservation = new Reservation(
+                    utilisateurId,
+                    place.getId(),
+                    Timestamp.valueOf(dateTime),
+                    Timestamp.valueOf(expirationTime),
+                    Reservation.StatutReservation.reserved,
+                    details.getVehicleType(),
+                    details.getCarWashType(),
+                    details.getNotes(),
+                    totalPrice
+            );
+
+            // Insert the reservation into the database
+            ReservationService reservationService = new ReservationService();
+            reservationService.insert(reservation);
 
             showSuccessAnimation();
             loadParkingSpots();
