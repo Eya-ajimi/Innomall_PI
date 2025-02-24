@@ -260,7 +260,10 @@ public class ParkingLotController implements Initializable {
         // Check if the spot is reserved for the current time
         boolean isReserved = isSpotReservedForCurrentTime(place.getId(), reservations);
 
-        if (!isReserved) {
+        // Check if the spot's statut is "taken"
+        boolean isTaken = place.getStatut() == StatutPlace.taken;
+
+        if (!isReserved && !isTaken && place.getStatut() == StatutPlace.free) {
             Button reserveButton = createReserveButton(place);
             spot.getStyleClass().add("available-spot");
             carView.setVisible(false);
