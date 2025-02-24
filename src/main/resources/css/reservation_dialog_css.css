@@ -65,6 +65,32 @@
     -fx-background-color: #f1f5f9;
 }
 
+.date-picker .cell {
+    -fx-background-color: white;
+    -fx-padding: 4px;
+    -fx-text-fill: #334155;
+}
+
+.date-picker .cell:hover {
+    -fx-background-color: #e0f2fe;
+}
+
+.date-picker .selected {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.date-picker .today {
+    -fx-border-color: #2563eb;
+    -fx-border-width: 1px;
+}
+
+.date-picker .day-name-cell {
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+    -fx-background-color: #f1f5f9;
+}
+
 /* ==================== Combo Box ==================== */
 .combo-box {
     -fx-background-color: white;
@@ -76,6 +102,25 @@
     -fx-border-color: #2563eb;
 }
 
+.combo-box .list-cell {
+    -fx-padding: 6px 10px;
+}
+
+.combo-box .list-view {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #e0f2fe;
+}
+
+.combo-box .list-cell:selected {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1e40af;
+}
+
 /* ==================== Text Area ==================== */
 .text-area {
     -fx-background-color: white;
@@ -85,6 +130,14 @@
 
 .text-area:focused {
     -fx-border-color: #2563eb;
+}
+
+.text-area .content {
+    -fx-background-color: white;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
 }
 
 /* ==================== Summary Container ==================== */
@@ -107,12 +160,27 @@
     -fx-text-fill: #2563eb;
 }
 
+.total-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+}
+
+.total-value {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563eb;
+}
+
 /* ==================== Error Label ==================== */
 .error-label {
     -fx-text-fill: #ef4444;
     -fx-font-size: 13px;
     -fx-padding: 8px 0 0 0;
     -fx-font-weight: bold;
+    -fx-background-color: #fee2e2;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 12px;
 }
 
 /* ==================== Buttons ==================== */
@@ -138,7 +206,123 @@
     -fx-opacity: 0.6;
 }
 
+.button.cancel {
+    -fx-background-color: white;
+    -fx-text-fill: #475569;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1px;
+}
+
+.button.cancel:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-effect: none;
+}
+
+.button.cancel:pressed {
+    -fx-background-color: #e2e8f0;
+}
+
 /* ==================== Input Focus States ==================== */
 .text-input:focused {
     -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.1), 4, 0, 0, 0);
+}
+
+/* ==================== Check Box ==================== */
+.check-box {
+    -fx-label-padding: 0 0 0 6px;
+}
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 3px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #2563eb;
+    -fx-border-color: #2563eb;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.check-box:hover .box {
+    -fx-border-color: #2563eb;
+}
+
+/* ==================== Info Text ==================== */
+.info-text {
+    -fx-fill: #64748b;
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+/* ==================== Field Labels ==================== */
+.field-label {
+    -fx-text-fill: #475569;
+    -fx-font-weight: normal;
+}
+
+/* ==================== Separator ==================== */
+.separator {
+    -fx-padding: 5px 0;
+}
+
+.separator .line {
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1px;
+}
+
+/* ==================== Car Wash Section ==================== */
+.car-wash-checkbox {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* ==================== Dialog Pane ==================== */
+.dialog-pane {
+    -fx-background-color: #f8fafc;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-background-color: #2563eb;
+}
+
+.dialog-pane:header .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* ==================== Spinner Arrows ==================== */
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #e2e8f0;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: #64748b;
+}
+
+/* ==================== Responsive Design ==================== */
+@media screen and (max-width: 600px) {
+    .dialog-content {
+        -fx-padding: 15px;
+    }
+
+    .section-container {
+        -fx-padding: 12px;
+    }
+
+    .dialog-header {
+        -fx-font-size: 20px;
+    }
 }

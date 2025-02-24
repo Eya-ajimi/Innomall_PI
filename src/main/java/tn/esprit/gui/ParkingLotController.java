@@ -116,8 +116,8 @@ public class ParkingLotController implements Initializable {
     private void createFloatingCarAnimation() {
         // Create small car for lane animation
         ImageView movingCar = new ImageView(carImage);
-        movingCar.setFitWidth(40);
-        movingCar.setFitHeight(20);
+        movingCar.setFitWidth(100);
+        movingCar.setFitHeight(100);
         movingCar.setPreserveRatio(true);
         movingCar.setRotate(90); // Rotate to face direction of travel
 

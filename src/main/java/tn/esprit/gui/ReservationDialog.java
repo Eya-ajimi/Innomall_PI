@@ -10,9 +10,25 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class ReservationDialog {
+
+    // Pricing constants
+    private static final double BASE_HOURLY_RATE = 2.0;
+    private static final Map<String, Double> VEHICLE_TYPE_MULTIPLIERS = new HashMap<String, Double>() {{
+        put("Sedan", 1.0);
+        put("SUV", 1.2);
+        put("Van", 1.5);
+        put("Motorcycle", 0.7);
+        put("Electric Vehicle", 1.1);
+        put("Truck", 1.8);
+    }};
+    private static final double CAR_WASH_BASIC_PRICE = 8.99;
+    private static final double CAR_WASH_PREMIUM_PRICE = 14.99;
+    private static final double CAR_WASH_DELUXE_PRICE = 19.99;
 
     // Original method for backward compatibility
     public static Optional<LocalDateTime> showReservationDialog() {
@@ -44,9 +60,13 @@ public class ReservationDialog {
             Spinner<Integer> endHourSpinner = (Spinner<Integer>) content.lookup("#endHourSpinner");
             Spinner<Integer> endMinuteSpinner = (Spinner<Integer>) content.lookup("#endMinuteSpinner");
             ComboBox<String> vehicleTypeCombo = (ComboBox<String>) content.lookup("#vehicleTypeCombo");
+            CheckBox carWashCheckBox = (CheckBox) content.lookup("#carWashCheckBox");
+            ComboBox<String> carWashTypeCombo = (ComboBox<String>) content.lookup("#carWashTypeCombo");
             TextArea notesArea = (TextArea) content.lookup("#notesArea");
             Label durationLabel = (Label) content.lookup("#durationLabel");
-            Label priceLabel = (Label) content.lookup("#priceLabel");
+            Label parkingPriceLabel = (Label) content.lookup("#parkingPriceLabel");
+            Label carWashPriceLabel = (Label) content.lookup("#carWashPriceLabel");
+            Label totalPriceLabel = (Label) content.lookup("#totalPriceLabel");
             Label errorLabel = (Label) content.lookup("#errorLabel");
 
             // Set up the dialog
@@ -60,12 +80,14 @@ public class ReservationDialog {
 
             // Initialize all components
             initializeComponents(startDatePicker, endDatePicker, startHourSpinner, startMinuteSpinner,
-                    endHourSpinner, endMinuteSpinner, vehicleTypeCombo);
+                    endHourSpinner, endMinuteSpinner, vehicleTypeCombo,
+                    carWashCheckBox, carWashTypeCombo);
 
-            // Add validation listeners
-            addValidationListeners(startDatePicker, endDatePicker, startHourSpinner, startMinuteSpinner,
-                    endHourSpinner, endMinuteSpinner, vehicleTypeCombo, errorLabel, confirmButton,
-                    durationLabel, priceLabel);
+            // Add validation and update listeners
+            addListeners(startDatePicker, endDatePicker, startHourSpinner, startMinuteSpinner,
+                    endHourSpinner, endMinuteSpinner, vehicleTypeCombo,
+                    carWashCheckBox, carWashTypeCombo, errorLabel, confirmButton,
+                    durationLabel, parkingPriceLabel, carWashPriceLabel, totalPriceLabel);
 
             // Set up result converter
             dialog.setResultConverter(dialogButton -> {
@@ -78,10 +100,17 @@ public class ReservationDialog {
                             endDatePicker.getValue(),
                             LocalTime.of(endHourSpinner.getValue(), endMinuteSpinner.getValue())
                     );
+
+                    String carWashType = null;
+                    if (carWashCheckBox.isSelected()) {
+                        carWashType = carWashTypeCombo.getValue();
+                    }
+
                     return new ReservationDetails(
                             startDateTime,
                             endDateTime,
                             vehicleTypeCombo.getValue(),
+                            carWashType,
                             notesArea.getText()
                     );
                 }
@@ -90,8 +119,8 @@ public class ReservationDialog {
 
             // Configure dialog window
             Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-            stage.setMinWidth(500);
-            stage.setMinHeight(600);
+            stage.setMinWidth(550);
+            stage.setMinHeight(700);
 
             // Show dialog and return result
             return dialog.showAndWait();
@@ -112,7 +141,9 @@ public class ReservationDialog {
             Spinner<Integer> startMinuteSpinner,
             Spinner<Integer> endHourSpinner,
             Spinner<Integer> endMinuteSpinner,
-            ComboBox<String> vehicleTypeCombo) {
+            ComboBox<String> vehicleTypeCombo,
+            CheckBox carWashCheckBox,
+            ComboBox<String> carWashTypeCombo) {
 
         // Set default dates
         LocalDate today = LocalDate.now();
@@ -120,10 +151,10 @@ public class ReservationDialog {
         endDatePicker.setValue(today);
 
         // Configure time spinners
-        formatTimeSpinner(startHourSpinner);
-        formatTimeSpinner(startMinuteSpinner);
-        formatTimeSpinner(endHourSpinner);
-        formatTimeSpinner(endMinuteSpinner);
+        configureTimeSpinner(startHourSpinner, 0, 23, LocalTime.now().getHour());
+        configureTimeSpinner(startMinuteSpinner, 0, 59, roundToNearestFive(LocalTime.now().getMinute()));
+        configureTimeSpinner(endHourSpinner, 0, 23, LocalTime.now().plusHours(1).getHour());
+        configureTimeSpinner(endMinuteSpinner, 0, 59, roundToNearestFive(LocalTime.now().getMinute()));
 
         // Set up vehicle types
         vehicleTypeCombo.getItems().addAll(
@@ -131,12 +162,32 @@ public class ReservationDialog {
                 "SUV",
                 "Van",
                 "Motorcycle",
-                "Electric Vehicle"
+                "Electric Vehicle",
+                "Truck"
         );
         vehicleTypeCombo.setValue("Sedan"); // Default value
+
+        // Set up car wash options
+        carWashTypeCombo.getItems().addAll(
+                "Basic Wash - $8.99",
+                "Premium Wash - $14.99",
+                "Deluxe Package - $19.99"
+        );
+        carWashTypeCombo.setValue("Basic Wash - $8.99");
+        carWashTypeCombo.setDisable(true);
+
+        // Connect car wash checkbox with combo box
+        carWashCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            carWashTypeCombo.setDisable(!newVal);
+        });
     }
 
-    private static void formatTimeSpinner(Spinner<Integer> spinner) {
+    private static int roundToNearestFive(int minute) {
+        return ((minute + 2) / 5) * 5 % 60;
+    }
+
+    private static void configureTimeSpinner(Spinner<Integer> spinner, int min, int max, int initialValue) {
+        spinner.setValueFactory(new IntegerSpinnerValueFactory(min, max, initialValue));
         spinner.setEditable(true);
         SpinnerValueFactory<Integer> factory = spinner.getValueFactory();
         if (factory instanceof IntegerSpinnerValueFactory) {
@@ -158,7 +209,7 @@ public class ReservationDialog {
         }
     }
 
-    private static void addValidationListeners(
+    private static void addListeners(
             DatePicker startDatePicker,
             DatePicker endDatePicker,
             Spinner<Integer> startHourSpinner,
@@ -166,10 +217,14 @@ public class ReservationDialog {
             Spinner<Integer> endHourSpinner,
             Spinner<Integer> endMinuteSpinner,
             ComboBox<String> vehicleTypeCombo,
+            CheckBox carWashCheckBox,
+            ComboBox<String> carWashTypeCombo,
             Label errorLabel,
             Button confirmButton,
             Label durationLabel,
-            Label priceLabel) {
+            Label parkingPriceLabel,
+            Label carWashPriceLabel,
+            Label totalPriceLabel) {
 
         Runnable validateAndUpdate = () -> {
             try {
@@ -188,7 +243,9 @@ public class ReservationDialog {
                     errorLabel.setVisible(true);
                     confirmButton.setDisable(true);
                     durationLabel.setText("Invalid duration");
-                    priceLabel.setText("--");
+                    parkingPriceLabel.setText("--");
+                    carWashPriceLabel.setText("--");
+                    totalPriceLabel.setText("--");
                     return;
                 }
 
@@ -197,10 +254,24 @@ public class ReservationDialog {
                 long minutes = ChronoUnit.MINUTES.between(startDateTime, endDateTime) % 60;
                 durationLabel.setText(String.format("%d hours %d minutes", hours, minutes));
 
-                // Calculate price (example: $2 per hour)
+                // Calculate parking price
                 double totalHours = hours + (minutes / 60.0);
-                double price = totalHours * 2.0;
-                priceLabel.setText(String.format("$%.2f", price));
+                double vehicleMultiplier = VEHICLE_TYPE_MULTIPLIERS.getOrDefault(vehicleTypeCombo.getValue(), 1.0);
+                double parkingPrice = totalHours * BASE_HOURLY_RATE * vehicleMultiplier;
+                parkingPriceLabel.setText(String.format("$%.2f", parkingPrice));
+
+                // Calculate car wash price
+                double carWashPrice = 0.0;
+                if (carWashCheckBox.isSelected() && carWashTypeCombo.getValue() != null) {
+                    carWashPrice = getCarWashPrice(carWashTypeCombo.getValue());
+                    carWashPriceLabel.setText(String.format("$%.2f", carWashPrice));
+                } else {
+                    carWashPriceLabel.setText("N/A");
+                }
+
+                // Calculate total price
+                double totalPrice = parkingPrice + carWashPrice;
+                totalPriceLabel.setText(String.format("$%.2f", totalPrice));
 
                 errorLabel.setVisible(false);
                 confirmButton.setDisable(false);
@@ -220,9 +291,28 @@ public class ReservationDialog {
         endHourSpinner.valueProperty().addListener((obs, oldVal, newVal) -> validateAndUpdate.run());
         endMinuteSpinner.valueProperty().addListener((obs, oldVal, newVal) -> validateAndUpdate.run());
         vehicleTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> validateAndUpdate.run());
+        carWashCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> validateAndUpdate.run());
+        carWashTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> validateAndUpdate.run());
+
+        // Initial validation
+        validateAndUpdate.run();
     }
 
-    private static String validateReservation(LocalDateTime startDateTime, LocalDateTime endDateTime, String vehicleType) {
+    private static double getCarWashPrice(String carWashType) {
+        if (carWashType == null) return 0.0;
+
+        if (carWashType.contains("Basic")) return CAR_WASH_BASIC_PRICE;
+        if (carWashType.contains("Premium")) return CAR_WASH_PREMIUM_PRICE;
+        if (carWashType.contains("Deluxe")) return CAR_WASH_DELUXE_PRICE;
+
+        return 0.0;
+    }
+
+    private static String validateReservation(
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime,
+            String vehicleType) {
+
         if (startDateTime.isBefore(LocalDateTime.now())) {
             return "Start time must be in the future";
         }
@@ -232,12 +322,15 @@ public class ReservationDialog {
         if (endDateTime.isBefore(LocalDateTime.now())) {
             return "End time must be in the future";
         }
-        if (ChronoUnit.HOURS.between(startDateTime, endDateTime) > 24) {
-            return "Maximum reservation duration is 24 hours";
+        if (ChronoUnit.HOURS.between(startDateTime, endDateTime) > 72) {
+            return "Maximum reservation duration is 72 hours";
         }
         if (vehicleType == null || vehicleType.isEmpty()) {
             return "Please select a vehicle type";
         }
+
+        // Additional validation could be added here
+
         return null;
     }
 
@@ -245,19 +338,27 @@ public class ReservationDialog {
         private final LocalDateTime startDateTime;
         private final LocalDateTime endDateTime;
         private final String vehicleType;
+        private final String carWashType;
         private final String notes;
 
-        public ReservationDetails(LocalDateTime startDateTime, LocalDateTime endDateTime,
-                                  String vehicleType, String notes) {
+        public ReservationDetails(
+                LocalDateTime startDateTime,
+                LocalDateTime endDateTime,
+                String vehicleType,
+                String carWashType,
+                String notes) {
             this.startDateTime = startDateTime;
             this.endDateTime = endDateTime;
             this.vehicleType = vehicleType;
+            this.carWashType = carWashType;
             this.notes = notes;
         }
 
         public LocalDateTime getStartDateTime() { return startDateTime; }
         public LocalDateTime getEndDateTime() { return endDateTime; }
         public String getVehicleType() { return vehicleType; }
+        public String getCarWashType() { return carWashType; }
+        public boolean hasCarWash() { return carWashType != null && !carWashType.isEmpty(); }
         public String getNotes() { return notes; }
     }
 }
