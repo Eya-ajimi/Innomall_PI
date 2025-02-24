@@ -68,7 +68,8 @@ public class PlaceParkingService implements CRUD<PlaceParking> {
     }
     public void updateParkingSpotStatus(int parkingId, StatutPlace status) throws SQLException {
         String query = "UPDATE PlaceParking SET statut = ? WHERE id = ?";
-        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+        try (Connection connection = DataBase.getInstance().getCnx();
+             PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, status.name());
             ps.setInt(2, parkingId);
             ps.executeUpdate();

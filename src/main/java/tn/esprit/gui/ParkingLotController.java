@@ -456,7 +456,7 @@ public class ParkingLotController implements Initializable {
                 }
             }
         } catch (SQLException e) {
-            
+            showErrorAlert("Error updating parking spot status", e.getMessage());
         }
     }
 }
