@@ -12,6 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -35,6 +38,7 @@ public class ParkingLotController implements Initializable {
     @FXML private HBox topRow;
     @FXML private HBox bottomRow;
     @FXML private Rectangle passage;
+    @FXML private StackPane passageContainer;
     @FXML private StackPane statsCard1;
     @FXML private StackPane statsCard2;
     @FXML private ComboBox<String> floorComboBox;
@@ -70,24 +74,100 @@ public class ParkingLotController implements Initializable {
         loadParkingSpots();
         setupStatsCardAnimation(statsCard1);
         setupStatsCardAnimation(statsCard2);
+        enhanceDrivingLane();
+    }
+
+    private void enhanceDrivingLane() {
+        // Create lane markers
+        createLaneMarkers();
+
+        // Add floating car animation
+        createFloatingCarAnimation();
+    }
+
+    private void createLaneMarkers() {
+        HBox markersContainer = new HBox();
+        markersContainer.setAlignment(Pos.CENTER);
+        markersContainer.setSpacing(40);
+
+        for (int i = 0; i < 8; i++) {
+            Rectangle marker = new Rectangle(20, 5);
+            marker.setFill(Color.WHITE);
+            marker.setArcWidth(5);
+            marker.setArcHeight(5);
+            markersContainer.getChildren().add(marker);
+
+            // Create fading animation for each marker
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), marker);
+            fadeTransition.setFromValue(1.0);
+            fadeTransition.setToValue(0.4);
+            fadeTransition.setCycleCount(Timeline.INDEFINITE);
+            fadeTransition.setAutoReverse(true);
+
+            // Stagger the animations
+            fadeTransition.setDelay(Duration.millis(i * 200));
+            fadeTransition.play();
+        }
+
+        // Add markers to passage container
+        passageContainer.getChildren().add(markersContainer);
+    }
+
+    private void createFloatingCarAnimation() {
+        // Create small car for lane animation
+        ImageView movingCar = new ImageView(carImage);
+        movingCar.setFitWidth(40);
+        movingCar.setFitHeight(20);
+        movingCar.setPreserveRatio(true);
+        movingCar.setRotate(90); // Rotate to face direction of travel
+
+        // Add to passage container
+        passageContainer.getChildren().add(movingCar);
+
+        // Position car initially outside visible area
+        movingCar.setTranslateX(-passage.getWidth()/2 - 100);
+
+        // Create animation to move car across lane
+        TranslateTransition carTransition = new TranslateTransition(Duration.seconds(7), movingCar);
+        carTransition.setFromX(-passage.getWidth()/2 - 100);
+        carTransition.setToX(passage.getWidth()/2 + 100);
+        carTransition.setCycleCount(Timeline.INDEFINITE);
+        carTransition.play();
     }
 
     private void initializeAnimations() {
-        Timeline passageAnimation = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(passage.opacityProperty(), 0.7)),
+        // Enhanced lane glow effect
+        Timeline passageGlowAnimation = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(passage.opacityProperty(), 0.8)),
                 new KeyFrame(Duration.seconds(1.5), new KeyValue(passage.opacityProperty(), 1))
         );
-        passageAnimation.setAutoReverse(true);
-        passageAnimation.setCycleCount(Timeline.INDEFINITE);
-        passageAnimation.play();
+        passageGlowAnimation.setAutoReverse(true);
+        passageGlowAnimation.setCycleCount(Timeline.INDEFINITE);
+        passageGlowAnimation.play();
 
+        // Enhanced pulse animation
         pulseAnimation = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(passage.scaleXProperty(), 1)),
-                new KeyFrame(Duration.seconds(0.5), new KeyValue(passage.scaleXProperty(), 1.02)),
-                new KeyFrame(Duration.seconds(1), new KeyValue(passage.scaleXProperty(), 1))
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(passage.scaleXProperty(), 1),
+                        new KeyValue(passage.scaleYProperty(), 1)),
+                new KeyFrame(Duration.seconds(0.7),
+                        new KeyValue(passage.scaleXProperty(), 1.03),
+                        new KeyValue(passage.scaleYProperty(), 1.05)),
+                new KeyFrame(Duration.seconds(1.4),
+                        new KeyValue(passage.scaleXProperty(), 1),
+                        new KeyValue(passage.scaleYProperty(), 1))
         );
         pulseAnimation.setCycleCount(Timeline.INDEFINITE);
         pulseAnimation.play();
+
+        // Set gradient fill for passage
+        Stop[] stops = new Stop[] {
+                new Stop(0, Color.web("#3498db", 0.8)),
+                new Stop(0.5, Color.web("#2980b9", 0.9)),
+                new Stop(1, Color.web("#3498db", 0.8))
+        };
+        LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true, null, stops);
+        passage.setFill(gradient);
     }
 
     private void setupStatsCardAnimation(StackPane card) {
@@ -133,7 +213,7 @@ public class ParkingLotController implements Initializable {
                 }
             }
 
-            totalSpots = filteredSpots.size(); // Fix: Use only spots from the selected floor
+            totalSpots = filteredSpots.size();
 
             int half = filteredSpots.size() / 2;
             for (int i = 0; i < filteredSpots.size(); i++) {
@@ -153,7 +233,6 @@ public class ParkingLotController implements Initializable {
         }
     }
 
-
     private void resetCounters() {
         availableSpots = 0;
         totalSpots = 0;
@@ -167,7 +246,7 @@ public class ParkingLotController implements Initializable {
         ImageView carView = createCarImageView();
 
         // Create a label to display the Zone and ID
-        Label infoLabel = new Label( place.getZone() + "\nID: " + place.getId());
+        Label infoLabel = new Label(place.getZone() + "\nID: " + place.getId());
         infoLabel.getStyleClass().add("spot-info-label");
 
         if (place.getStatut() == StatutPlace.free) {
