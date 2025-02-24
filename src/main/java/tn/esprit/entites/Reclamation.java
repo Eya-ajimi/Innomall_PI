@@ -55,8 +55,14 @@ public class Reclamation {
     public void setStatut(String statut) {
         this.statut = statut;
     }
+
+    // Dummy property for the action column
+    public String getDummy() {
+        return "";
+    }
+
     @Override
     public String toString() {
-        return  description ;
+        return description;
     }
 }

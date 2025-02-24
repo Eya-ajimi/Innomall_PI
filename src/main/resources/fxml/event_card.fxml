@@ -6,25 +6,77 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="315.0" prefWidth="346.0" spacing="8" style="-fx-background-color: #F5F5F5; -fx-border-color: #4d5656; -fx-border-width: 2; -fx-padding: 12; -fx-border-radius: 0; -fx-background-radius: 5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.EventCardController">
+<VBox prefHeight="315.0" prefWidth="360.0" spacing="12"
+      style="-fx-background-color: #F5F5F5;
+             -fx-border-color: #4d5656;
+             -fx-border-width: 2;
+             -fx-padding: 16;
+             -fx-border-radius: 10;
+             -fx-background-radius: 10;
+             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 2, 2);"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.EventCardController">
 
-    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Event Name:" />
-    <Label fx:id="eventName" prefHeight="32.0" prefWidth="300.0" style="-fx-font-size: 16px; -fx-text-fill: #2C77B8;" text="Event Name" />
+    <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Event Name:" />
+    <Label fx:id="eventName" prefHeight="32.0" prefWidth="300.0"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2C77B8;"
+           text="Event Name" />
     <Separator style="-fx-background-color: #D1D1D1; -fx-padding: 3 0 3 0;" />
 
-    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Description:" />
-    <Label fx:id="eventDescription" prefHeight="75.0" prefWidth="338.0" style="-fx-font-size: 14px; -fx-text-fill: #555555;" text="Event Description" wrapText="true" />
+    <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Description:" />
+    <Label fx:id="eventDescription" prefHeight="75.0" prefWidth="338.0" wrapText="true"
+           style="-fx-font-size: 15px; -fx-text-fill: #555555; -fx-line-spacing: 3;"
+           text="Event Description" />
     <Separator style="-fx-background-color: #D1D1D1; -fx-padding: 3 0 3 0;" />
 
-    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Date Debut - Date Fin:" />
-    <Label fx:id="eventDates" prefHeight="32.0" prefWidth="300.0" style="-fx-font-size: 14px; -fx-text-fill: #555555;" text="Event Dates" />
+    <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Date Debut - Date Fin:" />
+    <Label fx:id="eventDates" prefHeight="32.0" prefWidth="300.0"
+           style="-fx-font-size: 14px; -fx-text-fill: #555555;"
+           text="Event Dates" />
     <Separator style="-fx-background-color: #D1D1D1; -fx-padding: 3 0 3 0;" />
 
-    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Location:" />
-    <Label fx:id="eventLocation" prefHeight="32.0" prefWidth="300.0" style="-fx-font-size: 14px; -fx-text-fill: #555555;" text="Event Location" />
+    <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Location:" />
+    <Label fx:id="eventLocation" prefHeight="32.0" prefWidth="300.0"
+           style="-fx-font-size: 14px; -fx-text-fill: #555555;"
+           text="Event Location" />
 
-    <HBox alignment="CENTER" prefHeight="45.0" prefWidth="310.0" spacing="15.0" style="-fx-padding: 10 0 0 0;">
-        <Button fx:id="modifyButton" onAction="#handleModifyEvent" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Modify" />
-        <Button fx:id="deleteButton" onAction="#handleDeleteEvent" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Delete" />
+    <HBox alignment="CENTER" prefHeight="45.0" prefWidth="310.0" spacing="15.0"
+          style="-fx-padding: 10 0 0 0;">
+        <Button fx:id="modifyButton" onAction="#handleModifyEvent" prefHeight="35.0" prefWidth="120.0"
+                style="-fx-background-color: #4CAF50;
+                       -fx-text-fill: white;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 6;
+                       -fx-font-size: 14px;"
+                text="Modify">
+            <HBox style="-fx-background-color: transparent;">
+                <style>
+                    button:hover {
+                    -fx-scale-x: 1.05;
+                    -fx-scale-y: 1.05;
+                    -fx-opacity: 0.85;
+                    }
+                </style>
+            </HBox>
+        </Button>
+
+        <Button fx:id="deleteButton" onAction="#handleDeleteEvent" prefHeight="35.0" prefWidth="120.0"
+                style="-fx-background-color: #E53935;
+                       -fx-text-fill: white;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 6;
+                       -fx-font-size: 14px;"
+                text="Delete">
+            <HBox style="-fx-background-color: transparent;">
+                <style>
+                    button:hover {
+                    -fx-scale-x: 1.05;
+                    -fx-scale-y: 1.05;
+                    -fx-opacity: 0.85;
+                    }
+                </style>
+            </HBox>
+        </Button>
     </HBox>
 </VBox>

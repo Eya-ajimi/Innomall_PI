@@ -27,6 +27,7 @@ public class EventCardController {
 
     private Event event;
     private EventService eventService = new EventService();
+    private MainController mainController; // Reference to the MainController
 
     public void setEvent(Event event) {
         this.event = event;
@@ -34,6 +35,11 @@ public class EventCardController {
         eventDescription.setText(event.getDescription());
         eventDates.setText(event.getDateDebut() + " - " + event.getDateFin());
         eventLocation.setText(event.getEmplacement());
+    }
+
+    // Setter for MainController
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 
     @FXML
@@ -70,7 +76,12 @@ public class EventCardController {
 
     @FXML
     private void handleDeleteEvent() {
+        // Delete the event from the database
         eventService.delete(event.getId());
-        // Refresh the event list (you may need to notify the parent controller to refresh the list)
+
+        // Notify the MainController to refresh the event list
+        if (mainController != null) {
+            mainController.loadEvents();
+        }
     }
 }

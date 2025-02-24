@@ -5,17 +5,38 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane prefHeight="678.0" prefWidth="902.0" style="-fx-background-color: #E1F4FF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.MainController">
+<?import javafx.scene.layout.HBox?>
+<AnchorPane prefHeight="678.0" prefWidth="902.0" style="-fx-background-color: #E1F4FF; -fx-padding: 20;"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.gui.MainController">
 
     <!-- ScrollPane to hold the event cards -->
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="10.0" layoutY="50.0" prefHeight="520.0" prefWidth="862.0">
-        <FlowPane fx:id="eventsContainer" hgap="10" style="-fx-padding: 10;" vgap="10" />
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="10.0" layoutY="50.0" prefHeight="520.0" prefWidth="862.0"
+                style="-fx-background-color: transparent; -fx-border-color: transparent;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 5, 0, 1, 1);">
+        <FlowPane fx:id="eventsContainer" hgap="15" vgap="15" prefWrapLength="850"
+                  style="-fx-padding: 15; -fx-background-radius: 10;" />
     </ScrollPane>
 
-    <!-- "Refresh" button at the top right -->
-    <Button layoutX="806.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRefresh" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;" text="Refresh" />
-
     <!-- "Add Event" button at the bottom -->
-    <Button layoutX="375.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleAddEvent" style="-fx-background-color: #F9A66A; -fx-text-fill: white; -fx-font-size: 14px;" text="Add Event" />
+    <Button layoutX="375.0" layoutY="600.0" mnemonicParsing="false" onAction="#handleAddEvent"
+            style="-fx-background-color: #F9A66A;
+                   -fx-text-fill: white;
+                   -fx-font-size: 16px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 8;
+                   -fx-padding: 10 20;"
+            text="Add Event">
+        <HBox style="-fx-background-color: transparent;">
+            <style>
+                button:hover {
+                -fx-scale-x: 1.05;
+                -fx-scale-y: 1.05;
+                -fx-opacity: 0.9;
+                }
+            </style>
+        </HBox>
+    </Button>
 
 </AnchorPane>

@@ -1,77 +1,83 @@
 package tn.esprit.gui;
 
-import tn.esprit.entites.Reclamation;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import tn.esprit.entites.Reclamation;
 import tn.esprit.services.ReclamationService;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 public class AdminReclamationController {
-    @FXML private ListView<Reclamation> reclamationList;
-    @FXML private TextField commentaireField;
+    @FXML private TableView<Reclamation> reclamationTable;
+    @FXML private TableColumn<Reclamation, String> descriptionColumn;
+    @FXML private TableColumn<Reclamation, Void> actionColumn;
 
     private ReclamationService reclamationService = new ReclamationService();
 
     @FXML
     private void initialize() {
-        // Set up the custom cell factory
-        reclamationList.setCellFactory(new Callback<ListView<Reclamation>, ListCell<Reclamation>>() {
+        // Set up the description column
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        // Set up the action column with an "Update" button
+        actionColumn.setCellFactory(new Callback<TableColumn<Reclamation, Void>, TableCell<Reclamation, Void>>() {
             @Override
-            public ListCell<Reclamation> call(ListView<Reclamation> param) {
-                return new ListCell<Reclamation>() {
+            public TableCell<Reclamation, Void> call(final TableColumn<Reclamation, Void> param) {
+                return new TableCell<Reclamation, Void>() {
+                    private final Button btn = new Button("Update");
+
+                    {
+                        btn.setOnAction(event -> {
+                            Reclamation reclamation = getTableView().getItems().get(getIndex());
+                            openUpdateWindow(reclamation);
+                        });
+                    }
+
                     @Override
-                    protected void updateItem(Reclamation reclamation, boolean empty) {
-                        super.updateItem(reclamation, empty);
-                        if (empty || reclamation == null) {
-                            setText(null);
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
                         } else {
-                            // Customize the display text to exclude the ID
-                            setText(reclamation.getDescription());
+                            setGraphic(btn);
                         }
                     }
                 };
             }
         });
 
+        // Load data into the table
         try {
-            reclamationList.getItems().addAll(reclamationService.getAllReclamations());
+            reclamationTable.getItems().addAll(reclamationService.getAllReclamations());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleUpdate() {
-        Reclamation selectedReclamation = reclamationList.getSelectionModel().getSelectedItem();
-        if (selectedReclamation != null) {
-            if (commentaireField.getText().isEmpty()) {
-                showAlert("Erreur de saisie", "Le champ commentaire ne peut pas etre vide.");
-                return;
-            }
+    private void openUpdateWindow(Reclamation reclamation) {
+        try {
+            // Load the FXML file for the pop-up window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/update_reclamation.fxml"));
+            AnchorPane root = loader.load();
 
-            try {
-                selectedReclamation.setCommentaire(commentaireField.getText());
-                selectedReclamation.setStatut("traite");
-                reclamationService.updateReclamation(selectedReclamation);
-                reclamationList.refresh();
-                commentaireField.clear();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            showAlert("Aucune sélection", "Veuillez selectionner une reclamation a mettre a jour.");
+            // Get the controller and set the reclamation object
+            UpdateReclamationController controller = loader.getController();
+            controller.setReclamation(reclamation);
+
+            // Create a new stage for the pop-up window
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Update Reclamation");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

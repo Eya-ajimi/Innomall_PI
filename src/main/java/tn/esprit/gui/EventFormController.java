@@ -2,10 +2,14 @@ package tn.esprit.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import tn.esprit.entites.Event;
 import tn.esprit.services.EventService;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class EventFormController {
 
@@ -16,10 +20,10 @@ public class EventFormController {
     private TextField eventDescriptionField;
 
     @FXML
-    private TextField startDateField;
+    private DatePicker startDatePicker;
 
     @FXML
-    private TextField endDateField;
+    private DatePicker endDatePicker;
 
     @FXML
     private TextField locationField;
@@ -47,9 +51,15 @@ public class EventFormController {
             // Pre-fill the form with the event's current data
             eventNameField.setText(event.getNomOrganisateur());
             eventDescriptionField.setText(event.getDescription());
-            startDateField.setText(event.getDateDebut());
-            endDateField.setText(event.getDateFin());
             locationField.setText(event.getEmplacement());
+
+            // Convert String dates to LocalDate for DatePicker
+            if (event.getDateDebut() != null && !event.getDateDebut().isEmpty()) {
+                startDatePicker.setValue(LocalDate.parse(event.getDateDebut(), DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            }
+            if (event.getDateFin() != null && !event.getDateFin().isEmpty()) {
+                endDatePicker.setValue(LocalDate.parse(event.getDateFin(), DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            }
         }
     }
 
@@ -76,31 +86,25 @@ public class EventFormController {
         // Validate input fields
         if (eventNameField.getText().isEmpty() ||
                 eventDescriptionField.getText().isEmpty() ||
-                startDateField.getText().isEmpty() ||
-                endDateField.getText().isEmpty() ||
+                startDatePicker.getValue() == null ||
+                endDatePicker.getValue() == null ||
                 locationField.getText().isEmpty()) {
             // Show an error message if any field is empty
             showErrorAlert("Missing Information", "Please fill in all fields.");
             return; // Exit the method if validation fails
         }
 
-        // Validate date format for start date
-        if (!isValidDate(startDateField.getText())) {
-            showErrorAlert("Invalid Start Date", "The start date must be in the format jj-mm-aaaa.");
-            return; // Exit the method if validation fails
-        }
-
-        // Validate date format for end date
-        if (!isValidDate(endDateField.getText())) {
-            showErrorAlert("Invalid End Date", "The end date must be in the format jj-mm-aaaa.");
+        // Validate that the end date is after the start date
+        if (endDatePicker.getValue().isBefore(startDatePicker.getValue())) {
+            showErrorAlert("Invalid Date Range", "The end date must be after the start date.");
             return; // Exit the method if validation fails
         }
 
         // Update the event object with the new data
         event.setNomOrganisateur(eventNameField.getText());
         event.setDescription(eventDescriptionField.getText());
-        event.setDateDebut(startDateField.getText());
-        event.setDateFin(endDateField.getText());
+        event.setDateDebut(startDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        event.setDateFin(endDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         event.setEmplacement(locationField.getText());
 
         // Set the idOrganisateur (you need to get this value from somewhere)
@@ -114,18 +118,6 @@ public class EventFormController {
         // Close the form
         Stage stage = (Stage) eventNameField.getScene().getWindow();
         stage.close();
-    }
-
-    /**
-     * Validate if the date is in the format jj-mm-aaaa.
-     *
-     * @param date The date to validate.
-     * @return True if the date is valid, false otherwise.
-     */
-    private boolean isValidDate(String date) {
-        // Regex to match the format jj-mm-aaaa
-        String regex = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\\d{4})$";
-        return date.matches(regex);
     }
 
     /**

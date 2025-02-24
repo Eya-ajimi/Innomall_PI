@@ -4,15 +4,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.gui.ClientEventViewController"
-            prefHeight="600.0"
-            prefWidth="800.0"
-            style="-fx-background-color: #E1F4FF;">
 
-    <ScrollPane layoutX="10.0" layoutY="10.0" prefHeight="580.0" prefWidth="780.0" fitToWidth="true">
-        <FlowPane fx:id="eventsContainer" hgap="10" vgap="10" prefWrapLength="760" style="-fx-padding: 10;" />
-    </ScrollPane>
-
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.ClientEventViewController">
+   <children>
+   
+          <ScrollPane fitToWidth="true" layoutX="4.0" layoutY="4.0" prefHeight="618.0" prefWidth="902.0" style="-fx-background-color: transparent; -fx-border-color: transparent;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 5, 0, 1, 1);">
+           <FlowPane fx:id="eventsContainer" hgap="15" prefWrapLength="760" style="-fx-padding: 15; -fx-background-radius: 10;" vgap="15" />
+       </ScrollPane>
+   </children>
 </AnchorPane>

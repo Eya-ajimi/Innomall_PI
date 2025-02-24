@@ -34,7 +34,7 @@ public class MainController {
     /**
      * Load events from the database and display them in the FlowPane.
      */
-    private void loadEvents() {
+    public void loadEvents() {
         eventsContainer.getChildren().clear(); // Clear existing cards
         List<Event> events = eventService.getAll();
 
@@ -47,6 +47,9 @@ public class MainController {
                 // Set the event data in the card
                 EventCardController controller = loader.getController();
                 controller.setEvent(event);
+
+                // Pass a reference to this MainController to the EventCardController
+                controller.setMainController(this);
 
                 // Add the card to the container
                 eventsContainer.getChildren().add(eventCard);
@@ -84,45 +87,6 @@ public class MainController {
                 // Refresh the event list
                 loadEvents();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleRefresh() {
-        loadEvents(); // Recharge les événements depuis la base de données
-    }
-
-    @FXML
-    private void handleClientReclamation() {
-        try {
-            // Load the client reclamation FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_reclamation.fxml"));
-            Parent root = loader.load();
-
-            // Open the client reclamation form in a new window
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Add Reclamation");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleAdminReclamation() {
-        try {
-            // Load the admin reclamation FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin_reclamation.fxml"));
-            Parent root = loader.load();
-
-            // Open the admin reclamation form in a new window
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Manage Reclamations");
-            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
