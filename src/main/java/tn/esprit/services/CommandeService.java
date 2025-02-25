@@ -4,14 +4,18 @@ import tn.esprit.entites.*;
 import tn.esprit.utils.DataBase;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.*;
 
 
 public class CommandeService implements CRUD<Commande> {
 
     private final Connection cnx = DataBase.getInstance().getCnx();
     private PreparedStatement ps ;
+
+
+
 
 
 
@@ -127,7 +131,7 @@ public class CommandeService implements CRUD<Commande> {
         try {
             ps = cnx.prepareStatement(query);
             ps.setInt(1, idClient);
-            ps.setString(2, StatutCommande.confirme.toString());
+            ps.setString(2, StatutCommande.payee.toString());
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     return new Commande(
@@ -147,7 +151,7 @@ public class CommandeService implements CRUD<Commande> {
 
     /****************************************payement***************************************************/
     //affichage panier payé
-    public List<Panier> showAllClientPanierPaye(int commandeId) throws SQLException {
+    public List<Panier> showAllClientPanierPaye(int commandeId)  {
         List<Panier> paniers = new ArrayList<>();
 
         String query = "SELECT p.idCommande, p.idProduit, p.quantite, pr.nom, pr.prix, pr.description " +
@@ -183,6 +187,16 @@ public class CommandeService implements CRUD<Commande> {
         }
         return paniers;
 
+    }
+
+    public int updatestatutPanier(Panier productDansPanier ) throws SQLException {
+        String query = "UPDATE panier SET statut = ? WHERE idCommande = ? AND idProduit = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, productDansPanier.getStatut().toString());
+            ps.setInt(2, productDansPanier.getIdCommande());
+            ps.setInt(3, productDansPanier.getIdProduit());
+            return ps.executeUpdate();
+        }
     }
     public void updateStockProduit(int idProduit, int quantiteVendue) throws SQLException {
         String query = "UPDATE Produit SET stock = stock - ? WHERE id = ?";
@@ -250,25 +264,67 @@ public class CommandeService implements CRUD<Commande> {
             Commande commandePayee = new Commande(
                     commandeEnCours.getId(),
                     commandeEnCours.getIdClient(),
-                    commandeEnCours.getDateCommande(),
+                    Date.valueOf(LocalDate.now()).toString(),
                     commandeEnCours.getTotal(),
-                    StatutCommande.confirme // Changer le statut à "payée"
+                    StatutCommande.payee // Changer le statut à "payée"
             );
 
             // Mettre à jour la commande dans la base de données
             int rowsUpdated = update(commandePayee);
+            List<Panier> paniers = showAllClientPanierPaye(commandePayee.getId());
+
+            for (Panier panier : paniers) {
+                panier.setStatut( StatutCommande.payee);
+                updatestatutPanier(panier);
+            }
+
             if (rowsUpdated > 0) {
                 System.out.println("statut de commande est modifié avec succé.");
 
                 // Diminuer le stock des produits dans le panier
-                List<Panier> paniers = showAllClientPanierPaye(commandePayee.getId());
+                Map<Integer, List<Panier>> produitspanierParShop ;
                 if (paniers != null) {
+                    produitspanierParShop = new HashMap<>();
                     for (Panier panier : paniers) {
                         int idProduit = panier.getIdProduit();
                         int quantite = panier.getQuantite();
-
                         // Diminuer le stock du produit
                         updateStockProduit(idProduit, quantite);
+                        int produitShopId= getProduitById(idProduit).getShopId();
+
+                        if (produitspanierParShop.containsKey(produitShopId)) {
+                            // Si oui, ajouter le panier à la liste existante
+                            produitspanierParShop.get(produitShopId).add(panier);
+                        } else {
+                            // Sinon, créer une nouvelle liste et ajouter le panier
+                            List<Panier> paniersPourShop = new ArrayList<>();
+                            paniersPourShop.add(panier);
+                            produitspanierParShop.put(produitShopId, paniersPourShop);
+                        }
+
+
+                    }
+                    System.out.println(produitspanierParShop);
+                    // Après la boucle for qui remplit produitspanierParShop
+                    for (Map.Entry<Integer, List<Panier>> entry : produitspanierParShop.entrySet()) {
+                        int shopOwnerId = entry.getKey(); // Récupérer l'ID du shopOwner
+                        List<Panier> paniersPourShop = entry.getValue(); // Récupérer la liste des paniers pour ce shopOwner
+
+                        // Récupérer le numéroTicket actuel pour ce shopOwner
+                        int numeroTicketActuel = getNumeroTicketForShopOwner(shopOwnerId);
+
+                        System.out.println(numeroTicketActuel);
+
+                        // Incrémenter le numéroTicket
+                        int nouveauNumeroTicket = numeroTicketActuel + 1;
+                        System.out.println(nouveauNumeroTicket);
+
+                        // Mettre à jour le numéroTicket dans la table user pour ce shopOwner
+                        updateNumeroTicketForShopOwner(shopOwnerId, nouveauNumeroTicket);
+                        // Mettre à jour le numéroTicket pour chaque panier dans la liste
+                        for (Panier panier : paniersPourShop) {
+                            updateNumeroTicketInPanier(panier.getIdProduit(),panier.getIdCommande(), nouveauNumeroTicket);
+                        }
                     }
                 }
             } else {
@@ -279,6 +335,258 @@ public class CommandeService implements CRUD<Commande> {
         }
 
     }
+    public Produit getProduitById(int idProduit) throws SQLException {
+
+        String query = "SELECT * FROM produit WHERE id = ?";
+        try  {
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, idProduit);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Produit(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("shopId"),
+                            resultSet.getString("description"),
+                            resultSet.getInt("promotionId"),
+                            resultSet.getInt("stock"),
+                            resultSet.getDouble("prix"),
+                            resultSet.getString("nom")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public int getNumeroTicketForShopOwner(int shopOwnerId)  {
+        String query = "SELECT numeroTicket FROM user WHERE id = ?";
+        try  {
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, shopOwnerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println(rs.getString("numeroTicket")+"hehehehehehe");
+                    return rs.getInt("numeroTicket");
+                } else {
+                    throw new SQLException("ShopOwner non trouvé.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void updateNumeroTicketForShopOwner(int shopOwnerId, int nouveauNumeroTicket) {
+        String query = "UPDATE user SET numeroTicket = ? WHERE id = ?";
+        try  {
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, nouveauNumeroTicket);
+            ps.setInt(2, shopOwnerId);
+            ps.executeUpdate();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void updateNumeroTicketInPanier(int produitId,int commandePayeeId, int nouveauNumeroTicket)  {
+        String query = "UPDATE panier SET numeroTicket = ? WHERE idCommande = ? AND idProduit = ?";
+        try  {
+            ps = cnx.prepareStatement(query);
+            ps.setInt(1, nouveauNumeroTicket);
+            ps.setInt(2, commandePayeeId);
+            ps.setInt(3, produitId);
+            ps.executeUpdate();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+/***************************** affichage pour la liste de commande au shopOwner ******************************/
+
+public List<Commande> getCommandesPayeesAujourdhuiPourShopOwner(int shopId) throws SQLException {
+    List<Commande> commandes = new ArrayList<>();
+
+    // Récupérer la date d'aujourd'hui au format String
+    String dateAujourdhui = Date.valueOf(LocalDate.now()).toString();
+
+    // Requête SQL pour récupérer les commandes payées aujourd'hui
+    String queryCommandes = "SELECT * FROM commande WHERE dateCommande = ? AND statut = 'payee'";
+
+    try (PreparedStatement psCommandes = cnx.prepareStatement(queryCommandes)) {
+        psCommandes.setString(1, dateAujourdhui);
+        try (ResultSet rsCommandes = psCommandes.executeQuery()) {
+
+            // Parcourir les commandes
+            while (rsCommandes.next()) {
+                Commande commande = new Commande();
+                commande.setId(rsCommandes.getInt("id"));
+                commande.setIdClient(rsCommandes.getInt("idClient"));
+                commande.setDateCommande(rsCommandes.getString("dateCommande"));
+                commande.setTotal(rsCommandes.getDouble("total"));
+                commande.setStatut(StatutCommande.valueOf(rsCommandes.getString("statut")));
+                commande.setPaniers(new ArrayList<>());
+
+                // Récupérer les paniers pour cette commande
+                String queryPaniers = "SELECT * FROM panier WHERE idCommande = ? AND statut = 'payee'";
+                try (PreparedStatement psPaniers = cnx.prepareStatement(queryPaniers)) {
+                    psPaniers.setInt(1, commande.getId());
+                    try (ResultSet rsPaniers = psPaniers.executeQuery()) {
+
+                        // Parcourir les paniers
+                        while (rsPaniers.next()) {
+                            int idProduit = rsPaniers.getInt("idProduit");
+                            Produit produit = getProduitById(idProduit);
+
+                            // Vérifier si le produit correspond au shopId
+                            if (produit != null && produit.getShopId() == shopId) {
+                                Panier panier = new Panier();
+                                panier.setIdCommande(rsPaniers.getInt("idCommande"));
+                                panier.setNumeroTicket(rsPaniers.getInt("numeroTicket"));
+                                panier.setIdProduit(idProduit);
+                                panier.setQuantite(rsPaniers.getInt("quantite"));
+                                panier.setStatut(StatutCommande.valueOf(rsPaniers.getString("statut")));
+                                panier.setNomProduit(produit.getNom());
+                                panier.setPrix(panier.getQuantite() * produit.getPrix());
+
+                                // Ajouter le panier à la commande
+                                commande.getPaniers().add(panier);
+                            }
+                        }
+                    }
+                }
+
+                // Si la commande contient des paniers correspondants, la traiter
+                if (!commande.getPaniers().isEmpty()) {
+                    // Calculer le total de la commande
+                    double totalCommande = commande.getPaniers().stream()
+                            .mapToDouble(Panier::getPrix)
+                            .sum();
+                    commande.setTotal(totalCommande);
+
+                    // Définir le numéro de ticket de la commande
+                    commande.setNumeroTicket(commande.getPaniers().get(0).getNumeroTicket());
+                    System.out.println("lweeeesssssss"+commande.getPaniers().get(0));
+                    String nomClient = getNomClientById(commande.getIdClient());
+                    commande.setNomClient(nomClient);
+
+
+                    // Ajouter la commande à la liste
+                    commandes.add(commande);
+                }
+            }
+        }
+    }
+
+    return commandes;
+}
+
+
+
+    public String getNomClientById(int idClient)  {
+        String nomClient = null; // Variable pour stocker le nom du client
+
+        // Requête SQL pour récupérer le nom du client
+        String query = "SELECT nom FROM user WHERE id = ?";
+
+        try  {
+            ps = cnx.prepareStatement(query);
+            // Définir le paramètre de la requête (idClient)
+            ps.setInt(1, idClient);
+
+            // Exécuter la requête et récupérer le résultat
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Récupérer le nom du client depuis le ResultSet
+                    nomClient = rs.getString("nom");
+                }
+            }
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        // Retourner le nom du client (ou null si aucun client n'est trouvé)
+        return nomClient;
+    }
+
+    public List<Commande> getCommandesPayeesselonJourPourShopOwner(int shopId, String dateDeJour) throws SQLException {
+        List<Commande> commandes = new ArrayList<>();
+
+
+
+        // Requête SQL pour récupérer les commandes payées aujourd'hui
+        String queryCommandes = "SELECT * FROM commande WHERE dateCommande = ? AND statut = 'payee'";
+
+        try (PreparedStatement psCommandes = cnx.prepareStatement(queryCommandes)) {
+            psCommandes.setString(1, dateDeJour);
+            try (ResultSet rsCommandes = psCommandes.executeQuery()) {
+
+                // Parcourir les commandes
+                while (rsCommandes.next()) {
+                    Commande commande = new Commande();
+                    commande.setId(rsCommandes.getInt("id"));
+                    commande.setIdClient(rsCommandes.getInt("idClient"));
+                    commande.setDateCommande(rsCommandes.getString("dateCommande"));
+                    commande.setTotal(rsCommandes.getDouble("total"));
+                    commande.setStatut(StatutCommande.valueOf(rsCommandes.getString("statut")));
+                    commande.setPaniers(new ArrayList<>());
+
+                    // Récupérer les paniers pour cette commande
+                    String queryPaniers = "SELECT * FROM panier WHERE idCommande = ? AND statut = 'payee'";
+                    try (PreparedStatement psPaniers = cnx.prepareStatement(queryPaniers)) {
+                        psPaniers.setInt(1, commande.getId());
+                        try (ResultSet rsPaniers = psPaniers.executeQuery()) {
+
+                            // Parcourir les paniers
+                            while (rsPaniers.next()) {
+                                int idProduit = rsPaniers.getInt("idProduit");
+                                Produit produit = getProduitById(idProduit);
+
+                                // Vérifier si le produit correspond au shopId
+                                if (produit != null && produit.getShopId() == shopId) {
+                                    Panier panier = new Panier();
+                                    panier.setIdCommande(rsPaniers.getInt("idCommande"));
+                                    panier.setNumeroTicket(rsPaniers.getInt("numeroTicket"));
+                                    panier.setIdProduit(idProduit);
+                                    panier.setQuantite(rsPaniers.getInt("quantite"));
+                                    panier.setStatut(StatutCommande.valueOf(rsPaniers.getString("statut")));
+                                    panier.setNomProduit(produit.getNom());
+                                    panier.setPrix(panier.getQuantite() * produit.getPrix());
+
+                                    // Ajouter le panier à la commande
+                                    commande.getPaniers().add(panier);
+                                }
+                            }
+                        }
+                    }
+
+                    // Si la commande contient des paniers correspondants, la traiter
+                    if (!commande.getPaniers().isEmpty()) {
+                        // Calculer le total de la commande
+                        double totalCommande = commande.getPaniers().stream()
+                                .mapToDouble(Panier::getPrix)
+                                .sum();
+                        commande.setTotal(totalCommande);
+
+                        // Définir le numéro de ticket de la commande
+                        commande.setNumeroTicket(commande.getPaniers().get(0).getNumeroTicket());
+                        String nomClient = getNomClientById(commande.getIdClient());
+                        commande.setNomClient(nomClient);
+
+
+                        // Ajouter la commande à la liste
+                        commandes.add(commande);
+                    }
+                }
+            }
+        }
+        Collections.sort(commandes);
+        return commandes;
+    }
+
+
 
 
 

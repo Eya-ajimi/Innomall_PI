@@ -11,9 +11,9 @@ import java.util.List;
 
 public class panierService implements CRUD<Panier>{
 
-    private Connection cnx = DataBase.getInstance().getCnx();
+    private final Connection cnx = DataBase.getInstance().getCnx();
     private PreparedStatement ps ;
-    private CommandeService commandeService ;
+    private final CommandeService commandeService ;
 
     public panierService() {
         commandeService = new CommandeService();
@@ -69,12 +69,14 @@ public class panierService implements CRUD<Panier>{
     // Méthode pour ajouter un produit au panier
     @Override
     public int insert (Panier newProduct) throws SQLException {
-        String query = "INSERT INTO panier (`idCommande` , `idProduit`, `quantite`) VALUES (?, ?, ?)";
+        String query = "INSERT INTO panier (`idCommande` , `idProduit`, `quantite`,`statut`) VALUES (?, ?, ?, ?)";
         ps = cnx.prepareStatement(query);
 
         ps.setInt(1, newProduct.getIdCommande());
         ps.setInt(2, newProduct.getIdProduit());
         ps.setInt(3, newProduct.getQuantite());
+        ps.setString(4, newProduct.getStatut().toString());
+
         return ps.executeUpdate();
 
     }
@@ -256,7 +258,7 @@ public class panierService implements CRUD<Panier>{
                         }
                         else{
                             // Étape 5 : Ajouter le produit au panier
-                            Panier newProduct = new Panier(commande.getId(),idProduit,1);
+                            Panier newProduct = new Panier(commande.getId(),idProduit,1,StatutCommande.enCours);
                             insert(newProduct);
 
                             // Étape 6 : Mettre à jour le total de la commande
@@ -271,7 +273,7 @@ public class panierService implements CRUD<Panier>{
                         int commandeId = commandeService.insert(commande);
 
 
-                        Panier newProduct = new Panier(commandeId,idProduit,1);
+                        Panier newProduct = new Panier(commandeId,idProduit,1,StatutCommande.enCours);
 
                         // Étape 8 : Ajouter le produit au panier
                         insert(newProduct);

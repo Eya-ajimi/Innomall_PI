@@ -5,6 +5,7 @@ import java.util.List;
 public class ShopOwner extends User {
     private String nom;
     private String description;
+    private int numeroTicket;
     private List<Produit> produits;
 
     public ShopOwner(String email, String password, String nom, String description) {
@@ -18,8 +19,20 @@ public class ShopOwner extends User {
         this.description = description;
     }
 
+    public ShopOwner(int id,int numeroTicket) {
+        super(id);
+        this.numeroTicket = numeroTicket;
+    }
+
     public ShopOwner() {
 
+    }
+    public int getNumeroTicket() {
+        return numeroTicket;
+    }
+
+    public void setNumeroTicket(int numeroTicket) {
+        this.numeroTicket = numeroTicket;
     }
 
     public void setNom(String nom) {

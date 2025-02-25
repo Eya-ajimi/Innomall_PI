@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.gui.CommandeController">
+    <VBox spacing="10" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+        <Label text="Choisissez une date:" />
+        <DatePicker fx:id="datePicker" />
+        <TableView fx:id="tableView" prefHeight="400" prefWidth="600">
+            <columns>
+                <TableColumn fx:id="numeroTicketCol" text="Numéro Ticket" />
+                <TableColumn fx:id="nomClientCol" text="Nom Client" />
+                <TableColumn fx:id="totalCommandeCol" text="Total Commande" />
+                <TableColumn fx:id="dateCommandeCol" text="Date Commande" />
+            </columns>
+        </TableView>
+        <Pagination fx:id="pagination" />
+    </VBox>
+</AnchorPane>

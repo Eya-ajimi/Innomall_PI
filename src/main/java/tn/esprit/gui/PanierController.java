@@ -105,13 +105,22 @@ public class PanierController {
     }
 
     // Gérer le passage de la commande
+    private int nbClicks = 0; // Variable de classe pour compter les clics
+
     @FXML
     private void handlePasserCommande() throws SQLException {
         commandeService.payerCommande(idClient);
-        updateTotal();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Commande passée avec succès !");
-        alert.showAndWait();
-    }
+        Commande cmd = commandeService.getCommandeEnCours(idClient);
+
+        if (cmd == null && nbClicks == 0) {
+            nbClicks++; // Incrémenter le compteur de clics
+            updateTotal();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Commande passée avec succès !");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Commande déja passé !");
+            alert.showAndWait();
+        }}
 
     // Mettre à jour les cartes du panier
     private void updatePanierCards() throws SQLException, IOException {

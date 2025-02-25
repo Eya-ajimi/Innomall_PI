@@ -4,17 +4,35 @@ public class Panier {
     private int idCommande;
     private int idProduit;
     private int quantite;
+    private StatutCommande statut;
 
-    /*Other attributes for jointure */
+    public int getNumeroTicket() {
+        return numeroTicket;
+    }
+
+    public void setNumeroTicket(int numeroTicket) {
+        this.numeroTicket = numeroTicket;
+    }
+
+    private int numeroTicket;
+
+    /*Other attributes for jointure with tableProduit*/
 
     private String nomProduit;
     private double prix;
     private String description;
 
+    public Panier(int idCommande, int idProduit, int quantite, StatutCommande statut) {
+        this.idCommande = idCommande;
+        this.idProduit = idProduit;
+        this.quantite = quantite;
+        this.statut = statut;
+    }
     public Panier(int idCommande, int idProduit, int quantite) {
         this.idCommande = idCommande;
         this.idProduit = idProduit;
         this.quantite = quantite;
+
     }
 
     public Panier(int idCommande, int idProduit, int quantite, String nomProduit, double prix, String description) {
@@ -26,6 +44,8 @@ public class Panier {
         this.description = description;
 
     }
+
+    public Panier() {}
 
 
     @Override
@@ -86,5 +106,12 @@ public class Panier {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public StatutCommande getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutCommande statut) {
+        this.statut = statut;
     }
 }

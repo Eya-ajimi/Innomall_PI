@@ -30,7 +30,14 @@
     -fx-background-radius: 20;
 
 }
-
+.Scroll{
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 15px;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 3);
+}
 .white-border{
     -fx-border-color: #fff;
 }
