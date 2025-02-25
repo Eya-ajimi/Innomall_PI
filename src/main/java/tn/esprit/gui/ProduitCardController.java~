@@ -23,14 +23,15 @@ public class ProduitCardController {
         stockLabel.setText("Stock: " + produit.getStock());
         Description.setText(produit.getDescription());
 
-        // Using user ID 14 as the current user.
+        // Use user 14 as current user
         int currentUserId = 14;
         LikeProduitService likeService = new LikeProduitService();
-
         try {
-            // Check if the product is already liked by the current user
-            if (likeService.isLiked(currentUserId, produit.getId())) {
+            // Check if the product is already liked by user 14
+            boolean isLiked = likeService.isLiked(currentUserId, produit.getId());
+            if (isLiked) {
                 likeButton.setText("Liked");
+                // Optionally, you can change the graphic to a filled heart icon
             } else {
                 likeButton.setText("Like");
             }
@@ -38,19 +39,16 @@ public class ProduitCardController {
             e.printStackTrace();
         }
 
-        // Toggle like/dislike on left-click
+        // Set up the action handler to add a like only if not already liked.
         likeButton.setOnAction(event -> {
+            // If already liked, do nothing (or optionally allow unliking)
+            if(likeButton.getText().equals("Liked")){
+                return;
+            }
             try {
-                if (likeButton.getText().equals("Like")) {
-                    // Add like
-                    LikeProduit like = new LikeProduit(currentUserId, produit.getId());
-                    likeService.insert(like);
-                    likeButton.setText("Liked");
-                } else {
-                    // Remove like (dislike)
-                    likeService.delete(currentUserId, produit.getId());
-                    likeButton.setText("Like");
-                }
+                LikeProduit like = new LikeProduit(currentUserId, produit.getId());
+                likeService.insert(like);
+                likeButton.setText("Liked");
             } catch (Exception e) {
                 e.printStackTrace();
             }

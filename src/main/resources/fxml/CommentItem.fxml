@@ -25,11 +25,12 @@
         <VBox fx:id="vboxSousCommentaires" spacing="5" />
 
         <!-- Zone d'ajout de sous-commentaire -->
-        <!--
+
+        <!-- Zone d'ajout de sous-commentaire -->
         <HBox spacing="5">
             <TextArea fx:id="txtSousCommentaire" promptText="Reply..." prefRowCount="1" />
-            <Button text="Envoyer"  />
-        </HBox> -->
+            <Button fx:id="btnEnvoyer" text="Envoyer" />
+        </HBox>
     </VBox>
 
     <!-- Espacement pour pousser le bouton à droite -->

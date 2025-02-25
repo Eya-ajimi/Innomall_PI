@@ -591,19 +591,3 @@ CheckBox:selected {
 .add-to-cart-button:hover {
     -fx-background-color: #218838;
 }
-
-
-.like-button {
-    -fx-background-color: #94bee4;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 20px;
-    -fx-border-radius: 20px;
-    -fx-padding: 8px 15px;
-    -fx-cursor: hand;
-}
-
-.like-button:hover {
-    -fx-background-color: #379fe6;
-}

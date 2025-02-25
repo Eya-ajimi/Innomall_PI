@@ -35,59 +35,33 @@ public class HomePageController {
     public void initialize() {
         loadPosts();  // Load posts when the page initializes
         setupAddPostButton();  // Setup the button to add a post
-        initializeMap(); // Initialize WebView
+        initializeWebView(); // Initialize WebView
     }
 /******** map part****/
 
-@FXML private WebView mapWebView;
-
+    @FXML private WebView mapWebView; // WebView declaration
     private void initializeMap() {
-        try {
-            WebEngine webEngine = mapWebView.getEngine();
-            String htmlContent = """
+        WebEngine webEngine = mapWebView.getEngine();
+        String htmlContent = """
         <!DOCTYPE html>
         <html>
         <head>
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
             <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-            <style>
-                #map { 
-                    height: 100%;
-                    width: 100%;
-                    border-radius: 8px;
-                }
-            </style>
         </head>
         <body>
-            <div id="map"></div>
+            <div id="map" style="height: 100%; width: 100%;"></div>
             <script>
-                var map = L.map('map').setView([36.8989, 10.1895], 17);
-                
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(map);
-
-                L.marker([36.8989, 10.1895])
-                 .addTo(map)
-                 .bindPopup('<b>InnoMall</b>');
+                var map = L.map('map').setView([36.8989, 10.1895], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                L.marker([36.8989, 10.1895]).addTo(map).bindPopup('InnoMall');
             </script>
         </body>
         </html>
         """;
-
-            // Add error listener
-            webEngine.getLoadWorker().exceptionProperty().addListener(
-                    (obs, oldVal, newVal) -> {
-                        if (newVal != null) {
-                            System.err.println("Map loading error: " + newVal.getMessage());
-                        }
-                    });
-
-            webEngine.loadContent(htmlContent);
-        } catch (Exception e) {
-            System.err.println("Map initialization failed: " + e.getMessage());
-        }
+        webEngine.loadContent(htmlContent);
     }
+
 
 
     // Setup the Add Post button's action

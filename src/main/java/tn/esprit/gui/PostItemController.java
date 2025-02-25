@@ -71,7 +71,7 @@ public class PostItemController {
 
         Commentaire newComment = new Commentaire();
         newComment.setPostId(currentPost.getId());
-        newComment.setUtilisateurId(15);
+        newComment.setUtilisateurId(20);
         newComment.setContenu(content);
 
         try {

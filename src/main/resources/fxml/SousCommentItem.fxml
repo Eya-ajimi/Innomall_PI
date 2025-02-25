@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.SousCommentItemController">
-    <children>
-        <!-- Display userId -->
-        <Label fx:id="userIdLabel" layoutX="10" layoutY="10" />
+<HBox spacing="5" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.SousCommentItemController">
+    <ImageView fx:id="profileImage" fitHeight="20.0" fitWidth="18.0" styleClass="profile-pic">
+        <image>
+            <Image url="@../assets/user3.png" />
+        </image>
+    </ImageView>
+    <VBox spacing="5">
+        <Label fx:id="userIdLabel" styleClass="sous-comment-user" />
+        <Label fx:id="contentLabel" styleClass="sous-comment-content" wrapText="true" />
+        <Label fx:id="timeLabel" styleClass="sous-comment-time" />
+    </VBox>
+    <Region HBox.hgrow="ALWAYS" /> <!-- This will push the button to the right -->
+    <Button fx:id="btnEditDelete" contentDisplay="RIGHT" style="-fx-background-color: transparent;" styleClass="edite-delete-button" text="⋮">
+      <HBox.margin>
+         <Insets left="304.0" />
+      </HBox.margin></Button>
+      <HBox.margin>
+         <Insets left="522.0" />
+      </HBox.margin>
 
-        <!-- Display comment content -->
-        <Label fx:id="contentLabel" layoutX="10" layoutY="40" />
-
-        <!-- Display comment time -->
-        <Label fx:id="timeLabel" layoutX="10" layoutY="70" />
-    </children>
-</AnchorPane>
+</HBox>

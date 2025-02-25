@@ -112,7 +112,7 @@ public class UtilisateurService {
 
     public List<Utilisateur> getShopsByName(String name) throws SQLException {
         List<Utilisateur> shops = new ArrayList<>();
-        String query = "SELECT * FROM utilisateur WHERE role = 'SHOPOWNER' AND nom LIKE ?";
+        String query = "SELECT * FROM utilisateur WHERE role = 'SHOP' AND nom LIKE ?";
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();

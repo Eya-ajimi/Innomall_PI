@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -19,23 +20,23 @@
             <!-- Shop Contact -->
             <Label fx:id="shopContact" styleClass="shop-info" text="Contact" />
 
-            <!-- Feedback Buttons -->
-            <HBox alignment="CENTER" spacing="10" style="-fx-alignment: center;">
-                <Button fx:id="feedbackButton" onAction="#handleFeedbackButtonClick" style="-fx-alignment: center;" styleClass="feedback-button" text="Add Feedback" />
-                <Button fx:id="deleteFeedbackButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleDeleteFeedbackButtonClick" styleClass="delete-button" text="Delete Feedback" />
+            <!-- Rating Stars -->
+            <HBox fx:id="ratingContainer" alignment="CENTER" styleClass="rating-container">
+                <SVGPath fx:id="star1" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star gray-star" />
+                <SVGPath fx:id="star2" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star gray-star" />
+                <SVGPath fx:id="star3" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star gray-star" />
+                <SVGPath fx:id="star4" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star gray-star" />
+                <SVGPath fx:id="star5" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star gray-star" />
             </HBox>
 
-            <!-- Rating Stars -->
-            <HBox fx:id="ratingContainer" style="-fx-alignment: center;" styleClass="rating-container">
-                <SVGPath fx:id="star1" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
-                <SVGPath fx:id="star2" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
-                <SVGPath fx:id="star3" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
-                <SVGPath fx:id="star4" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
-                <SVGPath fx:id="star5" content="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21z" styleClass="rating-star" />
+            <!-- Feedback Buttons -->
+            <HBox alignment="CENTER" spacing="10">
+                <Button fx:id="feedbackButton" onAction="#handleFeedbackButtonClick" styleClass="feedback-button" text="Add Rating" />
+                <Button fx:id="deleteFeedbackButton" onAction="#handleDeleteFeedbackButtonClick" styleClass="delete-button" text="Delete Feedback" />
             </HBox>
 
             <!-- View Product Button -->
-            <Button fx:id="viewProductButton" onAction="#navigateToProductsView" prefHeight="30.0" prefWidth="108.0" styleClass="view-button" text="View Product" />
+            <Button fx:id="viewProductButton" onAction="#navigateToProductsView" styleClass="view-button" text="View Product" />
         </VBox>
     </children>
 </AnchorPane>

@@ -27,6 +27,10 @@ public class CommentItemController {
     private Button editDeleteButton;
     @FXML
     private VBox vboxSousCommentaires;
+    @FXML
+    private TextArea txtSousCommentaire;
+    @FXML
+    private Button btnEnvoyer;
 
     private final SousCommentaireService sousCommentaireService = new SousCommentaireService();
     private final CommentaireService commentaireService = new CommentaireService();
@@ -36,18 +40,21 @@ public class CommentItemController {
         this.commentaire = commentaire;
 
         // Mise à jour des labels
-        commentUser.setText("Utilsateur " + commentaire.getUtilisateurId());
+        commentUser.setText("Utilisateur " + commentaire.getUtilisateurId());
         commentContent.setText(commentaire.getContenu());
         commentTime.setText(commentaire.getDateCreation());
 
         // Chargement des sous-commentaires
-
         loadSousCommentaires();
 
         // Configuration du menu contextuel (Modifier/Supprimer)
         setupEditDeleteMenu();
+
+        // Add event handler for the "Envoyer" button
+        btnEnvoyer.setOnAction(event -> addSousCommentaire());
     }
 
+    /***************** sous commentaire part ***********************/
     private void loadSousCommentaires() throws SQLException {
         // Clear any existing sous-commentaires from the VBox
         vboxSousCommentaires.getChildren().clear();
@@ -56,7 +63,6 @@ public class CommentItemController {
         List<SousCommentaire> sousCommentaires = sousCommentaireService.getSousCommentairesByCommentaireId(commentaire.getId());
         System.out.println(sousCommentaires);
         System.out.println(commentaire);
-
 
         // Check if there are sous-commentaires to load
         if (sousCommentaires == null || sousCommentaires.isEmpty()) {
@@ -69,7 +75,7 @@ public class CommentItemController {
             try {
                 // Load the SousCommentaireItem.fxml FXML file
                 System.out.println(sc);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SousCommentaireItem.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SousCommentItem.fxml"));
                 System.out.println("Loading FXML from: " + loader.getLocation());
 
                 // Create the HBox item for the sous-commentaire
@@ -88,6 +94,31 @@ public class CommentItemController {
         }
     }
 
+    private void addSousCommentaire() {
+        String contenu = txtSousCommentaire.getText().trim();
+        if (!contenu.isEmpty()) {
+            try {
+                SousCommentaire sousCommentaire = new SousCommentaire();
+                sousCommentaire.setContenu(contenu);
+                sousCommentaire.setCommentaireId(commentaire.getId());
+                sousCommentaire.setUtilisateurId(17); // Replace with actual user ID
+                sousCommentaire.setDateCreation(java.time.LocalDateTime.now().toString());
+
+                // Insert the sous-commentaire into the database
+                sousCommentaireService.insert(sousCommentaire);
+
+                // Reload sous-commentaires to display the new one
+                loadSousCommentaires();
+
+                // Clear the text area
+                txtSousCommentaire.clear();
+            } catch (SQLException e) {
+                System.err.println("Erreur lors de l'ajout du sous-commentaire : " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+    /*************************/
 
     private void setupEditDeleteMenu() {
         ContextMenu contextMenu = new ContextMenu();

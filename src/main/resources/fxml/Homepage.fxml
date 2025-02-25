@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
+<?import javafx.scene.web.WebView?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="904.0" prefWidth="1353.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.HomePageController">
 
 <top>
@@ -79,7 +79,8 @@
 <right>
    <VBox prefHeight="844.0" prefWidth="424.0" style="-fx-background-color: white;">
       <children>
-         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="435.0" text="Map of the Mall " textAlignment="CENTER" textFill="#ffce89">
+          <!--Map section -->
+         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="430.0" text="Map of the Mall " textAlignment="CENTER" textFill="#ffce89">
             <font>
                <Font name="Arial Rounded MT Bold" size="24.0" />
             </font>
@@ -87,14 +88,12 @@
                <Insets top="22.0" />
             </VBox.margin>
          </Label>
-         <ImageView fitHeight="369.0" fitWidth="420.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@../assets/mall.png" />
-            </image>
+         <WebView fx:id="mapWebView" prefHeight="369.0" prefWidth="420.0" >
             <VBox.margin>
                <Insets top="31.0" />
             </VBox.margin>
-         </ImageView>
+         </WebView>
+         <!-- Atms activity -->
          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="422.0" text="ATM'S Activity" textAlignment="CENTER" textFill="#484848">
             <font>
                <Font name="Arial Rounded MT Bold" size="18.0" />
@@ -132,7 +131,7 @@
             <children>
                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="@../assets/deposit%201%20(1).png" />
+                     <Image url="@../assets/deposit 1.png" />
                   </image>
                   <HBox.margin>
                      <Insets left="20.0" />
@@ -145,7 +144,7 @@
                </Label>
                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="@../assets/Vector%20(16).png" />
+                     <Image url="@../assets/Vector (16).png" />
                   </image>
                </ImageView>
             </children>

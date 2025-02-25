@@ -71,4 +71,17 @@ public class LikeProduitService {
 
         return utilisateurs;
     }
+
+
+    public boolean isLiked(int utilisateurId, int produitId) throws SQLException {
+        String req = "SELECT COUNT(*) FROM LikeProduit WHERE utilisateurId = ? AND produitId = ?";
+        ps = cnx.prepareStatement(req);
+        ps.setInt(1, utilisateurId);
+        ps.setInt(2, produitId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+        return false;
+    }
 }
