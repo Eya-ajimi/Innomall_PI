@@ -57,7 +57,7 @@
             <Button text="Annuler" fx:id="cancelButton" prefWidth="120" prefHeight="35"
                     style="-fx-background-color: #f0f0f0; -fx-text-fill: #333333; -fx-background-radius: 4;" />
             <Button text="Ajouter" fx:id="saveButton" prefWidth="120" prefHeight="35"
-                    style="-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;" />
+                    style="-fx-background-color:rgba(191, 226, 246, 0.82); -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;" />
         </HBox>
     </children>
 </VBox>

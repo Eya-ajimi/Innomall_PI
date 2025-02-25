@@ -37,7 +37,7 @@
                                 <TextField fx:id="searchField" prefHeight="30.0" prefWidth="250.0" promptText="chercher par pourcentage de promotion..."
                                            style="-fx-background-radius: 4; -fx-border-radius: 4; -fx-border-color: #bfe2f6; -fx-background-color: white;" />
                                 <Button fx:id="addButton" text="Ajouter Promotion" prefHeight="30.0"
-                                        style="-fx-background-color: #ffffff; -fx-text-fill: rgba(255, 165, 0, 0.77); -fx-background-radius: 4; -fx-font-weight: bold;" />
+                                        style="-fx-background-color: rgb(255,255,255); -fx-text-fill: rgba(255, 165, 0, 0.77); -fx-background-radius: 4; -fx-font-weight: bold;" />
                             </children>
                         </HBox>
                     </children>

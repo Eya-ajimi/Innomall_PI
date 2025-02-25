@@ -8,6 +8,7 @@ public class Discount {
     private Date start_date;
     private Date end_date;
 
+
     public Discount() {}
     // Constructor
     public Discount(int id, int shop_id, float discount_percentage, Date start_date, Date end_date) {
@@ -36,6 +37,10 @@ public class Discount {
                 ", start_date=" + start_date +
                 ", end_date=" + end_date +
                 '}';
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {

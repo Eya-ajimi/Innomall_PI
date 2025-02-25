@@ -92,7 +92,7 @@ public class TestCrudDiscount {
     }
 
     private static void deleteDiscount(DiscountService discountService) {
-        Discount discountToDelete = new Discount(1, 1, 0.0f, new Date(), new Date()); // Sample data for deleting
+        Discount discountToDelete = new Discount(2, 1, 0.0f, new Date(), new Date()); // Sample data for deleting
       // Set the ID of the discount to delete
         try {
             int result = discountService.delete(discountToDelete);

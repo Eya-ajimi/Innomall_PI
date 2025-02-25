@@ -42,11 +42,18 @@ public class ProductService implements CRUD<Product> {
     public int update(Product product) throws SQLException {
         String query = "UPDATE product SET discount_id = ?, description = ?, stock = ?, price = ? WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, product.getDiscount_id());
+            // Handle null discount_id
+            if (product.getDiscount_id() == null) {
+                pst.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                pst.setInt(1, product.getDiscount_id());
+            }
+
             pst.setString(2, product.getDescription());
             pst.setInt(3, product.getStock());
             pst.setFloat(4, product.getPrice());
-            pst.setInt(5, product.getId()); // Pass the product ID here
+            pst.setInt(5, product.getId());
+
             return pst.executeUpdate();
         }
     }

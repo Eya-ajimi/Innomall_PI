@@ -30,22 +30,23 @@ public class DiscountService implements CRUD<Discount> {
     public int update(Discount discount) throws SQLException {
         String query = "UPDATE discount SET shop_id = ?, discount_percentage = ?, start_date = ?, end_date = ? WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, discount.getShopId());//shopid
-            pst.setFloat(2, discount.getDiscountPercentage());//percentage
-            pst.setDate(3, new java.sql.Date(discount.getStartDate().getTime()));//start_date
-            pst.setDate(4, new java.sql.Date(discount.getEndDate().getTime()));//end_date
+            pst.setInt(1, discount.getShopId());
+            pst.setFloat(2, discount.getDiscountPercentage());
+            pst.setDate(3, discount.getStartDate() != null ? new java.sql.Date(discount.getStartDate().getTime()) : null);
+            pst.setDate(4, discount.getEndDate() != null ? new java.sql.Date(discount.getEndDate().getTime()) : null);
             pst.setInt(5, discount.getId());
+
             int affectedRows = pst.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        return generatedKeys.getInt(1);
-                    }
-                }
+            if (!connection.getAutoCommit()) {
+                connection.commit(); // Commit only if auto-commit is disabled
             }
             return affectedRows;
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the error
+            throw e; // Rethrow the exception
         }
     }
+
 
     @Override
     public int delete(Discount discount) throws SQLException {

@@ -48,9 +48,9 @@ public class AjoutProduitController {
 
         // Save
         saveButton.setOnMouseEntered(e -> saveButton.setStyle("-fx-background-color: #ff8c33; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
-        saveButton.setOnMouseExited(e -> saveButton.setStyle("-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
+        saveButton.setOnMouseExited(e -> saveButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82); -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
         saveButton.setOnMousePressed(e -> saveButton.setStyle("-fx-background-color: #cc5f1a; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
-        saveButton.setOnMouseReleased(e -> saveButton.setStyle("-fx-background-color: #ff8c33; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
+        saveButton.setOnMouseReleased(e -> saveButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82); -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
     }
 
     private void saveProduct() {
