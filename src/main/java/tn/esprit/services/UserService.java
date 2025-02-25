@@ -8,6 +8,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 
 public class UserService implements IService<User> {
     private final Connection connection;
@@ -169,7 +171,56 @@ public class UserService implements IService<User> {
             }
         }
 
+
         return user;
     }
+
+
+    public boolean emailExists(String email) throws SQLException {
+        String query = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+    public int generatePasswordResetToken(String email) throws SQLException {
+        Random random = new Random();
+        int token= 100000 + random.nextInt(900000);
+        String query = "UPDATE utilisateur SET reset_token = ? WHERE email = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDouble(1, token);
+            pstmt.setString(2, email);
+            pstmt.executeUpdate();
+        }
+        return token;
+    }
+
+    public boolean verifyResetCode(String email, String code) throws SQLException {
+        String query = "SELECT reset_token FROM utilisateur WHERE email = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return code.equals(String.valueOf(rs.getInt("reset_token")));
+            }
+        }
+        return false;
+    }
+
+    public void updatePassword(String email, String newPassword) throws SQLException {
+        String query = "UPDATE utilisateur SET mot_de_passe = ? WHERE email = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, BCrypt.hashpw(newPassword, BCrypt.gensalt())); // Hash du nouveau mot de passe
+            pstmt.setString(2, email);
+            pstmt.executeUpdate();
+        }
+    }
+
+
 
 }

@@ -26,10 +26,15 @@ public class SignInController {
 
     @FXML
     private Button btn_sigin;
+
     @FXML
     private Button btn_sigUp;
+
     @FXML
     private Text errorMessage;
+
+    @FXML
+    private Text forget_password; // Ajout du texte "Forgot password"
 
     private UserService userService = new UserService();
 
@@ -37,6 +42,9 @@ public class SignInController {
     public void initialize() {
         System.out.println("Initializing SignInController...");
         btn_sigin.setOnAction(event -> handleSignIn());
+
+        // Gestionnaire d'événements pour "Forgot password"
+        forget_password.setOnMouseClicked(event -> handleForgotPassword());
     }
 
     @FXML
@@ -62,10 +70,6 @@ public class SignInController {
                 } else if ("admin".equals(user.getRole())) {
                     errorMessage.setText("Connexion réussie !");
 
-                    // Définir l'utilisateur connecté dans la session
-
-
-
                     // Rediriger vers le tableau de bord de l'admin
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/adminDashboard.fxml"));
                     Parent root = loader.load();
@@ -73,8 +77,7 @@ public class SignInController {
                     Stage stage = (Stage) btn_sigin.getScene().getWindow();
                     stage.setScene(scene);
                     stage.show();
-                }
-                else if ("Shop Owner".equals(role)) {
+                } else if ("Shop Owner".equals(role)) {
                     fxmlFile = "/fxml/shopOwnerDashboard.fxml"; // Page XML pour le shopowner
                 } else {
                     errorMessage.setText("Role non reconnu.");
@@ -96,6 +99,7 @@ public class SignInController {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleSignUp() {
         try {
@@ -118,6 +122,30 @@ public class SignInController {
         } catch (IOException e) {
             e.printStackTrace();
             errorMessage.setText("An error occurred while loading the sign-up page.");
+        }
+    }
+
+    // Gestionnaire d'événements pour "Forgot password"
+    private void handleForgotPassword() {
+        try {
+            // Charger le fichier FXML de l'interface de réinitialisation du mot de passe
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ForgotPassword.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la page chargée
+            Scene scene = new Scene(root);
+
+            // Appliquer le fichier CSS à la nouvelle scène
+            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+
+            // Créer une nouvelle fenêtre (stage) pour afficher la scène
+            Stage stage = new Stage();
+            stage.setTitle("Forgot Password");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            errorMessage.setText("An error occurred while loading the forgot password page.");
         }
     }
 }

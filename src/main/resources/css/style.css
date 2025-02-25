@@ -9,6 +9,9 @@
     -fx-min-width: 200px;
     -fx-transition: all 0.3s ease;
 }
+.text-blue {
+    -fx-fill: #A8D8FF;
+}
 
 .form-container {
     -fx-padding: 20px;
@@ -18,7 +21,7 @@
 .textfield, .passwordfield {
     -fx-background-color: transparent;
     -fx-border-color: #555555;
-    -fx-border-width: 0 0 1.5 0;
+    -fx-border-width: 0 0 1 0;
     -fx-font-size: 14px;
     -fx-min-width: 250px;
     -fx-max-width: 400px;
@@ -28,15 +31,15 @@
 }
 
 .textfield:focused, .passwordfield:focused {
-    -fx-border-color: #353A56;
-    -fx-border-width: 0 0 2px 0;
-    -fx-effect: dropshadow(three-pass-box, rgba(53,58,86,0.5), 5, 0,0,2);
+    -fx-border-color: #FFA500;
+    -fx-border-width: 0 0 1px 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(168, 216, 255, 0.7), 5, 0,0,2);
 }
 
 .btn_signin {
-    -fx-background-color: #A8D8FF;
+    -fx-background-color: #FFA500;
     -fx-border-color: #353A56;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
     -fx-text-fill: white;
@@ -51,7 +54,7 @@
 .btn_signup {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #353A56;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
     -fx-text-fill: #353A56;
@@ -64,14 +67,14 @@
 }
 
 .btn_signin:hover, .btn_signup:hover {
-    -fx-background-color: #7BB1E8;
+    -fx-background-color: #FFA500;
     -fx-border-color: #1D2540;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }
 
 .btn_signin:pressed, .btn_signup:pressed {
-    -fx-background-color: #5F8DCB;
+    -fx-background-color: #FFA500;
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
 }

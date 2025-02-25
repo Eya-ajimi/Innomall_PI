@@ -23,7 +23,7 @@
     <Label fx:id="roleLabel" layoutX="50" layoutY="250"/>
     <Label fx:id="statutLabel" layoutX="50" layoutY="280"/>
     <Label fx:id="dateInscriptionLabel" layoutX="50" layoutY="310"/>
-    
+
     <!-- Bouton de déconnexion -->
     <Button layoutX="50" layoutY="350" text="Déconnexion" onAction="#handleLogout"/>
 </AnchorPane>
