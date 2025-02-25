@@ -47,7 +47,7 @@ public class ReservationDialog {
             VBox content = loader.load();
 
             // Load CSS
-            URL cssUrl = ReservationDialog.class.getResource("/css/style.css");
+            URL cssUrl = ReservationDialog.class.getResource("/css/reservation_dialog_css.css");
             if (cssUrl != null) {
                 content.getStylesheets().add(cssUrl.toExternalForm());
             }
