@@ -10,7 +10,7 @@
     -border-color: #dee2e6;
     -hover-color: #e9f2fc;
     -shadow-color: rgba(0, 0, 0, 0.1);
-    -card-radius: 12px;
+    /* Remove the variable for card-radius since it causes ClassCastException */
 }
 
 .reserved-spots-dialog {
@@ -82,9 +82,11 @@
 /* ==================== Table Container ==================== */
 .table-container {
     -fx-background-color: -surface-color;
-    -fx-background-radius: -card-radius;
+    /* Use explicit value instead of variable reference */
+    -fx-background-radius: 12px;
     -fx-border-color: -border-color;
-    -fx-border-radius: -card-radius;
+    /* Use explicit value instead of variable reference */
+    -fx-border-radius: 12px;
     -fx-padding: 5px;
     -fx-effect: dropshadow(gaussian, -shadow-color, 4, 0, 0, 1);
 }

@@ -3,9 +3,9 @@ package tn.esprit.utils;
 import org.eclipse.paho.client.mqttv3.*;
 
 public class MQTTClient {
-    private static final String BROKER_URL = "tcp://192.168.254.112:1883"; // Use your local IP
-    private static final String CLIENT_ID = "JavaFXClient";
-    private static final String TOPIC = "placeparking/status"; // ESP32 publishes here
+    private static final String BROKER_URL = "tcp://192.168.1.174:1883"; // Your MQTT broker IP
+    private static final String CLIENT_ID = "ParkingLotApp";
+    private static final String TOPIC = "placeparking/status";
 
     private MqttClient client;
     private MQTTMessageHandler messageHandler;

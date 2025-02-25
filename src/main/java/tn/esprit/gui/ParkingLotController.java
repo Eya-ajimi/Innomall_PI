@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import tn.esprit.utils.MQTTClient;
+import tn.esprit.utils.MQTTMessageHandler;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,6 +40,9 @@ public class ParkingLotController implements Initializable {
     private PlaceParkingService parkingService = new PlaceParkingService();
     private Image carImage;
     private Timeline pulseAnimation;
+    private MQTTClient mqttClient;
+    private MQTTMessageHandler mqttMessageHandler;
+
     @FXML private Button viewReservedSpotsButton;
     @FXML private Label counterLabel;
     @FXML private Label occupancyLabel;
@@ -74,7 +79,8 @@ public class ParkingLotController implements Initializable {
         } catch (Exception e) {
             System.out.println("Error loading car image: " + e.getMessage());
         }
-
+        mqttMessageHandler = new MQTTMessageHandler(parkingService);
+        mqttClient = new MQTTClient(mqttMessageHandler);
         initializeAnimations();
         initializeAutoRefresh();
         initializeFloorComboBox();

@@ -27,7 +27,7 @@ public class MQTTMessageHandler {
         try {
             // Assuming the format is "id:status" (e.g., "1:free")
             String[] parts = payload.split(":");
-            return StatutPlace.valueOf(parts[1]); // Convert second part to StatutPlace enum
+            return StatutPlace.valueOf(parts[1].toLowerCase()); // Convert second part to StatutPlace enum
         } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
             System.err.println("Invalid status in MQTT message: " + payload);
             return null; // Return null for error handling
