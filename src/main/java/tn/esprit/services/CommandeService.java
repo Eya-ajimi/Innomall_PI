@@ -125,30 +125,6 @@ public class CommandeService implements CRUD<Commande> {
     }
 
 
-    //pour l'interface de shops
-    public Commande getCommandeConfirme(int idClient) throws SQLException {
-        String query = "SELECT * FROM commande WHERE idClient = ? AND statut = ?";
-        try {
-            ps = cnx.prepareStatement(query);
-            ps.setInt(1, idClient);
-            ps.setString(2, StatutCommande.payee.toString());
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Commande(
-                            resultSet.getInt("id"),
-                            resultSet.getInt("idClient"),
-                            resultSet.getString("dateCommande"),
-                            resultSet.getDouble("total"),
-                            StatutCommande.valueOf(resultSet.getString("statut"))
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
     /****************************************payement***************************************************/
     //affichage panier payé
     public List<Panier> showAllClientPanierPaye(int commandeId)  {
@@ -335,6 +311,8 @@ public class CommandeService implements CRUD<Commande> {
         }
 
     }
+
+    //getProduitBYId
     public Produit getProduitById(int idProduit) throws SQLException {
 
         String query = "SELECT * FROM produit WHERE id = ?";
@@ -511,6 +489,7 @@ public List<Commande> getCommandesPayeesAujourdhuiPourShopOwner(int shopId) thro
         return nomClient;
     }
 
+    //cette methode dans le filtre par le jour
     public List<Commande> getCommandesPayeesselonJourPourShopOwner(int shopId, String dateDeJour) throws SQLException {
         List<Commande> commandes = new ArrayList<>();
 
@@ -586,8 +565,77 @@ public List<Commande> getCommandesPayeesAujourdhuiPourShopOwner(int shopId) thro
         return commandes;
     }
 
+/****************************les methodes pour le changement de statut de commande en recuperer *************************/
 
+public List<Panier> getPaniersByCommandeId(int idCommande) throws SQLException {
+    List<Panier> paniers = new ArrayList<>();
 
+    String query = "SELECT * FROM panier WHERE idCommande = ?";
+    try (PreparedStatement ps = cnx.prepareStatement(query)) {
+        ps.setInt(1, idCommande);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Panier panier = new Panier();
+                panier.setIdCommande(rs.getInt("idCommande"));
+                panier.setIdProduit(rs.getInt("idProduit"));
+                panier.setQuantite(rs.getInt("quantite"));
+                panier.setStatut(StatutCommande.valueOf(rs.getString("statut")));
+
+                paniers.add(panier);
+            }
+        }
+    }
+
+    return paniers;
+}
+
+    public void updateStatutCommande(int idCommande, StatutCommande statut) throws SQLException {
+        String query = "UPDATE commande SET statut = ? WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, statut.toString());
+            ps.setInt(2, idCommande);
+            ps.executeUpdate();
+        }
+    }
+
+    public void updateStatutPanier(int idCommande, int idProduit, StatutCommande statut) throws SQLException {
+        String query = "UPDATE panier SET statut = ? WHERE idCommande = ? AND idProduit = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, statut.toString());
+            ps.setInt(2, idCommande);
+            ps.setInt(3, idProduit);
+            ps.executeUpdate();
+        }
+    }
+
+    //cette fonction qui sera appelé dans le controller et les fonctions au dessus sont utilisé dans cette foncion
+    public void updateStatutCommandeEtPaniers(int idCommande, int shopId) throws SQLException {
+        // Récupérer tous les paniers de la commande
+        List<Panier> paniers = getPaniersByCommandeId(idCommande);
+
+        // Variable pour vérifier si tous les paniers sont marqués comme "recuperer"
+        boolean tousPaniersRecuperes = true;
+
+        // Parcourir les paniers
+        for (Panier panier : paniers) {
+            Produit produit = getProduitById(panier.getIdProduit());
+            // Vérifier si le produit du panier correspond au shopId
+            if (produit.getShopId() == shopId) {
+                // Mettre à jour le statut du panier à "recuperer"
+                updateStatutPanier(panier.getIdCommande(), panier.getIdProduit(), StatutCommande.recuperer);
+            }
+
+            // Vérifier si le panier est encore en statut "payee"
+            if (panier.getStatut() == StatutCommande.payee) {
+                tousPaniersRecuperes = false;
+            }
+        }
+
+        // Mettre à jour le statut de la commande si nécessaire
+        if (tousPaniersRecuperes) {
+            updateStatutCommande(idCommande, StatutCommande.recuperer);
+        }
+    }
 
 
 

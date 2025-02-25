@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.gui.PanierPopupController"
+      spacing="10" style="-fx-padding: 20px;">
+
+    <Label text="Détails des Paniers" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <VBox fx:id="panierContainer" spacing="10" style="-fx-background-color: white; -fx-padding: 10px;"/>
+
+    <Button fx:id="btnConfirmer" text="Confirmer" onAction="#confirmerCommande"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px;"/>
+
+</VBox>

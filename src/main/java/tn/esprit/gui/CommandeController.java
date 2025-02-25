@@ -6,14 +6,18 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import tn.esprit.entites.Commande;
 import tn.esprit.entites.Panier;
 import tn.esprit.services.CommandeService;
 
+import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class CommandeController {
@@ -40,11 +44,12 @@ public class CommandeController {
 
     private CommandeService commandeService = new CommandeService();
     private ObservableList<Commande> commandesList = FXCollections.observableArrayList();
-    private static final int ROWS_PER_PAGE = 10; // Nombre de commandes par page
+    private static final int ROWS_PER_PAGE = 10;
 
     @FXML
     public void initialize() {
-        // Fixer la taille du tableau
+        datePicker.setValue(java.time.LocalDate.now());
+
         tableView.setPrefHeight(400); // Hauteur du tableau
         tableView.setPrefWidth(600); // Largeur du tableau
 
@@ -58,21 +63,15 @@ public class CommandeController {
         dateCommandeCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getDateCommande()));
 
-        // Définir la date par défaut sur aujourd'hui
-        datePicker.setValue(LocalDate.now());
+        loadCommandes(datePicker.getValue().toString());
 
-        // Charger les commandes du jour actuel
-        loadCommandes(LocalDate.now().toString());
-
-        // Écouter les changements de date
         datePicker.setOnAction(event -> filterCommandes());
 
-        // Double-clic sur une commande pour voir les détails du panier
         tableView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Commande selectedCommande = tableView.getSelectionModel().getSelectedItem();
                 if (selectedCommande != null) {
-                    showPanierDetails(selectedCommande.getPaniers());
+                    openPanierPopup(selectedCommande);
                 }
             }
         });
@@ -80,9 +79,15 @@ public class CommandeController {
 
     private void loadCommandes(String date) {
         try {
-            int shopId = 3; // ID du shopOwner (à remplacer par une valeur dynamique si nécessaire)
+            int shopId = 3;
             List<Commande> commandes = commandeService.getCommandesPayeesselonJourPourShopOwner(shopId, date);
+
+            // 🔴 Correction : Vérifier si la liste est remplie
+            System.out.println("Commandes récupérées : " + commandes.size());
+
             commandesList.setAll(commandes);
+            tableView.setItems(commandesList);  // ✅ S'assurer que le TableView est mis à jour
+
             setupPagination();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,10 +95,7 @@ public class CommandeController {
     }
 
     private void filterCommandes() {
-        LocalDate selectedDate = datePicker.getValue();
-        if (selectedDate != null) {
-            loadCommandes(selectedDate.toString());
-        }
+        loadCommandes(datePicker.getValue().toString());
     }
 
     private void setupPagination() {
@@ -107,6 +109,11 @@ public class CommandeController {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
         int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, commandesList.size());
 
+        // 🔴 Correction : Vérifier si l'index est valide avant de sous-lister
+        if (fromIndex > commandesList.size()) {
+            return new VBox();
+        }
+
         tableView.setItems(FXCollections.observableArrayList(commandesList.subList(fromIndex, toIndex)));
 
         VBox box = new VBox();
@@ -114,22 +121,25 @@ public class CommandeController {
         return box;
     }
 
-    private void showPanierDetails(List<Panier> paniers) {
-        if (paniers == null || paniers.isEmpty()) {
-            return;
-        }
+    private void openPanierPopup(Commande commande) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PanierPopup.fxml"));
+            VBox root = loader.load();
 
-        VBox vbox = new VBox();
-        for (Panier panier : paniers) {
-            Label label = new Label(String.format("Produit: %s, Quantité: %d, Prix: %.2f",
-                    panier.getNomProduit(), panier.getQuantite(), panier.getPrix()));
-            vbox.getChildren().add(label);
-        }
+            PanierPopupController popupController = loader.getController();
+            popupController.setData(commande, this);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Détails du Panier");
-        alert.setHeaderText("Détails des paniers pour la commande sélectionnée");
-        alert.getDialogPane().setContent(vbox);
-        alert.showAndWait();
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("Détails du Panier");
+            popupStage.setScene(new Scene(root));
+            popupStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshTable() {
+        loadCommandes(datePicker.getValue().toString());
     }
 }
