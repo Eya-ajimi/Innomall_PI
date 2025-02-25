@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class EventService implements CRUD<Event> {
     private Connection connection;
 
@@ -104,5 +103,33 @@ public class EventService implements CRUD<Event> {
             e.printStackTrace();
         }
         return event;
+    }
+
+    // New method to get events by organizer ID
+    public List<Event> getEventsByOrganizer(int idOrganisateur) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT * FROM event WHERE idOrganisateur = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, idOrganisateur);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Event event = new Event(
+                        rs.getInt("id"),
+                        rs.getInt("idOrganisateur"),
+                        rs.getString("nomOrganisateur"),
+                        rs.getString("description"),
+                        rs.getString("dateDebut"),
+                        rs.getString("dateFin"),
+                        rs.getString("emplacement")
+                );
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Debug: Print the events fetched
+        System.out.println("Events fetched for organizer " + idOrganisateur + ": " + events);
+        return events;
     }
 }

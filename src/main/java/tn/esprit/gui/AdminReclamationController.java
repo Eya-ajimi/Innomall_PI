@@ -2,6 +2,7 @@ package tn.esprit.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -31,9 +32,11 @@ public class AdminReclamationController {
             @Override
             public TableCell<Reclamation, Void> call(final TableColumn<Reclamation, Void> param) {
                 return new TableCell<Reclamation, Void>() {
-                    private final Button btn = new Button("Update");
+                    private final Button btn = new Button("Reply");
 
                     {
+                        btn.getStyleClass().add("reply-button"); // Apply the CSS class
+                        btn.setMaxWidth(Double.MAX_VALUE); // Make the button fill the cell width
                         btn.setOnAction(event -> {
                             Reclamation reclamation = getTableView().getItems().get(getIndex());
                             openUpdateWindow(reclamation);
@@ -47,6 +50,7 @@ public class AdminReclamationController {
                             setGraphic(null);
                         } else {
                             setGraphic(btn);
+                            setAlignment(Pos.CENTER); // Center the button in the cell
                         }
                     }
                 };

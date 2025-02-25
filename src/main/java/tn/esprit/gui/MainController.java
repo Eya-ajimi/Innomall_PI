@@ -22,6 +22,13 @@ public class MainController {
     private ScrollPane scrollPane; // ScrollPane to make the FlowPane scrollable
 
     private EventService eventService = new EventService();
+    private int idOrganisateur; // Add this field
+
+    // Setter for idOrganisateur
+    public void setIdOrganisateur(int idOrganisateur) {
+        this.idOrganisateur = idOrganisateur;
+        System.out.println("idOrganisateur set to: " + this.idOrganisateur); // Debug log
+    }
 
     @FXML
     public void initialize() {
@@ -36,7 +43,9 @@ public class MainController {
      */
     public void loadEvents() {
         eventsContainer.getChildren().clear(); // Clear existing cards
-        List<Event> events = eventService.getAll();
+
+        // Fetch events for the specific organizer
+        List<Event> events = eventService.getEventsByOrganizer(idOrganisateur);
 
         for (Event event : events) {
             try {
@@ -71,6 +80,9 @@ public class MainController {
 
             // Pass null to indicate this is a new event
             formController.setEvent(null);
+
+            // Set the organizer ID for the new event
+            formController.setIdOrganisateur(idOrganisateur);
 
             // Open the form in a new window
             Stage stage = new Stage();

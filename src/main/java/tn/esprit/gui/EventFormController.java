@@ -32,6 +32,12 @@ public class EventFormController {
     private boolean isNewEvent = false; // Flag to check if this is a new event
     private boolean updated = false; // Flag to check if the event was updated
     private EventService eventService = new EventService();
+    private int idOrganisateur; // Add this field
+
+    // Setter for idOrganisateur
+    public void setIdOrganisateur(int idOrganisateur) {
+        this.idOrganisateur = idOrganisateur;
+    }
 
     /**
      * Set the event to be modified or initialize a new event.
@@ -91,13 +97,13 @@ public class EventFormController {
                 locationField.getText().isEmpty()) {
             // Show an error message if any field is empty
             showErrorAlert("Missing Information", "Please fill in all fields.");
-            return; // Exit the method if validation fails
+            return;
         }
 
         // Validate that the end date is after the start date
         if (endDatePicker.getValue().isBefore(startDatePicker.getValue())) {
             showErrorAlert("Invalid Date Range", "The end date must be after the start date.");
-            return; // Exit the method if validation fails
+            return;
         }
 
         // Update the event object with the new data
@@ -107,9 +113,7 @@ public class EventFormController {
         event.setDateFin(endDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         event.setEmplacement(locationField.getText());
 
-        // Set the idOrganisateur (you need to get this value from somewhere)
-        // For example, you can hardcode it for testing, or get it from the logged-in user
-        int idOrganisateur = 2; // Replace this with the actual idOrganisateur
+        // Set the idOrganisateur
         event.setIdOrganisateur(idOrganisateur);
 
         // Mark the event as updated
