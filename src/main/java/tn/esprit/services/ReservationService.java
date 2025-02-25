@@ -5,6 +5,7 @@ import tn.esprit.entities.Reservation.StatutReservation;
 import tn.esprit.utils.DataBase;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,6 +132,25 @@ public class ReservationService implements CRUD<Reservation> {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+    public void updateExpiredReservations() throws SQLException {
+        String sql = "UPDATE Reservation SET statut = ? WHERE dateExpiration < ? AND statut = ?";
+        try (Connection connection = DataBase.getInstance().getCnx();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, Reservation.StatutReservation.expired.name()); // Set status to "expired"
+            statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now())); // Current time
+            statement.setString(3, Reservation.StatutReservation.reserved.name()); // Only update "reserved" status
+            statement.executeUpdate();
+        }
+    }
+    public void updateReservationStatus(int reservationId, Reservation.StatutReservation status) throws SQLException {
+        String sql = "UPDATE Reservation SET statut = ? WHERE idReservation = ?";
+        try (Connection connection = DataBase.getInstance().getCnx();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, status.name());
+            statement.setInt(2, reservationId);
+            statement.executeUpdate();
         }
     }
 }

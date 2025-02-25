@@ -14,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,7 +29,12 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
+// Import Logger and Level
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ParkingLotController implements Initializable {
+    private static final Logger logger = Logger.getLogger(ParkingLotController.class.getName());
     private PlaceParkingService parkingService = new PlaceParkingService();
     private Image carImage;
     private Timeline pulseAnimation;
@@ -188,9 +192,13 @@ public class ParkingLotController implements Initializable {
     }
 
     private void initializeAutoRefresh() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
-            loadParkingSpots();
-            updateParkingSpotStatusBasedOnReservations();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> { // 5 seconds
+            try {
+                new ReservationService().updateExpiredReservations();
+                loadParkingSpots(); // Refresh the parking spots display
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Error updating expired reservations", e);
+            }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -204,6 +212,9 @@ public class ParkingLotController implements Initializable {
 
     private void loadParkingSpots() {
         try {
+            // Update parking spot status based on reservations
+            updateParkingSpotStatusBasedOnReservations();
+
             String selectedFloor = floorComboBox.getValue();
             List<PlaceParking> parkingSpots = parkingService.showAll();
             List<Reservation> reservations = new ReservationService().showAll(); // Fetch all reservations
@@ -454,12 +465,25 @@ public class ParkingLotController implements Initializable {
                     // Update the parking spot status to "taken"
                     parkingService.updateParkingSpotStatus(reservation.getIdParking(), StatutPlace.taken);
                 } else if (now.isAfter(reservation.getDateExpiration().toLocalDateTime())) {
-                    // Update the parking spot status to "free"
+                    // Update the parking spot status to "free" and mark reservation as "expired"
                     parkingService.updateParkingSpotStatus(reservation.getIdParking(), StatutPlace.free);
+                    new ReservationService().updateReservationStatus(reservation.getIdReservation(), Reservation.StatutReservation.expired);
                 }
             }
         } catch (SQLException e) {
-            showErrorAlert("Error updating parking spot status", e.getMessage());
+            logger.log(Level.SEVERE, "Error updating parking spot status based on reservations", e);
         }
+    }
+    private boolean isSpotReservationExpired(int spotId, List<Reservation> reservations) {
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Reservation reservation : reservations) {
+            if (reservation.getIdParking() == spotId &&
+                    now.isAfter(reservation.getDateExpiration().toLocalDateTime())) {
+                return true; // Reservation has expired
+            }
+        }
+
+        return false; // Reservation has not expired
     }
 }
