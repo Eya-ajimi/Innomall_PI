@@ -410,7 +410,7 @@ public class ParkingLotController implements Initializable {
         alert.setContentText("Your parking spot has been reserved successfully.");
 
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        dialogPane.getStylesheets().add(getClass().getResource("/css/parking_lot_css.css").toExternalForm());
         dialogPane.getStyleClass().add("success-dialog");
 
         FadeTransition ft = new FadeTransition(Duration.millis(1000), dialogPane);
