@@ -52,13 +52,20 @@ public class ReservedSpotsController implements Initializable {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredReservations.setPredicate(reservation -> {
                 if (newValue == null || newValue.isEmpty()) {
-                    return true;
+                    return true; // Show all reservations if the search field is empty
                 }
 
                 String lowerCaseFilter = newValue.toLowerCase();
-                return String.valueOf(reservation.getIdParking()).contains(lowerCaseFilter) ||
-                        reservation.getDateReservation().toString().toLowerCase().contains(lowerCaseFilter) ||
-                        reservation.getStatut().toString().toLowerCase().contains(lowerCaseFilter);
+
+                // Check all fields for a match
+                return String.valueOf(reservation.getIdParking()).contains(lowerCaseFilter) || // Spot #
+                        reservation.getDateReservation().toString().toLowerCase().contains(lowerCaseFilter) || // Reserved On
+                        reservation.getDateExpiration().toString().toLowerCase().contains(lowerCaseFilter) || // Expires On
+                        reservation.getStatut().toString().toLowerCase().contains(lowerCaseFilter) || // Status
+                        (reservation.getVehicleType() != null && reservation.getVehicleType().toLowerCase().contains(lowerCaseFilter)) || // Vehicle Type
+                        (reservation.getCarWashType() != null && reservation.getCarWashType().toLowerCase().contains(lowerCaseFilter)) || // Car Wash Type
+                        (reservation.getNotes() != null && reservation.getNotes().toLowerCase().contains(lowerCaseFilter)) || // Notes
+                        String.valueOf(reservation.getPrice()).contains(lowerCaseFilter); // Price
             });
         });
     }

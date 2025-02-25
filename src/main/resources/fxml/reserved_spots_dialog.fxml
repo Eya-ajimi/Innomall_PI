@@ -55,6 +55,31 @@
                         <PropertyValueFactory property="statut"/>
                     </cellValueFactory>
                 </TableColumn>
+
+                <!-- New Columns -->
+                <TableColumn text="Vehicle Type" prefWidth="120" styleClass="table-column">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="vehicleType"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Car Wash Type" prefWidth="120" styleClass="table-column">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="carWashType"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Notes" prefWidth="200" styleClass="table-column">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="notes"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Price" prefWidth="80" styleClass="table-column">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="price"/>
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
     </ScrollPane>
