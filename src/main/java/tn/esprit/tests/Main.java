@@ -19,7 +19,7 @@ public class Main extends Application {
         MainController mainController = loader.getController();
 
 
-        mainController.setIdOrganisateur(2); // Example: Set organizer ID to 2
+        mainController.setIdOrganisateur(1); // Example: Set organizer ID to 2
 
         // Explicitly call loadEvents() after setting the idOrganisateur
         mainController.loadEvents();

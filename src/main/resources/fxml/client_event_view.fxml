@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.ClientEventViewController">
-   <children>
-   
-          <ScrollPane fitToWidth="true" layoutX="4.0" layoutY="4.0" prefHeight="618.0" prefWidth="902.0" style="-fx-background-color: transparent; -fx-border-color: transparent;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 5, 0, 1, 1);">
-           <FlowPane fx:id="eventsContainer" hgap="15" prefWrapLength="760" style="-fx-padding: 15; -fx-background-radius: 10;" vgap="15" />
-       </ScrollPane>
-   </children>
+    <children>
+        <!-- Centered search bar -->
+        <VBox layoutX="0.0" layoutY="20.0" alignment="CENTER" spacing="10.0" prefWidth="1172.0">
+            <HBox alignment="CENTER" spacing="10.0">
+                <DatePicker fx:id="searchDatePicker" promptText="Select a date"
+                            style="-fx-font-size: 14px; -fx-padding: 5px;"/>
+                <Button onAction="#handleSearch" text="Search"
+                        style="-fx-background-color: #FFB177; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-background-radius: 8px;
+                               -fx-padding: 8px 15px; -fx-font-size: 14px;"/>
+            </HBox>
+        </VBox>
+
+        <!-- Scroll pane for events -->
+        <ScrollPane fitToWidth="true" layoutX="4.0" layoutY="80.0" prefHeight="700.0" prefWidth="1172.0"
+                    style="-fx-background-color: transparent; -fx-border-color: transparent;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 5, 0, 1, 1);">
+            <FlowPane fx:id="eventsContainer" hgap="15" prefWrapLength="760"
+                      style="-fx-padding: 15; -fx-background-radius: 10;" vgap="15" />
+        </ScrollPane>
+    </children>
 </AnchorPane>

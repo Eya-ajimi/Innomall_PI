@@ -4,6 +4,8 @@ import tn.esprit.entites.Event;
 import tn.esprit.utils.MyDatabase;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,6 +132,44 @@ public class EventService implements CRUD<Event> {
 
         // Debug: Print the events fetched
         System.out.println("Events fetched for organizer " + idOrganisateur + ": " + events);
+        return events;
+    }
+    public List<Event> getEventsByDate(LocalDate date) {
+        List<Event> events = new ArrayList<>();
+        // Convert LocalDate to DD-MM-YYYY format
+        String formattedDate = date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        System.out.println("Searching for events on date: " + formattedDate); // Debugging
+
+        String query = "SELECT * FROM event WHERE STR_TO_DATE(?, '%d-%m-%Y') BETWEEN STR_TO_DATE(dateDebut, '%d-%m-%Y') AND STR_TO_DATE(dateFin, '%d-%m-%Y')";
+        System.out.println("Executing query: " + query); // Debugging
+
+        try (Connection connection = MyDatabase.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, formattedDate);
+            System.out.println("Query parameter: " + formattedDate); // Debugging
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Event event = new Event();
+                    event.setId(resultSet.getInt("id"));
+                    event.setNomOrganisateur(resultSet.getString("nomOrganisateur"));
+                    event.setDescription(resultSet.getString("description"));
+                    event.setDateDebut(resultSet.getString("dateDebut"));
+                    event.setDateFin(resultSet.getString("dateFin"));
+                    event.setEmplacement(resultSet.getString("emplacement"));
+                    events.add(event);
+                    System.out.println("Found event: " + event.getNomOrganisateur() + " (" + event.getDateDebut() + " to " + event.getDateFin() + ")"); // Debugging
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage()); // Debugging
+        }
+
+        if (events.isEmpty()) {
+            System.out.println("No events found for the selected date."); // Debugging
+        }
+
         return events;
     }
 }

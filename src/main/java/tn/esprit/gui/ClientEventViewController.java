@@ -3,28 +3,40 @@ package tn.esprit.gui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.FlowPane; // Updated import
+import javafx.scene.control.DatePicker;
+import javafx.scene.layout.FlowPane;
 import tn.esprit.entites.Event;
 import tn.esprit.services.EventService;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ClientEventViewController {
 
     @FXML
-    private FlowPane eventsContainer; // Updated from VBox to FlowPane
+    private FlowPane eventsContainer;
 
+    @FXML
+    private DatePicker searchDatePicker;
+
+    @FXML
     private EventService eventService = new EventService();
 
     @FXML
     public void initialize() {
-        loadEvents();
+        loadEvents(null); // Load all events initially
     }
 
-    private void loadEvents() {
+    @FXML
+    private void handleSearch() {
+        LocalDate selectedDate = searchDatePicker.getValue();
+        loadEvents(selectedDate);
+    }
+
+    private void loadEvents(LocalDate date) {
         eventsContainer.getChildren().clear(); // Clear existing cards
-        List<Event> events = eventService.getAll();
+        List<Event> events = date == null ? eventService.getAll() : eventService.getEventsByDate(date);
 
         for (Event event : events) {
             try {
