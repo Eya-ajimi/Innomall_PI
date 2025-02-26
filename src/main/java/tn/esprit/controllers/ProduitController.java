@@ -187,8 +187,14 @@ public class ProduitController {
                 "-fx-padding: 15 15 10 15; " +
                 "-fx-background-radius: 0 0 15px 15px;");
 
+        // Add title label - NEW ADDITION
+        Label titleLabel = new Label(product.getTitle());
+        titleLabel.setStyle("-fx-text-fill: #000000; -fx-font-size: 16px; -fx-font-weight: bold;");
+        titleLabel.setWrapText(true);
+        titleLabel.setMaxWidth(220);
+
         Label descLabel = new Label(product.getDescription());
-        descLabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px; -fx-font-weight: bold;");
+        descLabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px; -fx-font-weight: normal;");
         descLabel.setWrapText(true);
         descLabel.setMaxHeight(60);
 
@@ -201,7 +207,7 @@ public class ProduitController {
         priceBox.setSpacing(2);
 
         Label priceLabel = new Label("Price: " + product.getPrice() + " DT");
-        priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill:#000000; -fx-font-size: 16px;");
+        priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill:#000000; -fx-font-size: 15px;");
 
         Label stockLabel = new Label("Stock: " + product.getStock());
         if (product.getStock() > 10) {
@@ -223,7 +229,7 @@ public class ProduitController {
                 Discount discount = discountService.getEntityById(discountId);
                 if (discount != null) {
                     discountLabel = new Label(discount.getDiscountPercentage() + "%");
-                    discountLabel.setStyle("-fx-background-color: rgba(220, 53, 69, 0.85); " +
+                    discountLabel.setStyle("-fx-background-color: rgba(193,3,25,0.85); " +
                             "-fx-text-fill: white; " +
                             "-fx-font-weight: bold; " +
                             "-fx-padding: 5 10; " +
@@ -246,8 +252,8 @@ public class ProduitController {
             detailsBox.getChildren().add(discountLabel);
         }
 
-        // Add all elements to the product body
-        productBody.getChildren().addAll(descLabel, detailsBox);
+        // Add all elements to the product body - UPDATED TO INCLUDE TITLE
+        productBody.getChildren().addAll(titleLabel, descLabel, detailsBox);
 
         // Add all elements to the main container
         productBox.getChildren().addAll(imageContainer, productBody);
@@ -289,9 +295,12 @@ public class ProduitController {
             Product product_copy = new Product();
             product_copy.setId(product.getId());
             product_copy.setShop_id(product.getShop_id());
+            product_copy.setTitle(product.getTitle());           // Add this line for title
+            product_copy.setPhotoUrl(product.getPhotoUrl());   // Add this line for image path
             product_copy.setDescription(product.getDescription());
             product_copy.setPrice(product.getPrice());
             product_copy.setStock(product.getStock());
+            product_copy.setDiscount_id(product.getDiscount_id()); // Add this line if not already there
 
             // Load the FXML file
             FXMLLoader loader = new FXMLLoader();
@@ -308,7 +317,7 @@ public class ProduitController {
             // Get the controller
             ModificationProduitController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setProduct(product);
+            controller.setProduct(product_copy);
 
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
@@ -326,7 +335,6 @@ public class ProduitController {
             alert.showAndWait();
         }
     }
-
 
     private void showDeleteConfirmation(Product product) {
         Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);

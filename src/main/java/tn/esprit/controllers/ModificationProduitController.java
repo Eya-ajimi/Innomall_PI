@@ -13,6 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import tn.esprit.entities.Discount;
 import tn.esprit.entities.Product;
@@ -39,6 +40,17 @@ public class ModificationProduitController implements Initializable {
     @FXML
     private Button cancelButton;
 
+    @FXML
+    private TextField titleField;
+
+    @FXML
+    private ImageView productImageView;
+
+    @FXML
+    private Button chooseImageButton;
+
+    private String imagePath; // To store the image path
+
     private Product currentProduct;
     private Integer originalDiscountId; // Store the original discount_id
     private ProductService productService;
@@ -57,6 +69,28 @@ public class ModificationProduitController implements Initializable {
         // Set up button event handlers
         saveButton.setOnAction(event -> handleSave());
         cancelButton.setOnAction(event -> dialogStage.close());
+
+        // Setup image selection
+        setupImageSelection();
+    }
+
+    /**
+     * Sets up the image selection functionality
+     */
+    private void setupImageSelection() {
+        chooseImageButton.setOnAction(event -> {
+            javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+            fileChooser.setTitle("Sélectionner une image");
+            fileChooser.getExtensionFilters().addAll(
+                    new javafx.stage.FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
+            );
+            java.io.File selectedFile = fileChooser.showOpenDialog(dialogStage);
+            if (selectedFile != null) {
+                imagePath = selectedFile.getAbsolutePath();
+                javafx.scene.image.Image image = new javafx.scene.image.Image(selectedFile.toURI().toString());
+                productImageView.setImage(image);
+            }
+        });
     }
 
     /**
@@ -116,9 +150,24 @@ public class ModificationProduitController implements Initializable {
         this.originalDiscountId = product.getDiscount_id();
 
         // Populate fields with product data
+        titleField.setText(product.getTitle());
         descriptionField.setText(product.getDescription());
         stockField.setText(Integer.toString(product.getStock()));
         priceField.setText(Float.toString(product.getPrice()));
+
+        // Load product image if available
+        if (product.getPhotoUrl() != null && !product.getPhotoUrl().isEmpty()) {
+            imagePath = product.getPhotoUrl();
+            try {
+                java.io.File imageFile = new java.io.File(imagePath);
+                if (imageFile.exists()) {
+                    javafx.scene.image.Image image = new javafx.scene.image.Image(imageFile.toURI().toString());
+                    productImageView.setImage(image);
+                }
+            } catch (Exception e) {
+                System.out.println("Could not load product image: " + e.getMessage());
+            }
+        }
 
         // Set the selected discount or "No discount" if null
         try {
@@ -185,9 +234,11 @@ public class ModificationProduitController implements Initializable {
                     currentProduct.setDiscount_id(originalDiscountId);
                 }
 
+                currentProduct.setTitle(titleField.getText());
                 currentProduct.setDescription(descriptionField.getText());
                 currentProduct.setStock(Integer.parseInt(stockField.getText()));
                 currentProduct.setPrice(Float.parseFloat(priceField.getText()));
+                currentProduct.setPhotoUrl(imagePath);
 
                 // Print debug info
                 System.out.println("Updating product: " + currentProduct.getId());
@@ -218,6 +269,10 @@ public class ModificationProduitController implements Initializable {
      */
     private boolean isInputValid() {
         String errorMessage = "";
+
+        if (titleField.getText() == null || titleField.getText().isEmpty()) {
+            errorMessage += "Le titre ne peut pas être vide\n";
+        }
 
         if (descriptionField.getText() == null || descriptionField.getText().isEmpty()) {
             errorMessage += "La description ne peut pas être vide\n";

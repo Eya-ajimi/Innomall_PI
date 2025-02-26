@@ -4,6 +4,7 @@ public class Product {
     private int id;
     private int shop_id;
     private Integer discount_id;
+    private String title;
     private String description;
     private int stock;
     private float price;
@@ -12,10 +13,11 @@ public class Product {
     public Product() {}
 
     // Constructor with product id for updating
-    public Product(int id, int shop_id, Integer discount_id, String description, int stock, float price, String photoUrl) {
+    public Product(int id, int shop_id, Integer discount_id, String title, String description, int stock, float price, String photoUrl) {
         this.id = id;
         this.shop_id = shop_id;
         this.discount_id = discount_id;
+        this.title = title;
         this.description = description;
         this.stock = stock;
         this.price = price;
@@ -23,9 +25,10 @@ public class Product {
     }
 
     // Constructor without product id
-    public Product(int shop_id, Integer discount_id, String description, int stock, float price, String photoUrl) {
+    public Product(int shop_id, Integer discount_id, String title, String description, int stock, float price, String photoUrl) {
         this.shop_id = shop_id;
         this.discount_id = discount_id;
+        this.title = title;
         this.description = description;
         this.stock = stock;
         this.price = price;
@@ -35,8 +38,8 @@ public class Product {
     @Override
     public String toString() {
         return "Product{id=" + id + ", shop_id=" + shop_id + ", discount_id=" + discount_id +
-                ", description='" + description + "', stock=" + stock + ", price=" + price +
-                ", photoUrl='" + photoUrl + "'}";
+                ", title='" + title + "', description='" + description + "', stock=" + stock +
+                ", price=" + price + ", photoUrl='" + photoUrl + "'}";
     }
 
     // Getters and Setters
@@ -62,6 +65,14 @@ public class Product {
 
     public void setDiscount_id(Integer discount_id) {
         this.discount_id = discount_id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

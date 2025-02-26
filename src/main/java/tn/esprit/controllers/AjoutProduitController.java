@@ -17,6 +17,9 @@ import java.sql.SQLException;
 public class AjoutProduitController {
 
     @FXML
+    private TextField titleField;
+
+    @FXML
     private TextArea descriptionField;
 
     @FXML
@@ -48,6 +51,17 @@ public class AjoutProduitController {
         saveButton.setOnAction(event -> saveProduct());
         cancelButton.setOnAction(event -> closePopup());
         uploadImageButton.setOnAction(event -> uploadImage());
+        cancelButton.setOnMouseEntered(e -> cancelButton.setStyle("-fx-background-color: #d6d6d6; -fx-text-fill: #333333; -fx-background-radius: 4;"));
+        cancelButton.setOnMouseExited(e -> cancelButton.setStyle("-fx-background-color: #f0f0f0; -fx-text-fill: #333333; -fx-background-radius: 4;"));
+        cancelButton.setOnMousePressed(e -> cancelButton.setStyle("-fx-background-color: #bfbfbf; -fx-text-fill: #333333; -fx-background-radius: 4;"));
+        cancelButton.setOnMouseReleased(e -> cancelButton.setStyle("-fx-background-color: #d6d6d6; -fx-text-fill: #333333; -fx-background-radius: 4;"));
+
+        // Save
+        saveButton.setOnMouseEntered(e -> saveButton.setStyle("-fx-background-color: #ff8c33; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
+        saveButton.setOnMouseExited(e -> saveButton.setStyle("-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
+        saveButton.setOnMousePressed(e -> saveButton.setStyle("-fx-background-color: #cc5f1a; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
+        saveButton.setOnMouseReleased(e -> saveButton.setStyle("-fx-background-color: #ff8c33; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
+
     }
 
     private void uploadImage() {
@@ -76,6 +90,11 @@ public class AjoutProduitController {
 
     private void saveProduct() {
         try {
+            if (titleField.getText().isEmpty()) {
+                showAlert("Remplissez le champ de titre.", Alert.AlertType.ERROR);
+                return;
+            }
+
             if (descriptionField.getText().isEmpty()) {
                 showAlert("Remplissez le champ de description.", Alert.AlertType.ERROR);
                 return;
@@ -120,6 +139,7 @@ public class AjoutProduitController {
             }
 
             Product product = new Product();
+            product.setTitle(titleField.getText());
             product.setDescription(descriptionField.getText());
             product.setPrice(price);
             product.setStock(stock);

@@ -68,7 +68,15 @@
 
                   <VBox alignment="CENTER" spacing="30.0" prefHeight="450.0" prefWidth="Infinity">
                      <children>
-
+                         <Button text="Tableau de bord" onAction="#showProduits" maxWidth="Infinity" graphicTextGap="10.0" contentDisplay="LEFT">
+                             <graphic>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                     <image>
+                                         <Image url="@assets/dashboard.png" />
+                                     </image>
+                                 </ImageView>
+                             </graphic>
+                         </Button>
                         <Button text="Produits" onAction="#showProduits" maxWidth="Infinity" graphicTextGap="10.0" contentDisplay="LEFT">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">

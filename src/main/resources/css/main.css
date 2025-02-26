@@ -217,9 +217,9 @@
 }
 
 #saveButton:hover {
-    -fx-background-color: #ff8c33;
+    -fx-background-color:rgba(191, 226, 246, 0.82);
 }
 
 #saveButton:pressed {
-    -fx-background-color: #cc5f1a;
+    -fx-background-color:rgba(191, 226, 246, 0.82);
 }
