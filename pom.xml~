@@ -61,12 +61,6 @@
             <version>2.0.0-ea+1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.gluonhq.attach</groupId>
-            <artifactId>util</artifactId>
-            <version>4.0.18</version> <!-- Use the latest version available -->
-        </dependency>
-
         <!-- JSON library for parsing responses -->
         <dependency>
             <groupId>org.json</groupId>

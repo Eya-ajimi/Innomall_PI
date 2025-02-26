@@ -450,14 +450,8 @@ CheckBox:selected {
     -fx-text-fill: #88d1e7;
 }
 
-/* Logo Label */
-.logo-label {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #88d1e7;
-}
 
-/*filter section2 */
+
 /* ===== Filter Card Styles ===== */
 .filter-card {
     -fx-background-color: #FFFFFF;
@@ -606,4 +600,85 @@ CheckBox:selected {
 
 .like-button:hover {
     -fx-background-color: #379fe6;
+}
+.map-view {
+    -fx-tile-caching: true;
+    -fx-background-color: transparent;
+}
+
+.map-view .map-layer {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+/*****CHAT***/
+/* Style for the chat window */
+/* Style for the chat window */
+#chatWindow {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+    -fx-pref-width: 250px;
+    -fx-pref-height: 350px;
+}
+
+/* Style for the chat header */
+#chatHeader {
+    -fx-background-color: #94bee4;
+    -fx-padding: 8px;
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+/* Style for the chat messages */
+#chatBox {
+    -fx-background-color: #f9f9f9;
+}
+
+/* Style for the text field */
+#chatInput {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+    -fx-padding: 3px;
+    -fx-font-size: 12px;
+}
+
+/* Style for the send button */
+#sendButton {
+    -fx-background-color: #94bee4;
+    -fx-text-fill: white;
+    -fx-border-radius: 5px;
+    -fx-padding: 3px 8px;
+    -fx-font-size: 12px;
+}
+
+/* Style for the robot icon button */
+#chatIconButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Style for the chat messages (TextFlow) */
+.text-flow {
+    -fx-padding: 5px;
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-max-width: 200px; /* Fixed width for chat messages */
+    -fx-font-size: 12px;
+}
+
+/* Style for the user's messages */
+.user-message {
+    -fx-background-color: #94bee4;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px 10px 0 10px;
+}
+
+/* Style for the bot's messages */
+.bot-message {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: black;
+    -fx-background-radius: 10px 10px 10px 0;
 }

@@ -147,19 +147,11 @@
    <VBox prefHeight="844.0" prefWidth="424.0" style="-fx-background-color: white;">
       <children>
           <!--Map section -->
-         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="430.0" text="Map of the Mall " textAlignment="CENTER" textFill="#ffce89">
-            <font>
-               <Font name="Arial Rounded MT Bold" size="24.0" />
-            </font>
-            <VBox.margin>
-               <Insets top="22.0" />
-            </VBox.margin>
-         </Label>
-         <WebView fx:id="mapWebView" prefHeight="369.0" prefWidth="420.0" >
-            <VBox.margin>
-               <Insets top="31.0" />
-            </VBox.margin>
-         </WebView>
+         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="430.0" text="Map of the Mall " textAlignment="CENTER" textFill="#ffce89"/>
+         <VBox fx:id="vboxMap" spacing="10" style="-fx-padding: 10px;">
+            <Label text="Map of the Mall" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" />
+            <!-- Map will be added here programmatically -->
+         </VBox>
 
 
          <!-- Atms activity -->

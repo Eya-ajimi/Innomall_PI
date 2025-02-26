@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="10"  minWidth="-Infinity" prefHeight="904.0" prefWidth="1353.0" style="-fx-background-color: #E1F4FF;"
+<VBox spacing="10" prefWidth="1353.0" style="-fx-background-color: #E1F4FF;"
       xmlns="http://javafx.com/javafx/23.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="tn.esprit.gui.ShopsController" stylesheets="@../css/Styles.css" >

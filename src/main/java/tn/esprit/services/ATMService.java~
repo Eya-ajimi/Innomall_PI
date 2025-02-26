@@ -1,0 +1,76 @@
+package tn.esprit.services;
+
+
+
+import tn.esprit.entites.ATM;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ATMService implements CRUD<ATM> {
+
+    private Connection connection;
+
+    public ATMService(Connection connection) {
+        this.connection = connection;
+    }
+
+    @Override
+    public int insert(ATM atm) throws SQLException {
+        String query = "INSERT INTO ATM (bankName, status) VALUES (?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, atm.getBankName());
+            preparedStatement.setString(2, atm.getStatus());
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        atm.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+
+            return rowsAffected;
+        }
+    }
+
+    @Override
+    public int update(ATM atm) throws SQLException {
+        String query = "UPDATE ATM SET bankName = ?, status = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, atm.getBankName());
+            preparedStatement.setString(2, atm.getStatus());
+            preparedStatement.setInt(3, atm.getId());
+            return preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public int delete(ATM atm) throws SQLException {
+        String query = "DELETE FROM ATM WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, atm.getId());
+            return preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<ATM> showAll() throws SQLException {
+        List<ATM> atmList = new ArrayList<>();
+        String query = "SELECT * FROM ATM";
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                ATM atm = new ATM();
+                atm.setId(resultSet.getInt("id"));
+                atm.setBankName(resultSet.getString("bankName"));
+                atm.setStatus(resultSet.getString("status"));
+                atmList.add(atm);
+            }
+        }
+        return atmList;
+    }
+}
