@@ -7,36 +7,37 @@ public class Product {
     private String description;
     private int stock;
     private float price;
+    private String photoUrl; // New attribute for storing the photo URL
 
+    public Product() {}
 
-   public Product(){};
-   //constru with the product id for updating
-   public Product(int id, int shop_id, Integer discount_id, String description, int stock, float price) {
-       this.id = id;
-       this.shop_id = shop_id;
-       this.discount_id = discount_id;
-       this.description = description;
-       this.stock = stock;
-       this.price = price;
-   }
-
-    //without the product id
-    public Product(int shop_id, Integer discount_id, String description, int stock, float price) {
+    // Constructor with product id for updating
+    public Product(int id, int shop_id, Integer discount_id, String description, int stock, float price, String photoUrl) {
+        this.id = id;
         this.shop_id = shop_id;
-        // Check if discount_id is null or invalid, set to null (or any default value like 0)
         this.discount_id = discount_id;
         this.description = description;
         this.stock = stock;
         this.price = price;
+        this.photoUrl = photoUrl;
     }
 
+    // Constructor without product id
+    public Product(int shop_id, Integer discount_id, String description, int stock, float price, String photoUrl) {
+        this.shop_id = shop_id;
+        this.discount_id = discount_id;
+        this.description = description;
+        this.stock = stock;
+        this.price = price;
+        this.photoUrl = photoUrl;
+    }
 
     @Override
     public String toString() {
         return "Product{id=" + id + ", shop_id=" + shop_id + ", discount_id=" + discount_id +
-                ", description='" + description + "', stock=" + stock + ", price=" + price + "}";
+                ", description='" + description + "', stock=" + stock + ", price=" + price +
+                ", photoUrl='" + photoUrl + "'}";
     }
-
 
     // Getters and Setters
     public int getId() {
@@ -85,5 +86,13 @@ public class Product {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

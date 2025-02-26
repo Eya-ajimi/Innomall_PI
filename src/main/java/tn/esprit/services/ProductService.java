@@ -16,33 +16,29 @@ public class ProductService implements CRUD<Product> {
 
     @Override
     public int insert(Product product) throws SQLException {
-        // Use PreparedStatement to prevent SQL injection
-        String query = "INSERT INTO product (shop_id, discount_id, description, stock, price) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO product (shop_id, discount_id, description, stock, price, photo_url) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            // Set the parameters for the query
             pst.setInt(1, product.getShop_id());
-           //did that so that a product can be without a discount
-            if (product.getDiscount_id()!= null) {
+            if (product.getDiscount_id() != null) {
                 pst.setInt(2, product.getDiscount_id());
             } else {
-                pst.setNull(2, Types.INTEGER);  // Set discount_id to SQL NULL
+                pst.setNull(2, Types.INTEGER);
             }
             pst.setString(3, product.getDescription());
             pst.setInt(4, product.getStock());
             pst.setFloat(5, product.getPrice());
+            pst.setString(6, product.getPhotoUrl());
 
-            // Execute the insert and return the number of rows affected
             return pst.executeUpdate();
         }
     }
 
     @Override
     public int update(Product product) throws SQLException {
-        String query = "UPDATE product SET discount_id = ?, description = ?, stock = ?, price = ? WHERE id = ?";
+        String query = "UPDATE product SET discount_id = ?, description = ?, stock = ?, price = ?, photo_url = ? WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            // Handle null discount_id
             if (product.getDiscount_id() == null) {
                 pst.setNull(1, java.sql.Types.INTEGER);
             } else {
@@ -52,7 +48,8 @@ public class ProductService implements CRUD<Product> {
             pst.setString(2, product.getDescription());
             pst.setInt(3, product.getStock());
             pst.setFloat(4, product.getPrice());
-            pst.setInt(5, product.getId());
+            pst.setString(5, product.getPhotoUrl());
+            pst.setInt(6, product.getId());
 
             return pst.executeUpdate();
         }
@@ -77,10 +74,11 @@ public class ProductService implements CRUD<Product> {
                 Product product = new Product();
                 product.setId(rs.getInt("id"));
                 product.setShop_id(rs.getInt("shop_id"));
-                product.setDiscount_id(rs.getInt("discount_id"));
+                product.setDiscount_id(rs.getObject("discount_id") != null ? rs.getInt("discount_id") : null);
                 product.setDescription(rs.getString("description"));
                 product.setStock(rs.getInt("stock"));
                 product.setPrice(rs.getFloat("price"));
+                product.setPhotoUrl(rs.getString("photo_url"));
                 products.add(product);
             }
         }
@@ -100,37 +98,34 @@ public class ProductService implements CRUD<Product> {
                         rs.getObject("discount_id") != null ? rs.getInt("discount_id") : null,
                         rs.getString("description"),
                         rs.getInt("stock"),
-                        rs.getFloat("price")
+                        rs.getFloat("price"),
+                        rs.getString("photo_url")
                 );
             }
         }
-        return null; // Return null if no product is found
+        return null;
     }
 
     public List<Product> getProductsByShopId(int shopId) throws SQLException {
         String query = "SELECT * FROM product WHERE shop_id = ?";
         List<Product> productList = new ArrayList<>();
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-
             pst.setInt(1, shopId);
-
-            // Execute the query
             ResultSet rs = pst.executeQuery();
 
-            // Loop through the result set and add products to the list
             while (rs.next()) {
                 Product product = new Product();
                 product.setId(rs.getInt("id"));
                 product.setShop_id(rs.getInt("shop_id"));
-                product.setDiscount_id(rs.getInt("discount_id"));
+                product.setDiscount_id(rs.getObject("discount_id") != null ? rs.getInt("discount_id") : null);
                 product.setDescription(rs.getString("description"));
                 product.setStock(rs.getInt("stock"));
                 product.setPrice(rs.getFloat("price"));
+                product.setPhotoUrl(rs.getString("photo_url"));
                 productList.add(product);
             }
         }
 
         return productList;
     }
-
 }

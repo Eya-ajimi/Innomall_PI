@@ -4,10 +4,12 @@
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+
 <VBox spacing="15" alignment="CENTER"
-      prefWidth="400" prefHeight="500"
+      prefWidth="400" prefHeight="600"
       style="-fx-padding: 30; -fx-background-color: #ffffff; "
       xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="tn.esprit.controllers.AjoutProduitController">
@@ -16,9 +18,10 @@
         <Label text="Ajouter un Produit"
                style="-fx-text-fill: #ff791f;" >
             <font>
-                <Font name="Dubai " size="25.0" />
+                <Font name="Dubai" size="25.0" />
             </font>
         </Label>
+
         <VBox spacing="5" style="-fx-padding: 10 0;">
             <Label text="Description du produit" style="-fx-font-weight: medium;" />
             <TextArea fx:id="descriptionField" prefHeight="120"
@@ -50,6 +53,17 @@
             <TextField fx:id="discountField" promptText="Laissez vide si pas de remise"
                        style="-fx-background-radius: 4; -fx-border-radius: 4; -fx-border-color: #bfe2f6;" />
             <Label text="Entrez un ID de promotion existante (optionel)"
+                   style="-fx-font-size: 11; -fx-text-fill: #696969;" />
+        </VBox>
+
+        <!-- Image Upload Section -->
+        <VBox spacing="5" style="-fx-padding: 10 0;">
+            <Label text="Image du produit" style="-fx-font-weight: medium;" />
+            <ImageView fx:id="productImageView" fitWidth="150" fitHeight="150"
+                       style="-fx-border-color: #bfe2f6; -fx-border-radius: 4;" />
+            <Button text="Choisir une image" fx:id="uploadImageButton"
+                    style="-fx-background-color: #bfe2f6; -fx-text-fill: white; -fx-background-radius: 4;" />
+            <Label fx:id="imagePathLabel" text="Aucune image sélectionnée"
                    style="-fx-font-size: 11; -fx-text-fill: #696969;" />
         </VBox>
 

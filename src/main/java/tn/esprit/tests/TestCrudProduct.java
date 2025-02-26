@@ -10,10 +10,8 @@ public class TestCrudProduct {
 
     private static ProductService productservice = new ProductService();
 
-
-
     public static void testCreateProduct() {
-        Product p1 = new Product(3, null, "tiramisu", 30, 12);
+        Product p1 = new Product(3, null, "tiramisu", 30, 12, null);
         try {
             productservice.insert(p1);
             System.out.println("Product created successfully.");
@@ -47,6 +45,7 @@ public class TestCrudProduct {
         Integer discount_id_update = null;
         Integer stock_update = 70;
         Float price_update = null;
+        String photo_url_update = "images/product1.jpg";
         int product_id_update = 1;
 
         try {
@@ -61,6 +60,7 @@ public class TestCrudProduct {
                 if (stock_update != null) product_update.setStock(stock_update);
                 if (price_update != null) product_update.setPrice(price_update);
                 if (description_update != null && !description_update.isEmpty()) product_update.setDescription(description_update);
+                if (photo_url_update != null && !photo_url_update.isEmpty()) product_update.setPhotoUrl(photo_url_update);
 
                 int rowsAffected = productservice.update(product_update);
                 if (rowsAffected > 0) {
@@ -96,7 +96,7 @@ public class TestCrudProduct {
 //        testCreateProduct();
 //        testGetAllProducts();
 //        testGetAllProductsByShopId();
-//      testUpdateProduct();
+//        testUpdateProduct();
 //        testDeleteProduct();
     }
 }

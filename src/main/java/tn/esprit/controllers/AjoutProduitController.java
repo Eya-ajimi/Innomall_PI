@@ -1,14 +1,17 @@
 package tn.esprit.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tn.esprit.entities.Product;
 import tn.esprit.services.ProductService;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 
 public class AjoutProduitController {
@@ -31,33 +34,50 @@ public class AjoutProduitController {
     @FXML
     private Button cancelButton;
 
-    //--------------------------------
+    @FXML
+    private Button uploadImageButton;
+
+    @FXML
+    private Label imagePathLabel;
+
+    private String imagePath;
     private final ProductService productService = new ProductService();
 
     @FXML
     public void initialize() {
-
-
         saveButton.setOnAction(event -> saveProduct());
         cancelButton.setOnAction(event -> closePopup());
-        //cancel
-        cancelButton.setOnMouseEntered(e -> cancelButton.setStyle("-fx-background-color: #d6d6d6; -fx-text-fill: #333333; -fx-background-radius: 4;"));
-        cancelButton.setOnMouseExited(e -> cancelButton.setStyle("-fx-background-color: #f0f0f0; -fx-text-fill: #333333; -fx-background-radius: 4;"));
-        cancelButton.setOnMousePressed(e -> cancelButton.setStyle("-fx-background-color: #bfbfbf; -fx-text-fill: #333333; -fx-background-radius: 4;"));
-        cancelButton.setOnMouseReleased(e -> cancelButton.setStyle("-fx-background-color: #d6d6d6; -fx-text-fill: #333333; -fx-background-radius: 4;"));
+        uploadImageButton.setOnAction(event -> uploadImage());
+    }
 
-        // Save
-        saveButton.setOnMouseEntered(e -> saveButton.setStyle("-fx-background-color: #ff8c33; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
-        saveButton.setOnMouseExited(e -> saveButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82); -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
-        saveButton.setOnMousePressed(e -> saveButton.setStyle("-fx-background-color: #cc5f1a; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
-        saveButton.setOnMouseReleased(e -> saveButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82); -fx-text-fill: white; -fx-background-radius: 4; -fx-font-weight: bold;"));
+    private void uploadImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File file = fileChooser.showOpenDialog(new Stage());
+
+        if (file != null) {
+            try {
+                Path destinationDir = Path.of("resources/assets/product_images");
+                if (!Files.exists(destinationDir)) {
+                    Files.createDirectories(destinationDir);
+                }
+
+                Path destinationPath = destinationDir.resolve(file.getName());
+                Files.copy(file.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+                imagePath = destinationPath.toString();
+                imagePathLabel.setText("Image: " + file.getName());
+            } catch (IOException e) {
+                showAlert("Erreur lors de l'upload de l'image.", Alert.AlertType.ERROR);
+                e.printStackTrace();
+            }
+        }
     }
 
     private void saveProduct() {
         try {
-        // Validate inputs fields
             if (descriptionField.getText().isEmpty()) {
-                showAlert(" Remplissez le champ de description.", Alert.AlertType.ERROR);
+                showAlert("Remplissez le champ de description.", Alert.AlertType.ERROR);
                 return;
             }
 
@@ -65,24 +85,23 @@ public class AjoutProduitController {
             try {
                 price = Float.parseFloat(priceField.getText());
                 if (price < 0) {
-                    showAlert("Entrez un valeur positive.", Alert.AlertType.ERROR);
+                    showAlert("Entrez une valeur positive.", Alert.AlertType.ERROR);
                     return;
                 }
             } catch (NumberFormatException e) {
-                showAlert("Format prix est invalide veillez .Entrez une valeur decimale .", Alert.AlertType.ERROR);
+                showAlert("Format de prix invalide. Entrez une valeur décimale.", Alert.AlertType.ERROR);
                 return;
             }
-
 
             int stock;
             try {
                 stock = Integer.parseInt(stockField.getText());
                 if (stock < 0) {
-                    showAlert("Entrez un valeur positive.", Alert.AlertType.ERROR);
+                    showAlert("Entrez une valeur positive.", Alert.AlertType.ERROR);
                     return;
                 }
             } catch (NumberFormatException e) {
-                showAlert("Format prix est invalide veillez .Entrez une valeur entière", Alert.AlertType.ERROR);
+                showAlert("Format de stock invalide. Entrez un nombre entier.", Alert.AlertType.ERROR);
                 return;
             }
 
@@ -91,39 +110,33 @@ public class AjoutProduitController {
                 try {
                     discountId = Integer.parseInt(discountField.getText());
                     if (discountId < 0) {
-                        showAlert("Entrez un valeur positive.", Alert.AlertType.ERROR);
+                        showAlert("Entrez une valeur positive.", Alert.AlertType.ERROR);
                         return;
                     }
                 } catch (NumberFormatException e) {
-                    showAlert("Format prix est invalide veillez .Entrez une valeur entière ou laissez le champ vide", Alert.AlertType.ERROR);
+                    showAlert("Format invalide pour la remise. Entrez un entier ou laissez vide.", Alert.AlertType.ERROR);
                     return;
                 }
             }
-
 
             Product product = new Product();
             product.setDescription(descriptionField.getText());
             product.setPrice(price);
             product.setStock(stock);
-
-
             product.setShop_id(1);
-
-
             product.setDiscount_id(discountId);
+            product.setPhotoUrl(imagePath);
 
-            // Insert product
             int result = productService.insert(product);
 
             if (result > 0) {
-                showAlert("Produit est ajouté avec succès!", Alert.AlertType.INFORMATION);
+                showAlert("Produit ajouté avec succès!", Alert.AlertType.INFORMATION);
                 closePopup();
             } else {
-                showAlert("Ajout echoué.", Alert.AlertType.ERROR);
+                showAlert("Échec de l'ajout du produit.", Alert.AlertType.ERROR);
             }
-
         } catch (SQLException e) {
-            showAlert("Database error: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur de base de données: " + e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
         }
     }
@@ -135,7 +148,7 @@ public class AjoutProduitController {
 
     private void showAlert(String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
-        alert.setTitle(alertType == Alert.AlertType.INFORMATION ? "Success" : "Error");
+        alert.setTitle(alertType == Alert.AlertType.INFORMATION ? "Succès" : "Erreur");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

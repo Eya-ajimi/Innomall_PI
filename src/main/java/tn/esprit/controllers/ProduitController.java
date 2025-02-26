@@ -9,10 +9,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -22,6 +24,8 @@ import tn.esprit.entities.Product;
 import tn.esprit.services.DiscountService;
 import tn.esprit.services.ProductService;
 import tn.esprit.services.ProductService;
+
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -100,68 +104,101 @@ public class ProduitController {
                 "-fx-background-radius: 15px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
 
-        // Product header
-        HBox productHeader = new HBox();
-        productHeader.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
-                "-fx-border-radius: 15px 15px 0 0; " +
-                "-fx-background-radius: 15px 15px 0 0; " +
-                "-fx-padding: 12 15; " +
-                "-fx-border-color: #e2e8f0; " +
-                "-fx-border-width: 0 0 1 0;");
-        productHeader.setAlignment(Pos.CENTER_LEFT);
+        // Load product image or default image
+        System.out.println(product.getPhotoUrl());
+        String imagePath = product.getPhotoUrl();
+        Image image;
 
-        Label idLabel = new Label("ID: " + product.getId());
-        idLabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 15px;");
+        try {
+            if (imagePath != null && !imagePath.isEmpty()) {
+                File file = new File(imagePath);
+                if (file.exists()) {
+                    image = new Image(file.toURI().toString()); // Load from local file system
+                } else {
+                    throw new Exception("File not found: " + imagePath);
+                }
+            } else {
+                throw new Exception("Image path is null or empty");
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading image: " + e.getMessage());
+            image = new Image(getClass().getResourceAsStream("/assets/product.png")); // Load default image
+        }
+
+        // Main image container at the top with controls overlay
+        StackPane imageContainer = new StackPane();
+        imageContainer.setMinHeight(180);
+
+        // Product image for the top section
+        ImageView topImage = new ImageView(image);
+        topImage.setFitWidth(100);
+        topImage.setFitHeight(100);
+        topImage.setPreserveRatio(true);
 
         // Icons container
         HBox iconsBox = new HBox();
-        iconsBox.setAlignment(Pos.CENTER_RIGHT);
-        iconsBox.setSpacing(5);
-        iconsBox.setPadding(new Insets(0, 10, 0, 0));
+        iconsBox.setAlignment(Pos.TOP_RIGHT);
+        iconsBox.setSpacing(10);
+        iconsBox.setPadding(new Insets(10, 10, 0, 0));
 
         // Edit icon
         Button editButton = new Button();
         ImageView editIcon = new ImageView(new Image(getClass().getResourceAsStream("/assets/edit.png")));
-        editIcon.setFitHeight(13);
-        editIcon.setFitWidth(13);
+        editIcon.setFitHeight(16);
+        editIcon.setFitWidth(16);
         editButton.setGraphic(editIcon);
-        editButton.setStyle("-fx-background-color: transparent;");
-        editButton.setOnMouseEntered(e -> editButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82);"));
-        editButton.setOnMouseExited(e -> editButton.setStyle("-fx-background-color: transparent;"));
+        editButton.setStyle("-fx-background-color:rgba(255, 165, 0, 0.50); " +
+                "-fx-background-radius: 50%; " +
+                "-fx-padding: 7;");
+        editButton.setOnMouseEntered(e -> editButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82); " +
+                "-fx-background-radius: 50%; " +
+                "-fx-padding: 7;"));
+        editButton.setOnMouseExited(e -> editButton.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
+                "-fx-background-radius: 50%; " +
+                "-fx-padding: 7;"));
 
         // Delete icon
         Button deleteButton = new Button();
         ImageView deleteIcon = new ImageView(new Image(getClass().getResourceAsStream("/assets/trash.png")));
-        deleteIcon.setFitHeight(13);
-        deleteIcon.setFitWidth(13);
+        deleteIcon.setFitHeight(16);
+        deleteIcon.setFitWidth(16);
         deleteButton.setGraphic(deleteIcon);
-        deleteButton.setStyle("-fx-background-color: transparent;");
-        deleteButton.setOnMouseEntered(e -> deleteButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82);"));
-        deleteButton.setOnMouseExited(e -> deleteButton.setStyle("-fx-background-color: transparent;"));
+        deleteButton.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
+                "-fx-background-radius: 50%; " +
+                "-fx-padding: 7;");
+        deleteButton.setOnMouseEntered(e -> deleteButton.setStyle("-fx-background-color:rgba(191, 226, 246, 0.82);" +
+                "-fx-background-radius: 50%; " +
+                "-fx-padding: 7;"));
+        deleteButton.setOnMouseExited(e -> deleteButton.setStyle("-fx-background-color:rgba(255, 165, 0, 0.50); " +
+                "-fx-background-radius: 50%; " +
+                "-fx-padding: 7;"));
 
         iconsBox.getChildren().addAll(editButton, deleteButton);
 
-        // Properly adding elements to productHeader
-        HBox.setHgrow(iconsBox, Priority.ALWAYS);
-        productHeader.getChildren().addAll(idLabel, iconsBox);
+        // Add elements to image container with proper stacking
+        imageContainer.getChildren().addAll(topImage, iconsBox);
 
-        // Product body
+        StackPane.setAlignment(iconsBox, Pos.TOP_CENTER);
+
+        // Product body - CHANGED FROM BLUE TO ORANGE
         VBox productBody = new VBox();
-        productBody.setStyle("-fx-padding: 15;");
-        Label descLabel = new Label("Description: " + product.getDescription());
-        descLabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px;");
-        descLabel.setWrapText(true);
-        productBody.getChildren().add(descLabel);
+        productBody.setSpacing(8);
+        productBody.setStyle("-fx-background-color: rgba(255, 165, 0, 0.3); " +
+                "-fx-padding: 15 15 10 15; " +
+                "-fx-background-radius: 0 0 15px 15px;");
 
-        // Product footer
-        VBox productFooter = new VBox();
-        productFooter.setStyle("-fx-background-color: rgb(255,255,255); " +
-                "-fx-border-radius: 0 0 15px 15px; " +
-                "-fx-background-radius: 0 0 15px 15px; " +
-                "-fx-padding: 10 15; " +
-                "-fx-border-color: #e2e8f0; " +
-                "-fx-border-width: 1 0 0 0;");
-        productFooter.setMinHeight(5);
+        Label descLabel = new Label(product.getDescription());
+        descLabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px; -fx-font-weight: bold;");
+        descLabel.setWrapText(true);
+        descLabel.setMaxHeight(60);
+
+        // Price and stock in a horizontal box
+        HBox detailsBox = new HBox();
+        detailsBox.setSpacing(10);
+        detailsBox.setAlignment(Pos.CENTER_LEFT);
+
+        VBox priceBox = new VBox();
+        priceBox.setSpacing(2);
 
         Label priceLabel = new Label("Price: " + product.getPrice() + " DT");
         priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill:#000000; -fx-font-size: 16px;");
@@ -174,35 +211,74 @@ public class ProduitController {
         } else {
             stockLabel.setStyle("-fx-text-fill: #e53e3e; -fx-font-size: 14px;");
         }
+
+        priceBox.getChildren().addAll(priceLabel, stockLabel);
+
+        // Discount badge - CHANGED TO RED BACKGROUND
         Label discountLabel;
         try {
-            Discount discount = discountService.getEntityById(product.getDiscount_id());
-            discountLabel = new Label("Promo " + (discount != null ? discount.getDiscountPercentage() + "%" : "Aucune promo"));
+            Integer discountId = product.getDiscount_id();
+
+            if (discountId != null) {
+                Discount discount = discountService.getEntityById(discountId);
+                if (discount != null) {
+                    discountLabel = new Label(discount.getDiscountPercentage() + "%");
+                    discountLabel.setStyle("-fx-background-color: rgba(220, 53, 69, 0.85); " +
+                            "-fx-text-fill: white; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-padding: 5 10; " +
+                            "-fx-background-radius: 15;");
+                } else {
+                    discountLabel = new Label();
+                }
+            } else {
+                discountLabel = new Label();
+            }
         } catch (SQLException e) {
-            discountLabel = new Label("Promo: Erreur");
-            e.printStackTrace(); // Log the error for debugging
+            discountLabel = new Label();
+            e.printStackTrace();
         }
 
-        priceLabel.setStyle("-fx-text-fill:#000000; -fx-font-size: 14px;");
-        productFooter.getChildren().addAll(priceLabel, stockLabel,discountLabel);
+        // Add price box and discount badge to details box
+        detailsBox.getChildren().addAll(priceBox);
+        if (discountLabel.getText() != null && !discountLabel.getText().isEmpty()) {
+            HBox.setMargin(discountLabel, new Insets(0, 0, 0, 10));
+            detailsBox.getChildren().add(discountLabel);
+        }
+
+        // Add all elements to the product body
+        productBody.getChildren().addAll(descLabel, detailsBox);
 
         // Add all elements to the main container
-        productBox.getChildren().addAll(productHeader, productBody, productFooter);
+        productBox.getChildren().addAll(imageContainer, productBody);
 
-        // Hover effect
-        productBox.setOnMouseEntered(e -> productBox.setStyle(productBox.getStyle() +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
-                "-fx-translate-y: -5;"));
+        // Hover effect - UPDATED TO USE ORANGE INSTEAD OF BLUE
+        productBox.setOnMouseEntered(e -> {
+            productBox.setStyle(productBox.getStyle() +
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
+                    "-fx-translate-y: -5;");
+            productBody.setStyle(productBody.getStyle().replace(
+                    "-fx-background-color: rgba(255, 165, 0, 0.3);",
+                    "-fx-background-color:rgba(191, 226, 246, 0.82);"));
+        });
 
-        productBox.setOnMouseExited(e -> productBox.setStyle(productBox.getStyle().replace(
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
-                        "-fx-translate-y: -5;",
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);")));
+        productBox.setOnMouseExited(e -> {
+            productBox.setStyle(productBox.getStyle().replace(
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
+                            "-fx-translate-y: -5;",
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"));
+            productBody.setStyle(productBody.getStyle().replace(
+                    "-fx-background-color:rgba(191, 226, 246, 0.82);",
+                    "-fx-background-color: rgba(255, 165, 0, 0.3);"));
+        });
+
         // event handlers for edit and delete buttons
         editButton.setOnAction(e -> showEditDialog(product));
         deleteButton.setOnAction(e -> showDeleteConfirmation(product));
+
         return productBox;
     }
+
     private void showEditDialog(Product product) {
         if (product == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Aucun produit n'est sélectionné.");
