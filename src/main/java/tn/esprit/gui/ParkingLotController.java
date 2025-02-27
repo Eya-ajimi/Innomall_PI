@@ -1,5 +1,6 @@
 package tn.esprit.gui;
 
+import tn.esprit.services.EmailReservationService;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -42,7 +43,7 @@ public class ParkingLotController implements Initializable {
     private Timeline pulseAnimation;
     private MQTTClient mqttClient;
     private MQTTMessageHandler mqttMessageHandler;
-
+    private EmailReservationService emailReservationService = new EmailReservationService();
     @FXML private Button viewReservedSpotsButton;
     @FXML private Label counterLabel;
     @FXML private Label occupancyLabel;
@@ -400,6 +401,27 @@ public class ParkingLotController implements Initializable {
             ReservationService reservationService = new ReservationService();
             reservationService.insert(reservation);
 
+            // Send confirmation email to sofienezayati87@gmail.com
+            String to = "sofienezayati87@gmail.com"; // Recipient email address
+            String subject = "Confirmation de Réservation";
+            String body = "<h1>Confirmation de Réservation</h1>"
+                    + "<p>Bonjour,</p>"
+                    + "<p>Votre réservation a été confirmée avec succès. Voici les détails :</p>"
+                    + "<ul>"
+                    + "<li><strong>Numéro de place :</strong> " + place.getId() + "</li>"
+                    + "<li><strong>Étage :</strong> " + place.getFloor() + "</li>"
+                    + "<li><strong>Zone :</strong> " + place.getZone() + "</li>"
+                    + "<li><strong>Date de début :</strong> " + dateTime + "</li>"
+                    + "<li><strong>Date de fin :</strong> " + expirationTime + "</li>"
+                    + "<li><strong>Type de véhicule :</strong> " + details.getVehicleType() + "</li>"
+                    + "<li><strong>Service de lavage :</strong> " + (details.getCarWashType() != null ? details.getCarWashType() : "Aucun") + "</li>"
+                    + "<li><strong>Notes :</strong> " + (details.getNotes() != null ? details.getNotes() : "Aucune") + "</li>"
+                    + "<li><strong>Coût total :</strong> " + totalPrice + " €</li>"
+                    + "</ul>"
+                    + "<p>Merci d'avoir utilisé notre service de parking.</p>";
+
+            emailReservationService.sendReservationConfirmationEmail(to, subject, body);
+
             showSuccessAnimation();
             loadParkingSpots();
 
@@ -492,4 +514,5 @@ public class ParkingLotController implements Initializable {
 
         return false; // Reservation has not expired
     }
+
 }
