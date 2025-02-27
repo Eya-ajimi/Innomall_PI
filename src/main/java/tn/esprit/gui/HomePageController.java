@@ -1,5 +1,9 @@
 package tn.esprit.gui;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,6 +28,12 @@ import javafx.scene.layout.VBox;
 import tn.esprit.services.MallService;
 import javafx.scene.layout.StackPane;
 
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import java.io.IOException;
@@ -32,6 +42,17 @@ import java.sql.SQLException;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.paint.Color;
 
+
+import javafx.scene.web.WebView;
+import org.jxmapviewer.viewer.GeoPosition;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
+import com.google.gson.*;
 
 public class HomePageController {
 
@@ -70,9 +91,96 @@ public class HomePageController {
             chatIconButton.setVisible(true);
         });
 
+        initializeMap("Mall of Tunis");
+
 
     }
 /******** map part****/
+
+
+
+
+@FXML
+private WebView mapWebView;
+
+    // ... existing fields and methods ...
+
+
+    private void initializeMap(String address) {
+        geocodeAddress(address, position -> {
+            if (position != null) {
+                String html = generateLeafletHtml(position.getLatitude(), position.getLongitude(), address);
+                mapWebView.getEngine().loadContent(html);
+            } else {
+                showAlert("Error", "Could not geocode the mall address.");
+            }
+        });
+    }
+
+    private void geocodeAddress(String address, Consumer<GeoPosition> callback) {
+        new Thread(() -> {
+            try {
+                String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
+                String url = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodedAddress;
+
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                JsonArray jsonArray = JsonParser.parseString(response.body()).getAsJsonArray();
+                if (jsonArray.isEmpty()) {
+                    Platform.runLater(() -> callback.accept(null));
+                    return;
+                }
+
+                JsonObject firstResult = jsonArray.get(0).getAsJsonObject();
+                double lat = firstResult.get("lat").getAsDouble();
+                double lon = firstResult.get("lon").getAsDouble();
+                GeoPosition position = new GeoPosition(lat, lon);
+
+                Platform.runLater(() -> callback.accept(position));
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    showAlert("Geocoding Error", "Failed to retrieve location: " + e.getMessage());
+                    callback.accept(null);
+                });
+            }
+        }).start();
+    }
+
+    private String generateLeafletHtml(double lat, double lon, String address) {
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "    <title>Mall Map</title>"
+                + "    <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet/dist/leaflet.css\" />"
+                + "    <script src=\"https://unpkg.com/leaflet/dist/leaflet.js\"></script>"
+                + "    <style>"
+                + "        #map { height: 600px; width: 500px; }"
+                + "    </style>"
+                + "</head>"
+                + "<body>"
+                + "    <div id=\"map\"></div>"
+                + "    <script>"
+                + "        var map = L.map('map').setView([" + lat + ", " + lon + "], 15);"
+                + "        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"
+                + "            attribution: '© OpenStreetMap contributors'"
+                + "        }).addTo(map);"
+                + "        L.marker([" + lat + ", " + lon + "]).addTo(map)"
+                + "            .bindPopup('" + address + "')"
+                + "            .openPopup();"
+                + "    </script>"
+                + "</body>"
+                + "</html>";
+    }
+
+
+
+
+    /****/
 
 
 @FXML private Label mallInfoLabel;

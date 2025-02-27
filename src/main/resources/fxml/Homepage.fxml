@@ -143,33 +143,24 @@
       </VBox>
    </left>
 
-<right>
-   <VBox prefHeight="844.0" prefWidth="424.0" style="-fx-background-color: white;">
-      <children>
-          <!--Map section -->
-         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="430.0" text="Map of the Mall " textAlignment="CENTER" textFill="#ffce89">
-            <font>
-               <Font name="Arial Rounded MT Bold" size="24.0" />
-            </font>
-            <VBox.margin>
-               <Insets top="22.0" />
-            </VBox.margin>
-         </Label>
-         <ImageView fitHeight="369.0" fitWidth="420.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@../assets/mall.png" />
-            </image>
-            <VBox.margin>
-               <Insets top="31.0" />
-            </VBox.margin>
-         </ImageView>
-           <!-- mall info
-         <VBox spacing="10" style="-fx-padding: 20;">
-            <Button text="Get Mall Info" onAction="#fetchMallData" />
-            <Label fx:id="mallInfoLabel" style="-fx-font-size: 16; -fx-text-fill: #333;" />
-         </VBox>
-       -->
 
+   <right>
+      <VBox prefHeight="844.0" prefWidth="424.0" style="-fx-background-color: white;">
+         <children>
+            <!-- Map section -->
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="430.0" text="Map of the Mall " textAlignment="CENTER" textFill="#ffce89">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="22.0" />
+               </VBox.margin>
+            </Label>
+            <WebView fx:id="mapWebView" prefHeight="369.0" prefWidth="420.0">
+               <VBox.margin>
+                  <Insets top="31.0" />
+               </VBox.margin>
+            </WebView>
          <!-- Atms activity -->
          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="422.0" text="ATM'S Activity" textAlignment="CENTER" textFill="#484848">
             <font>
