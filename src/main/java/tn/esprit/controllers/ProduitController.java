@@ -24,7 +24,7 @@ import tn.esprit.entities.Product;
 import tn.esprit.services.DiscountService;
 import tn.esprit.services.ProductService;
 import tn.esprit.services.ProductService;
-
+import tn.esprit.services.LikedProductService;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -89,9 +89,9 @@ public class ProduitController {
             productContainer.getChildren().add(productBox);
         }
     }
-
     private VBox createProductCard(Product product) {
         DiscountService discountService = new DiscountService();
+        LikedProductService likedProductService = new LikedProductService();
         VBox productBox = new VBox();
         productBox.setPrefWidth(250);
         productBox.setMaxWidth(250);
@@ -218,7 +218,23 @@ public class ProduitController {
             stockLabel.setStyle("-fx-text-fill: #e53e3e; -fx-font-size: 14px;");
         }
 
-        priceBox.getChildren().addAll(priceLabel, stockLabel);
+        // Add likes count label
+        Label likesLabel = new Label();
+        try {
+            int likesCount = likedProductService.countLikesByProductId(product.getId());
+            likesLabel.setText("Likes: " + likesCount);
+            likesLabel.setStyle("-fx-text-fill: #000000; -fx-font-size: 16px;");
+            likesLabel.setGraphic(createLikeIcon());
+            likesLabel.setContentDisplay(ContentDisplay.LEFT);
+        } catch (SQLException e) {
+            System.out.println("Error getting likes count: " + e.getMessage());
+            likesLabel.setText("Likes: 0");
+            likesLabel.setStyle("-fx-text-fill: #000000; -fx-font-size: 16px;");
+            likesLabel.setGraphic(createLikeIcon());
+            likesLabel.setContentDisplay(ContentDisplay.LEFT);
+        }
+
+        priceBox.getChildren().addAll(priceLabel, stockLabel, likesLabel);
 
         // Discount badge - CHANGED TO RED BACKGROUND
         Label discountLabel;
@@ -285,6 +301,20 @@ public class ProduitController {
         return productBox;
     }
 
+
+    // Helper method to create like icon
+    private ImageView createLikeIcon() {
+        try {
+            Image likeImage = new Image(getClass().getResourceAsStream("/assets/heart.png"));
+            ImageView likeIcon = new ImageView(likeImage);
+            likeIcon.setFitHeight(16);
+            likeIcon.setFitWidth(16);
+            return likeIcon;
+        } catch (Exception e) {
+            System.out.println("Error loading like icon: " + e.getMessage());
+            return null;
+        }
+    }
     private void showEditDialog(Product product) {
         if (product == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Aucun produit n'est sélectionné.");
