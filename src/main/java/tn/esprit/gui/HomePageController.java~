@@ -90,49 +90,30 @@ public class HomePageController {
     }
 
     private void displayMallInfo(MallData mallData) {
-        if (mallData == null) {
-            mallInfoLabel.setText("No mall data available.");
-            return;
-        }
-
         StringBuilder info = new StringBuilder();
         info.append("Mall Name: ").append(mallData.getMallName()).append("\n\n");
 
-        // Display stores
-        if (mallData.getStores() != null && !mallData.getStores().isEmpty()) {
-            info.append("Stores:\n");
-            for (MallData.Store store : mallData.getStores()) {
-                info.append("- ").append(store.getName())
-                        .append(" (Floor ").append(store.getFloor())
-                        .append(", ").append(store.getCategory()).append(")\n");
-            }
-        } else {
-            info.append("Stores: No data available.\n");
+        info.append("Stores:\n");
+        for (MallData.Store store : mallData.getStores()) {
+            info.append("- ").append(store.getName())
+                    .append(" (Floor ").append(store.getFloor())
+                    .append(", ").append(store.getCategory()).append(")\n");
         }
 
-        // Display events
-        if (mallData.getEvents() != null && !mallData.getEvents().isEmpty()) {
-            info.append("\nEvents:\n");
-            for (MallData.Event event : mallData.getEvents()) {
-                info.append("- ").append(event.getName())
-                        .append(" (").append(event.getDate())
-                        .append(", ").append(event.getLocation()).append(")\n");
-            }
-        } else {
-            info.append("\nEvents: No data available.\n");
+        info.append("\nEvents:\n");
+        for (MallData.Event event : mallData.getEvents()) {
+            info.append("- ").append(event.getName())
+                    .append(" (").append(event.getDate())
+                    .append(", ").append(event.getLocation()).append(")\n");
         }
 
-        // Display parking
-        if (mallData.getParking() != null) {
-            info.append("\nParking:\n");
-            info.append("- Total Spaces: ").append(mallData.getParking().getTotalSpaces()).append("\n");
-            info.append("- Available Spaces: ").append(mallData.getParking().getAvailableSpaces());
-        } else {
-            info.append("\nParking: No data available.");
-        }
+        info.append("\nParking:\n");
+        info.append("- Total Spaces: ").append(mallData.getParking().getTotalSpaces()).append("\n");
+        info.append("- Available Spaces: ").append(mallData.getParking().getAvailableSpaces());
 
         mallInfoLabel.setText(info.toString());
     }
+
 
 
 
