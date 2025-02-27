@@ -3,6 +3,20 @@ package tn.esprit.services;
 import tn.esprit.entites.*;
 import tn.esprit.utils.DataBase;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -13,11 +27,6 @@ public class CommandeService implements CRUD<Commande> {
 
     private final Connection cnx = DataBase.getInstance().getCnx();
     private PreparedStatement ps ;
-
-
-
-
-
 
     @Override
     public int insert(Commande cmd) throws SQLException {
@@ -125,7 +134,8 @@ public class CommandeService implements CRUD<Commande> {
     }
 
 
-    /****************************************payement***************************************************/
+    /**************************************** payement ***************************************************/
+    //----------------------------------------------------------------------------------------------------//
     //affichage panier payé
     public List<Panier> showAllClientPanierPaye(int commandeId)  {
         List<Panier> paniers = new ArrayList<>();
@@ -164,7 +174,6 @@ public class CommandeService implements CRUD<Commande> {
         return paniers;
 
     }
-
     public int updatestatutPanier(Panier productDansPanier ) throws SQLException {
         String query = "UPDATE panier SET statut = ? WHERE idCommande = ? AND idProduit = ?";
         try (PreparedStatement ps = cnx.prepareStatement(query)) {
@@ -204,114 +213,6 @@ public class CommandeService implements CRUD<Commande> {
             return ps.executeUpdate();
         }
     }
-
-    //cette fonction est appelé dans le fxml
-    public void payerCommande(int idClient) throws SQLException {
-        // Récupérer le solde du client
-        double balanceClient = getBalanceClient(idClient);
-        if (balanceClient < 0) {
-            System.out.println("Client non trouvé ou solde indisponible.");
-            return;
-        }
-
-        // Récupérer la commande en cours du client
-        Commande commandeEnCours = getCommandeEnCours(idClient);
-        if (commandeEnCours == null) {
-            System.out.println("Aucune commande en cours trouvée pour ce client.");
-            return;
-        }
-
-        double totalCommande = commandeEnCours.getTotal();
-
-        System.out.println("Solde du client : " + balanceClient);
-        System.out.println("Total de la commande : " + totalCommande);
-
-        // Comparer le total de la commande avec le solde du client
-        if (totalCommande > balanceClient) {
-            System.out.println("Votre solde est insuffisant pour payer cette commande. Solde : " + balanceClient);
-            return;
-        }
-        int updateUserBalanceRow= updateUserBalance(commandeEnCours.getTotal(),idClient);
-
-        if (updateUserBalanceRow > 0) {
-            System.out.println("La commande a été payée avec succès.");
-
-            // Mettre à jour le statut de la commande à "payée"
-            Commande commandePayee = new Commande(
-                    commandeEnCours.getId(),
-                    commandeEnCours.getIdClient(),
-                    Date.valueOf(LocalDate.now()).toString(),
-                    commandeEnCours.getTotal(),
-                    StatutCommande.payee // Changer le statut à "payée"
-            );
-
-            // Mettre à jour la commande dans la base de données
-            int rowsUpdated = update(commandePayee);
-            List<Panier> paniers = showAllClientPanierPaye(commandePayee.getId());
-
-            for (Panier panier : paniers) {
-                panier.setStatut( StatutCommande.payee);
-                updatestatutPanier(panier);
-            }
-
-            if (rowsUpdated > 0) {
-                System.out.println("statut de commande est modifié avec succé.");
-
-                // Diminuer le stock des produits dans le panier
-                Map<Integer, List<Panier>> produitspanierParShop ;
-                if (paniers != null) {
-                    produitspanierParShop = new HashMap<>();
-                    for (Panier panier : paniers) {
-                        int idProduit = panier.getIdProduit();
-                        int quantite = panier.getQuantite();
-                        // Diminuer le stock du produit
-                        updateStockProduit(idProduit, quantite);
-                        int produitShopId= getProduitById(idProduit).getShopId();
-
-                        if (produitspanierParShop.containsKey(produitShopId)) {
-                            // Si oui, ajouter le panier à la liste existante
-                            produitspanierParShop.get(produitShopId).add(panier);
-                        } else {
-                            // Sinon, créer une nouvelle liste et ajouter le panier
-                            List<Panier> paniersPourShop = new ArrayList<>();
-                            paniersPourShop.add(panier);
-                            produitspanierParShop.put(produitShopId, paniersPourShop);
-                        }
-
-
-                    }
-                    System.out.println(produitspanierParShop);
-                    // Après la boucle for qui remplit produitspanierParShop
-                    for (Map.Entry<Integer, List<Panier>> entry : produitspanierParShop.entrySet()) {
-                        int shopOwnerId = entry.getKey(); // Récupérer l'ID du shopOwner
-                        List<Panier> paniersPourShop = entry.getValue(); // Récupérer la liste des paniers pour ce shopOwner
-
-                        // Récupérer le numéroTicket actuel pour ce shopOwner
-                        int numeroTicketActuel = getNumeroTicketForShopOwner(shopOwnerId);
-
-                        System.out.println(numeroTicketActuel);
-
-                        // Incrémenter le numéroTicket
-                        int nouveauNumeroTicket = numeroTicketActuel + 1;
-                        System.out.println(nouveauNumeroTicket);
-
-                        // Mettre à jour le numéroTicket dans la table user pour ce shopOwner
-                        updateNumeroTicketForShopOwner(shopOwnerId, nouveauNumeroTicket);
-                        // Mettre à jour le numéroTicket pour chaque panier dans la liste
-                        for (Panier panier : paniersPourShop) {
-                            updateNumeroTicketInPanier(panier.getIdProduit(),panier.getIdCommande(), nouveauNumeroTicket);
-                        }
-                    }
-                }
-            } else {
-                System.out.println("modification de statut de commande est échoué.");
-            }
-        } else {
-            System.out.println("Erreur lors de la mise à jour de la commande.");
-        }
-
-    }
-
     //getProduitBYId
     public Produit getProduitById(int idProduit) throws SQLException {
 
@@ -337,7 +238,6 @@ public class CommandeService implements CRUD<Commande> {
         }
         return null;
     }
-
     public int getNumeroTicketForShopOwner(int shopOwnerId)  {
         String query = "SELECT numeroTicket FROM user WHERE id = ?";
         try  {
@@ -380,6 +280,253 @@ public class CommandeService implements CRUD<Commande> {
             System.out.println(e.getMessage());
         }
     }
+    public String getNomShopById(int shopId) throws SQLException {
+        String query = "SELECT nom FROM user WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setInt(1, shopId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nom");
+                }
+            }
+        }
+        return null;
+    }
+    public void generatePdfForCommande(Commande commande, String filePath) {
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            // Ajouter les détails de la commande
+            document.add(new Paragraph("Commande pour le shop : " + commande.getNomShop()));
+            document.add(new Paragraph("Numéro de ticket : " + commande.getNumeroTicket()));
+            document.add(new Paragraph("Date de commande : " + commande.getDateCommande()));
+            document.add(new Paragraph("\nDétails des produits :"));
+
+            // Ajouter les détails des paniers
+            for (Panier panier : commande.getPaniers()) {
+                document.add(new Paragraph(
+                        "Produit : " + panier.getNomProduit() +
+                                ", Quantité : " + panier.getQuantite() +
+                                ", Prix : " + panier.getPrix()
+                ));
+            }
+
+            // Ajouter le total de la commande
+            document.add(new Paragraph("\nTotal de la commande : " + commande.getTotal()));
+
+            document.close();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendEmailWithPdf(String emailClient, Commande commande, String pdfFilePath) {
+        // Configuration du serveur SMTP et authentification
+        String from = "houssemjribi111@gmail.com"; // Remplacez par votre email
+        String password = "uwjn zigp simo kgbs"; // Mot de passe d'application (Gmail) ou mot de passe SMTP
+        String host = "smtp.gmail.com"; // Serveur SMTP de Gmail (adaptez si vous utilisez un autre fournisseur)
+        int port = 587; // Port SMTP pour TLS
+
+        // Propriétés pour la session email
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true"); // Activation de TLS
+
+        // Créer une session email avec authentification
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, password);
+            }
+        });
+
+        try {
+            // Créer un message email
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailClient));
+            message.setSubject("Détails de votre commande - " + commande.getNomShop());
+
+            // Corps du message
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setText("Veuillez trouver ci-joint les détails de votre commande.");
+
+            // Pièce jointe (PDF)
+            MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+            attachmentBodyPart.attachFile(new File(pdfFilePath));
+
+            // Combiner le corps du message et la pièce jointe
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+            multipart.addBodyPart(attachmentBodyPart);
+
+            // Ajouter le contenu au message
+            message.setContent(multipart);
+
+            // Envoyer l'email
+            Transport.send(message);
+            System.out.println("Email envoyé avec succès à " + emailClient);
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public String getEmailClientById(int idClient) throws SQLException {
+        String query = "SELECT email FROM user WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setInt(1, idClient);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("email");
+                }
+            }
+        }
+        return null; // Retourne null si aucun email n'est trouvé
+    }
+    public int incrementNombrePoints(int idClient) throws SQLException {
+        String query = "UPDATE user SET nombrePoint = nombrePoint + 100 WHERE id = ?";
+
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setInt(1, idClient);
+            return ps.executeUpdate();
+        }
+    }
+    //-----------------------------------------//
+    //cette fonction est appelé dans le fxml
+    public void payerCommande(int idClient) throws SQLException {
+        // Récupérer le solde du client
+        double balanceClient = getBalanceClient(idClient);
+        if (balanceClient < 0) {
+            System.out.println("Client non trouvé ou solde indisponible.");
+            return;
+        }
+
+        // Récupérer la commande en cours du client
+        Commande commandeEnCours = getCommandeEnCours(idClient);
+        if (commandeEnCours == null) {
+            System.out.println("Aucune commande en cours trouvée pour ce client.");
+            return;
+        }
+
+        double totalCommande = commandeEnCours.getTotal();
+
+        System.out.println("Solde du client : " + balanceClient);
+        System.out.println("Total de la commande : " + totalCommande);
+
+        // Comparer le total de la commande avec le solde du client
+        if (totalCommande > balanceClient) {
+            System.out.println("Votre solde est insuffisant pour payer cette commande. Solde : " + balanceClient);
+            return;
+        }
+
+        // Mettre à jour le solde du client
+        int updateUserBalanceRow = updateUserBalance(commandeEnCours.getTotal(), idClient);
+
+        if (updateUserBalanceRow > 0) {
+            incrementNombrePoints(idClient);
+            System.out.println("La commande a été payée avec succès.");
+
+            // Mettre à jour le statut de la commande à "payée"
+            Commande commandePayee = new Commande(
+                    commandeEnCours.getId(),
+                    commandeEnCours.getIdClient(),
+                    Date.valueOf(LocalDate.now()).toString(),
+                    commandeEnCours.getTotal(),
+                    StatutCommande.payee // Changer le statut à "payée"
+            );
+
+            // Mettre à jour la commande dans la base de données
+            int rowsUpdated = update(commandePayee);
+            List<Panier> paniers = showAllClientPanierPaye(commandePayee.getId());
+
+            for (Panier panier : paniers) {
+                panier.setStatut(StatutCommande.payee);
+                updatestatutPanier(panier);
+            }
+
+            if (rowsUpdated > 0) {
+                System.out.println("Statut de commande est modifié avec succès.");
+
+                // Diminuer le stock des produits dans le panier
+                Map<Integer, List<Panier>> produitspanierParShop = new HashMap<>();
+                if (paniers != null) {
+                    for (Panier panier : paniers) {
+                        int idProduit = panier.getIdProduit();
+                        int quantite = panier.getQuantite();
+                        // Diminuer le stock du produit
+                        updateStockProduit(idProduit, quantite);
+                        int produitShopId = getProduitById(idProduit).getShopId();
+
+                        if (produitspanierParShop.containsKey(produitShopId)) {
+                            // Si oui, ajouter le panier à la liste existante
+                            produitspanierParShop.get(produitShopId).add(panier);
+                        } else {
+                            // Sinon, créer une nouvelle liste et ajouter le panier
+                            List<Panier> paniersPourShop = new ArrayList<>();
+                            paniersPourShop.add(panier);
+                            produitspanierParShop.put(produitShopId, paniersPourShop);
+                        }
+                    }
+
+                    // Récupérer l'email du client
+                    String emailClient = getEmailClientById(idClient);
+                    if (emailClient == null) {
+                        System.out.println("Email du client non trouvé.");
+                        return;
+                    }
+
+                    // Créer des commandes distinctes pour chaque shopOwner
+                    for (Map.Entry<Integer, List<Panier>> entry : produitspanierParShop.entrySet()) {
+                        int shopOwnerId = entry.getKey();
+                        List<Panier> paniersPourShop = entry.getValue();
+
+                        // Récupérer le nom du shopOwner
+                        String nomShop = getNomShopById(shopOwnerId);
+
+                        // Créer une nouvelle commande pour ce shopOwner
+                        Commande commandeShop = new Commande();
+                        commandeShop.setIdClient(idClient);
+                        commandeShop.setDateCommande(commandePayee.getDateCommande());
+                        commandeShop.setStatut(StatutCommande.payee);
+                        commandeShop.setPaniers(paniersPourShop);
+                        commandeShop.setNomShop(nomShop);
+
+                        // Calculer le total de la commande pour ce shopOwner
+                        double totalCommandeShop = paniersPourShop.stream()
+                                .mapToDouble(Panier::getPrix)
+                                .sum();
+                        commandeShop.setTotal(totalCommandeShop);
+
+                        // Récupérer le numéro de ticket pour ce shopOwner
+                        int numeroTicket = getNumeroTicketForShopOwner(shopOwnerId);
+                        commandeShop.setNumeroTicket(numeroTicket);
+
+                        // Mettre à jour le numéro de ticket dans la base de données
+                        updateNumeroTicketForShopOwner(shopOwnerId, numeroTicket + 1);
+
+                        // Mettre à jour le numéro de ticket pour chaque panier
+                        for (Panier panier : paniersPourShop) {
+                            updateNumeroTicketInPanier(panier.getIdProduit(), panier.getIdCommande(), numeroTicket);
+                        }
+
+                        // Générer un fichier PDF pour cette commande
+                        String pdfFilePath = "commande_" + shopOwnerId + ".pdf";
+                        generatePdfForCommande(commandeShop, pdfFilePath);
+
+                        // Envoyer un email avec le fichier PDF en pièce jointe
+                        sendEmailWithPdf(emailClient, commandeShop, pdfFilePath);
+                    }
+                }
+            } else {
+                System.out.println("Modification de statut de commande a échoué.");
+            }
+        } else {
+            System.out.println("Erreur lors de la mise à jour de la commande.");
+        }
+    }
+
 
 /***************************** affichage pour la liste de commande au shopOwner ******************************/
 
@@ -566,7 +713,7 @@ public List<Commande> getCommandesPayeesAujourdhuiPourShopOwner(int shopId) thro
     }
 
 /****************************les methodes pour le changement de statut de commande en recuperer *************************/
-
+//-----------------------------//
 public List<Panier> getPaniersByCommandeId(int idCommande) throws SQLException {
     List<Panier> paniers = new ArrayList<>();
 
@@ -607,7 +754,7 @@ public List<Panier> getPaniersByCommandeId(int idCommande) throws SQLException {
             ps.executeUpdate();
         }
     }
-
+//----------------------------------//
     //cette fonction qui sera appelé dans le controller et les fonctions au dessus sont utilisé dans cette foncion
     public void updateStatutCommandeEtPaniers(int idCommande, int shopId) throws SQLException {
         // Récupérer tous les paniers de la commande
@@ -636,6 +783,10 @@ public List<Panier> getPaniersByCommandeId(int idCommande) throws SQLException {
             updateStatutCommande(idCommande, StatutCommande.recuperer);
         }
     }
+  /******************************************************************************************************************************************/
+
+
+
 
 
 

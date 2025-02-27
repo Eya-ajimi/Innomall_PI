@@ -18,6 +18,9 @@ public class PanierPopupController {
     private VBox panierContainer;
 
     @FXML
+    private Label totalCommandeLabel;  // Ajout du label pour afficher le total
+
+    @FXML
     private Button btnConfirmer;
 
     private Commande commande;
@@ -28,6 +31,7 @@ public class PanierPopupController {
         this.commande = commande;
         this.parentController = parentController;
         afficherPaniers();
+        afficherTotalCommande();
     }
 
     private void afficherPaniers() {
@@ -41,17 +45,22 @@ public class PanierPopupController {
 
             Label nomProduit = new Label("Produit: " + panier.getNomProduit());
             Label quantite = new Label("Quantité: " + panier.getQuantite());
-            Label prix = new Label("Prix: " + panier.getPrix());
+            Label prix = new Label("Prix: " + panier.getPrix() + " DT");
 
             card.getChildren().addAll(nomProduit, quantite, prix);
             panierContainer.getChildren().add(card);
         }
     }
 
+    private void afficherTotalCommande() {
+        totalCommandeLabel.setText("Total Commande: " + commande.getTotal() + " DT");
+    }
+
     @FXML
     private void confirmerCommande() {
         try {
             commandeService.updateStatutCommandeEtPaniers(commande.getId(), 3);
+
             parentController.refreshTable();
             fermerFenetre();
         } catch (SQLException e) {

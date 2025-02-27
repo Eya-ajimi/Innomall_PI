@@ -55,9 +55,10 @@ public class testPanier {
             // Affichage des résultats
             System.out.println(cs.getCommandeEnCours(1));
             System.out.println(ps.showAllClientPanier(1));
-            System.out.println("------------------------------------");
-            cs.payerCommande(1);
-            System.out.println(cs.getCommandesPayeesAujourdhuiPourShopOwner(3));
+            System.out.println("-----------------------------------------------------------------------------------");
+      cs.payerCommande(1);
+      System.out.println(cs.getCommandesPayeesAujourdhuiPourShopOwner(3));
+//            cs.updateStatutCommandeEtPaniers(33,3);
         } catch (SQLException e) {
             System.out.println("Erreur SQL : " + e.getMessage());
         } catch (Exception ex) {

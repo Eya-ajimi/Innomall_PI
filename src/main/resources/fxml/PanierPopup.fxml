@@ -12,6 +12,9 @@
 
     <VBox fx:id="panierContainer" spacing="10" style="-fx-background-color: white; -fx-padding: 10px;"/>
 
+    <Label fx:id="totalCommandeLabel" text="Total Commande: 0 DT"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
     <Button fx:id="btnConfirmer" text="Confirmer" onAction="#confirmerCommande"
             style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px;"/>
 

@@ -15,6 +15,10 @@ public class Commande implements Comparable<Commande> {
     private int numeroTicket;
     private List<Panier> paniers;
 
+    /*** attribut ajouté pour l'envoi demail de commande au client ***/
+    private String nomShop;
+
+
 
 
     public Commande(int id, int idClient, String dateCommande, double total, StatutCommande statut) {
@@ -115,6 +119,15 @@ public class Commande implements Comparable<Commande> {
                 ", numeroTicket=" + numeroTicket +
                 ", paniers=" + paniers +
                 '}';
+    }
+
+
+    public String getNomShop() {
+        return nomShop;
+    }
+
+    public void setNomShop(String nomShop) {
+        this.nomShop = nomShop;
     }
 
     @Override

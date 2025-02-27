@@ -44,7 +44,7 @@ public class CommandeController {
 
     private CommandeService commandeService = new CommandeService();
     private ObservableList<Commande> commandesList = FXCollections.observableArrayList();
-    private static final int ROWS_PER_PAGE = 10;
+    private static final int ROWS_PER_PAGE = 5;
 
     @FXML
     public void initialize() {
@@ -81,6 +81,7 @@ public class CommandeController {
         try {
             int shopId = 3;
             List<Commande> commandes = commandeService.getCommandesPayeesselonJourPourShopOwner(shopId, date);
+            System.out.println(commandes);
 
             // 🔴 Correction : Vérifier si la liste est remplie
             System.out.println("Commandes récupérées : " + commandes.size());
@@ -109,15 +110,17 @@ public class CommandeController {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
         int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, commandesList.size());
 
-        // 🔴 Correction : Vérifier si l'index est valide avant de sous-lister
-        if (fromIndex > commandesList.size()) {
+        if (fromIndex >= commandesList.size()) {
             return new VBox();
         }
 
-        tableView.setItems(FXCollections.observableArrayList(commandesList.subList(fromIndex, toIndex)));
+        ObservableList<Commande> pageData = FXCollections.observableArrayList(commandesList.subList(fromIndex, toIndex));
+        tableView.setItems(pageData);
 
-        VBox box = new VBox();
-        box.getChildren().add(tableView);
+        // Ajuster la hauteur du TableView en fonction du nombre de lignes réelles
+        tableView.setPrefHeight(pageData.size() * 30 + 30); // 30 est une estimation de la hauteur d'une ligne
+
+        VBox box = new VBox(tableView);
         return box;
     }
 
