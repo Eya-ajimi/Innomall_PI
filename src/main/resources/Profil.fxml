@@ -8,6 +8,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label text="feedback" layoutX="50" layoutY="50" />
+        <Label text="GETION DU PROFIL DU BOUTIQUE" layoutX="50" layoutY="50" />
+
     </children>
 </AnchorPane>

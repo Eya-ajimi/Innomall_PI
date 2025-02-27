@@ -223,3 +223,16 @@
 #saveButton:pressed {
     -fx-background-color:rgba(191, 226, 246, 0.82);
 }
+/* Custom CSS for the pie chart */
+.pie-chart {
+    -fx-pie-label-visible: true;
+    -fx-pie-label-line-length: 10;
+    -fx-pie-label-font-size: 14px;
+    -fx-pie-label-fill: #333333;
+}
+
+/* Custom CSS for the legend */
+.legend {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

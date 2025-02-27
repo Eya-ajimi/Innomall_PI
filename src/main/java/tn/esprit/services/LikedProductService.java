@@ -65,4 +65,45 @@ public class LikedProductService {
         }
         return 0;
     }
+
+    public List<Integer> getTopLikedProductsByShopId(int shopId) throws SQLException {
+        String query = """
+        SELECT p.id 
+        FROM likedProducts lp
+        JOIN product p ON lp.product_id = p.id
+        WHERE p.shop_id = ?
+        GROUP BY p.id
+        ORDER BY COUNT(lp.id) DESC
+        LIMIT 3
+    """;
+
+        List<Integer> topProducts = new ArrayList<>();
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, shopId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                topProducts.add(rs.getInt("id"));
+            }
+        }
+        return topProducts;
+    }
+
+    public int countTotalLikesByShopId(int shopId) throws SQLException {
+        String query = """
+        SELECT COUNT(lp.id) 
+        FROM likedProducts lp
+        JOIN product p ON lp.product_id = p.id
+        WHERE p.shop_id = ?
+    """;
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, shopId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
 }

@@ -18,16 +18,21 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             AnchorPane view = loader.load();
-            contentPane.getChildren().setAll(view); // Add new content inside the StackPane
+            contentPane.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @FXML
+    private void showDashboardContent() {
+        loadView("/DashboardContent.fxml");
+    }
+
 
     @FXML
     private void showProduits() {
-        loadView("/Produit.fxml"); // Ensure the path is correct
+        loadView("/Produit.fxml");
     }
 
     @FXML
@@ -47,6 +52,6 @@ public class DashboardController {
 
     @FXML
     private void showFeedback() {
-        loadView("/feedback.fxml");
+        loadView("/Profil.fxml");
     }
 }

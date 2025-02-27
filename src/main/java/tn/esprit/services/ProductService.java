@@ -132,4 +132,17 @@ public class ProductService implements CRUD<Product> {
 
         return productList;
     }
+
+    public int countProductsByShopId(int shopId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM product WHERE shop_id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, shopId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
 }

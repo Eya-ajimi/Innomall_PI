@@ -89,7 +89,7 @@ public class ProduitController {
             productContainer.getChildren().add(productBox);
         }
     }
-    private VBox createProductCard(Product product) {
+    public VBox createProductCard(Product product) {
         DiscountService discountService = new DiscountService();
         LikedProductService likedProductService = new LikedProductService();
         VBox productBox = new VBox();

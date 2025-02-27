@@ -1,4 +1,4 @@
 package tn.esprit.controllers;
 
-public class FeedbackController {
+public class ProfilController {
 }

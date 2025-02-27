@@ -19,14 +19,18 @@
       <BorderPane layoutX="-15.0" layoutY="-5.0" prefHeight="812.0" prefWidth="1333.0" >
          <left>
             <VBox alignment="CENTER" prefHeight="812.0" prefWidth="300" styleClass="sidebar" stylesheets="@css/main.css" BorderPane.alignment="CENTER">
-               <!-- Sidebar  -->
+               <!-- Sidebar with improved spacing -->
+               <padding>
+                  <Insets bottom="25.0" left="20.0" right="20.0" top="25.0" />
+               </padding>
                <children>
-                  <VBox prefHeight="250.0" alignment="CENTER" spacing="1" style="-fx-background-color:rgba(191, 226, 246, 0.82);
-             -fx-padding: 15;
-             -fx-background-radius: 35;
-             -fx-border-color: black;
-             -fx-border-width: 0;
-             -fx-border-radius: 35;" >
+
+                  <VBox prefHeight="180.0" alignment="CENTER" spacing="15" style="-fx-background-color:rgba(191, 226, 246, 0.82);
+                     -fx-padding: 12 10;
+                     -fx-background-radius: 35;
+                     -fx-border-color: black;
+                     -fx-border-width: 0;
+                     -fx-border-radius: 35;" >
                      <children>
                         <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="255.0" >
                            <children>
@@ -44,40 +48,36 @@
                               </Pane>
                            </children>
                         </HBox>
-                       <VBox>
-                          <VBox.margin>
-                             <Insets top="20.0" />
-                          </VBox.margin>
-                       </VBox>
-                        <HBox alignment="CENTER" fillHeight="false" prefHeight="40.0" prefWidth="315.0">
-                           <children>
-                              <Label alignment="CENTER" prefHeight="7.0" prefWidth="266.0" textFill="#000000"  text="Bonjour Fatales !"
-                                     style="-fx-font-weight:light">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font size="25.0" />
-                                 </font>
-                              </Label>
-
-                           </children>
-                        </HBox>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="266.0" textFill="#000000" text="Bonjour Fatales !"
+                               style="-fx-font-weight:light">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
                      </children>
                   </VBox>
 
-                  <VBox alignment="CENTER" spacing="30.0" prefHeight="450.0" prefWidth="Infinity">
+
+                  <VBox alignment="CENTER" spacing="18.0" prefHeight="450.0" prefWidth="Infinity">
+                     <padding>
+                        <Insets top="35.0" bottom="25.0" />
+                     </padding>
                      <children>
-                         <Button text="Tableau de bord" onAction="#showProduits" maxWidth="Infinity" graphicTextGap="10.0" contentDisplay="LEFT">
-                             <graphic>
-                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                     <image>
-                                         <Image url="@assets/dashboard.png" />
-                                     </image>
-                                 </ImageView>
-                             </graphic>
-                         </Button>
-                        <Button text="Produits" onAction="#showProduits" maxWidth="Infinity" graphicTextGap="10.0" contentDisplay="LEFT">
+                        <Button text="Tableau de bord" onAction="#showDashboardContent" maxWidth="Infinity" graphicTextGap="15.0"
+                                contentDisplay="LEFT" styleClass="sidebar-button">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/dashboard.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+                           </padding>
+                        </Button>
+                        <Button text="Produits" onAction="#showProduits" maxWidth="Infinity" graphicTextGap="15.0"
+                                contentDisplay="LEFT" styleClass="sidebar-button">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -85,10 +85,13 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+                           </padding>
                         </Button>
 
-
-                        <Button text="Promotion" onAction="#showPromotion" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                        <Button text="Promotion" onAction="#showPromotion" maxWidth="Infinity" graphicTextGap="15.0"
+                                contentDisplay="LEFT" styleClass="sidebar-button">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -96,9 +99,13 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+                           </padding>
                         </Button>
 
-                        <Button text="Les Horaires" onAction="#showHoraires" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                        <Button text="Les Horaires" onAction="#showHoraires" maxWidth="Infinity" graphicTextGap="15.0"
+                                contentDisplay="LEFT" styleClass="sidebar-button">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -106,9 +113,13 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+                           </padding>
                         </Button>
 
-                        <Button text="Les Événements" onAction="#showEvenements" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                        <Button text="Les Événements" onAction="#showEvenements" maxWidth="Infinity" graphicTextGap="15.0"
+                                contentDisplay="LEFT" styleClass="sidebar-button">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -116,9 +127,13 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+                           </padding>
                         </Button>
 
-                        <Button text="Les Feedbacks" onAction="#showFeedback" prefWidth="300.0" graphicTextGap="10.0" contentDisplay="LEFT">
+                        <Button text="Profil" onAction="#showFeedback" maxWidth="Infinity" graphicTextGap="15.0"
+                                contentDisplay="LEFT" styleClass="sidebar-button">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -126,37 +141,32 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+                           </padding>
                         </Button>
                      </children>
                   </VBox>
 
-
-                  <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="-Infinity">
+                  <!-- Logout section with improved spacing -->
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="Infinity" spacing="10.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="50.0" prefWidth="340.0" spacing="10.0">
-                           <children>
-                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
-                                      prefHeight="15.0" prefWidth="300.0" text="Se Déconnecter" textFill="WHITE"
-                                      styleClass="logout-button" style="-fx-font-size: 17px;">
-                                 <font>
-                                    <Font name="Dubai light"  />
-                                 </font>
-
-                              </Button>
-                           </children>
-                        </VBox>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                                prefHeight="45.0" prefWidth="260.0" text="Se Déconnecter" textFill="WHITE"
+                                styleClass="logout-button" style="-fx-font-size: 17px;">
+                           <font>
+                              <Font name="Dubai light" />
+                           </font>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </Button>
                      </children>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="20.0" />
                      </VBox.margin>
-                  </HBox>
+                  </VBox>
                </children>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
             </VBox>
          </left>
          <center>

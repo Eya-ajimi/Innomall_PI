@@ -4,14 +4,14 @@ public class Feedback {
     private int id;
     private int client_id;
     private int shopowner_id;
-    private int rate;
+    private int rating;
 
     // Constructor
     public Feedback(int id, int client_id, int shopowner_id, int rate) {
         this.id = id;
         this.client_id = client_id;
         this.shopowner_id = shopowner_id;
-        this.rate = rate;
+        this.rating = rate;
     }
 
     // Getters and Setters
@@ -36,11 +36,11 @@ public class Feedback {
         this.shopowner_id = Shopowner_id;
     }
 
-    public int getRate() {
-        return rate;
+    public int getRating() {
+        return rating;
     }
 
-    public void setRate(int rate) {
-        this.rate = rate;
+    public void setRating(int rate) {
+        this.rating = rate;
     }
 }
