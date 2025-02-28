@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.gui;
 import java.net.URL;
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.List;
 import javafx.scene.control.Alert;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PromotionController {
 
@@ -95,85 +98,142 @@ public class PromotionController {
         discountBox.setMaxWidth(250);
         discountBox.setMinHeight(100);
         discountBox.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #cccccc; " +
+                "-fx-border-color: #e5e5e5; " +
                 "-fx-border-width: 1px; " +
-                "-fx-border-radius: 15px; " +
-                "-fx-background-radius: 15px; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
+                "-fx-border-radius: 12px; " +
+                "-fx-background-radius: 12px; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);");
 
-        // Discount header
+        // Discount header with gradient background
         HBox headerContainer = new HBox();
         headerContainer.setAlignment(Pos.CENTER_LEFT);
 
         VBox header = new VBox();
+        // Use color that matches the orange theme from the main UI
         header.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
-                "-fx-border-radius: 15px 15px 0 0; " +
-                "-fx-background-radius: 15px 0 0 0; " +
+                "-fx-border-radius: 12px 0 0 0; " +
+                "-fx-background-radius: 12px 0 0 0; " +
                 "-fx-padding: 12 15; " +
-                "-fx-border-color: #e2e8f0; " +
+                "-fx-border-color: #f0f0f0; " +
                 "-fx-border-width: 0 0 1 0;");
         header.setPrefWidth(180);
 
-        Label idLabel = new Label("Promotion: " + discount.getDiscountPercentage() +"%");
-        idLabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 15px;");
-        header.getChildren().add(idLabel);
+        // Create a more prominent discount display
+        Label discountLabel = new Label(discount.getDiscountPercentage() + "%");
+        discountLabel.setStyle("-fx-text-fill: #000000; -fx-font-size: 24px; -fx-font-weight: bold;");
 
-        // Icons container
+        Label promotionLabel = new Label("PROMOTION");
+        promotionLabel.setStyle("-fx-text-fill: #333333; -fx-font-size: 12px; -fx-font-weight: bold;");
+
+        header.getChildren().addAll(promotionLabel, discountLabel);
+
+        // Icons container with matching style
         HBox iconsBox = new HBox();
         iconsBox.setAlignment(Pos.CENTER_RIGHT);
-        iconsBox.setSpacing(5);
-        iconsBox.setPadding(new Insets(0, 10, 0, 0));
-        iconsBox.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
-                "-fx-border-radius: 0 15px 0 0; " +
-                "-fx-background-radius: 0 15px 0 0; " +
+        iconsBox.setSpacing(8);
+        iconsBox.setPadding(new Insets(0, 15, 0, 0));
+        iconsBox.setStyle("-fx-background-color:  rgba(255, 165, 0, 0.50);" +
+                "-fx-border-radius: 0 12px 0 0; " +
+                "-fx-background-radius: 0 12px 0 0; " +
                 "-fx-padding: 12 15; " +
-                "-fx-border-color: #e2e8f0; " +
+                "-fx-border-color: #f0f0f0; " +
                 "-fx-border-width: 0 0 1 0;");
 
-        // --------------Edit icon
+        // Edit icon with improved hover effect
         Button editButton = new Button();
+        ImageView editIcon = new ImageView(new Image(getClass().getResourceAsStream("/assets/edit.png")));
+        editIcon.setFitHeight(16);
+        editIcon.setFitWidth(16);
+        editButton.setGraphic(editIcon);
+        editButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.3); -fx-background-radius: 4px; -fx-padding: 5 8;");
+        editButton.setOnMouseEntered(e -> editButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.6); -fx-background-radius: 4px; -fx-padding: 5 8;"));
+        editButton.setOnMouseExited(e -> editButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.3); -fx-background-radius: 4px; -fx-padding: 5 8;"));
 
-              ImageView editIcon = new ImageView(new Image(getClass().getResourceAsStream("/assets/edit.png")));
-              editIcon.setFitHeight(13);
-              editIcon.setFitWidth(13);
-              editButton.setGraphic(editIcon);
-              editButton.setStyle("-fx-background-color: transparent;");
-              editButton.setOnMouseEntered(e -> editButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82);"));
-              editButton.setOnMouseExited(e -> editButton.setStyle("-fx-background-color: transparent;"));
-        // --------------Delete icon
+        // Delete icon with improved hover effect
         Button deleteButton = new Button();
+        ImageView deleteIcon = new ImageView(new Image(getClass().getResourceAsStream("/assets/trash.png")));
+        deleteIcon.setFitHeight(16);
+        deleteIcon.setFitWidth(16);
+        deleteButton.setGraphic(deleteIcon);
+        deleteButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.3); -fx-background-radius: 4px; -fx-padding: 5 8;");
+        deleteButton.setOnMouseEntered(e -> deleteButton.setStyle("-fx-background-color: rgb(255,70,70); -fx-background-radius: 4px; -fx-padding: 5 8;"));
+        deleteButton.setOnMouseExited(e -> deleteButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.3); -fx-background-radius: 4px; -fx-padding: 5 8;"));
 
-              ImageView deleteIcon = new ImageView(new Image(getClass().getResourceAsStream("/assets/trash.png")));
-              deleteIcon.setFitHeight(13);
-              deleteIcon.setFitWidth(13);
-              deleteButton.setGraphic(deleteIcon);
-              deleteButton.setStyle("-fx-background-color: transparent;");
-              deleteButton.setOnMouseEntered(e -> deleteButton.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82);"));
-              deleteButton.setOnMouseExited(e -> deleteButton.setStyle("-fx-background-color: transparent;"));
-
-        //putting both icons in the container
+        // Add icons to container
         iconsBox.getChildren().addAll(editButton, deleteButton);
 
-        // header+ container icons
+        // Combine header and icons
         headerContainer.getChildren().addAll(header, iconsBox);
         HBox.setHgrow(iconsBox, Priority.ALWAYS);
 
-        // Discount details
+        // Discount details section with improved styling
         VBox details = new VBox();
-        details.setStyle("-fx-padding: 30;");
-        Label startDate = new Label("Commence en: " + discount.getStartDate());
-        startDate.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px;");
-        Label endDate = new Label("S'expire en: " + discount.getEndDate());
-        endDate.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px;");
-        details.getChildren().addAll(startDate, endDate);
+        details.setSpacing(12);
+        details.setStyle("-fx-padding: 15 20;");
 
-        //collect all s"ection in the card
+        // Create date labels with icons
+        HBox startDateBox = new HBox(10);
+        startDateBox.setAlignment(Pos.CENTER_LEFT);
+        Label startDateIcon = new Label("📅");
+        Label startDateLabel = new Label("Commence: " + formatDate(discount.getStartDate()));
+        startDateLabel.setStyle("-fx-text-fill: #333333; -fx-font-size: 14px;");
+        startDateBox.getChildren().addAll(startDateIcon, startDateLabel);
+
+        HBox endDateBox = new HBox(10);
+        endDateBox.setAlignment(Pos.CENTER_LEFT);
+        Label endDateIcon = new Label("⏰");
+        Label endDateLabel = new Label("Expire: " + formatDate(discount.getEndDate()));
+        endDateLabel.setStyle("-fx-text-fill: #333333; -fx-font-size: 14px;");
+        endDateBox.getChildren().addAll(endDateIcon, endDateLabel);
+
+        // Add status indicator
+        HBox statusBox = new HBox(10);
+        statusBox.setAlignment(Pos.CENTER_LEFT);
+
+        String statusText;
+        String statusColor;
+
+        // Determine if promotion is active, upcoming, or expired
+        Date now = new Date();
+        Date startDate = discount.getStartDate();
+        Date endDate = discount.getEndDate();
+
+        if (now.after(endDate)) {
+            statusText = "Expiré";
+            statusColor = "#ff4545";
+        } else if (now.before(startDate)) {
+            statusText = "À venir";
+            statusColor = "#4da6ff";
+        } else {
+            statusText = "Actif";
+            statusColor = "#4caf50";
+        }
+
+        Label statusIndicator = new Label("●");
+        statusIndicator.setStyle("-fx-text-fill: " + statusColor + "; -fx-font-size: 16px;");
+
+        Label statusLabel = new Label(statusText);
+        statusLabel.setStyle("-fx-text-fill: " + statusColor + "; -fx-font-weight: bold; -fx-font-size: 14px;");
+
+        statusBox.getChildren().addAll(statusIndicator, statusLabel);
+
+        // Add all elements to details section
+        details.getChildren().addAll(statusBox, startDateBox, endDateBox);
+
+        // Collect all sections in the card
         discountBox.getChildren().addAll(headerContainer, details);
-        // event handlers for edit and delete buttons
+
+        // Event handlers for edit and delete buttons
         editButton.setOnAction(e -> showEditDialog(discount));
         deleteButton.setOnAction(e -> showDeleteConfirmation(discount));
 
         return discountBox;
+    }
+
+    // Helper method to format dates nicely using java.util.Date
+    private String formatDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        return formatter.format(date);
     }
 
     private void showAddPromotionPopup() {

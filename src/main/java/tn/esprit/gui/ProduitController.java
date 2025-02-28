@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,26 +10,17 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import tn.esprit.entities.Discount;
 import tn.esprit.entities.Product;
-import tn.esprit.entities.Product;
 import tn.esprit.services.DiscountService;
-import tn.esprit.services.ProductService;
 import tn.esprit.services.ProductService;
 import tn.esprit.services.LikedProductService;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class ProduitController {
     @FXML
@@ -183,7 +174,7 @@ public class ProduitController {
         // Product body - CHANGED FROM BLUE TO ORANGE
         VBox productBody = new VBox();
         productBody.setSpacing(8);
-        productBody.setStyle("-fx-background-color: rgba(255, 165, 0, 0.3); " +
+        productBody.setStyle("-fx-background-color: rgba(255, 165, 0, 0.45); " +
                 "-fx-padding: 15 15 10 15; " +
                 "-fx-background-radius: 0 0 15px 15px;");
 
@@ -274,24 +265,30 @@ public class ProduitController {
         // Add all elements to the main container
         productBox.getChildren().addAll(imageContainer, productBody);
 
-        // Hover effect - UPDATED TO USE ORANGE INSTEAD OF BLUE
+
         productBox.setOnMouseEntered(e -> {
-            productBox.setStyle(productBox.getStyle() +
+            productBox.setStyle("-fx-background-color: white; " +
+                    "-fx-border-color: #cccccc; " +
+                    "-fx-border-width: 1px; " +
+                    "-fx-border-radius: 15px; " +
+                    "-fx-background-radius: 15px; " +
                     "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
                     "-fx-translate-y: -5;");
-            productBody.setStyle(productBody.getStyle().replace(
-                    "-fx-background-color: rgba(255, 165, 0, 0.3);",
-                    "-fx-background-color:rgba(191, 226, 246, 0.82);"));
+            productBody.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82); " +
+                    "-fx-padding: 15 15 10 15; " +
+                    "-fx-background-radius: 0 0 15px 15px;");
         });
 
         productBox.setOnMouseExited(e -> {
-            productBox.setStyle(productBox.getStyle().replace(
-                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
-                            "-fx-translate-y: -5;",
-                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"));
-            productBody.setStyle(productBody.getStyle().replace(
-                    "-fx-background-color:rgba(191, 226, 246, 0.82);",
-                    "-fx-background-color: rgba(255, 165, 0, 0.3);"));
+            productBox.setStyle("-fx-background-color: white; " +
+                    "-fx-border-color: #cccccc; " +
+                    "-fx-border-width: 1px; " +
+                    "-fx-border-radius: 15px; " +
+                    "-fx-background-radius: 15px; " +
+                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
+            productBody.setStyle("-fx-background-color: rgba(255, 165, 0, 0.45); " +
+                    "-fx-padding: 15 15 10 15; " +
+                    "-fx-background-radius: 0 0 15px 15px;");
         });
 
         // event handlers for edit and delete buttons

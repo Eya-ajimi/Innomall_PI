@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,7 +11,6 @@ import tn.esprit.services.DiscountService;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class ModificationPromotionController {
 

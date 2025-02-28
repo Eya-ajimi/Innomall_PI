@@ -1,9 +1,9 @@
-package tn.esprit.controllers;
+package tn.esprit.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+
 import java.io.IOException;
 import javafx.scene.layout.StackPane;
 
@@ -51,7 +51,11 @@ public class DashboardController {
     }
 
     @FXML
-    private void showFeedback() {
+    private void showCommandes() {
+        loadView("/Commandes.fxml");
+    }
+    @FXML
+    private void showProfil() {
         loadView("/Profil.fxml");
     }
 }

@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.gui;
 
 public class ProfilController {
 }

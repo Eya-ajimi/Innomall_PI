@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 
-<AnchorPane fx:id="dashboardMainPane" prefHeight="800.0" prefWidth="955.0" style="-fx-background-color: #f5f7fa;"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="tn.esprit.controllers.DashboardContentController">
+<AnchorPane fx:id="dashboardMainPane" prefHeight="800.0" prefWidth="955.0" style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.DashboardContentController">
     <children>
-        <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
                 <Insets bottom="15.0" left="30.0" right="30.0" top="25.0" />
             </padding>
             <top>
                 <VBox spacing="5.0" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 2);-fx-border-radius:10;-fx-background-color:rgba(191, 226, 246, 0.82);-fx-background-radius: 10 ">
-                     <padding>
+                    <padding>
                         <Insets bottom="15.0" left="30.0" right="30.0" top="25.0" />
                     </padding>
                     <children>
-                        <Label text="Tableau de Bord" textFill="#2c3e50" >
+                        <Label text="Tableau de Bord" textFill="#2c3e50">
                             <font>
                                 <Font name="System Bold" size="28.0" />
 
@@ -47,8 +45,7 @@
             </top>
 
             <center>
-                <ScrollPane fitToWidth="true" BorderPane.alignment="CENTER"
-                            style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;" BorderPane.alignment="CENTER">
                     <content>
                         <VBox spacing="25.0">
                             <padding>
@@ -73,14 +70,14 @@
                                             </columnConstraints>
                                             <children>
                                                 <!-- Total Products Card -->
-                                                <VBox styleClass="stats-card" style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);" GridPane.columnIndex="0">
+                                                <VBox style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);" styleClass="stats-card" GridPane.columnIndex="0">
                                                     <padding>
                                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                                     </padding>
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                                                             <children>
-                                                                <StackPane style="-fx-background-color: #e3f2fd; -fx-background-radius: 8;" minWidth="50" minHeight="50" maxWidth="50" maxHeight="50">
+                                                                <StackPane maxHeight="50" maxWidth="50" minHeight="50" minWidth="50" style="-fx-background-color: #e3f2fd; -fx-background-radius: 8;">
                                                                     <children>
                                                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                             <image>
@@ -109,14 +106,14 @@
                                                 </VBox>
 
                                                 <!-- Total Likes Card -->
-                                                <VBox styleClass="stats-card" style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);" GridPane.columnIndex="1">
+                                                <VBox style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);" styleClass="stats-card" GridPane.columnIndex="1">
                                                     <padding>
                                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                                     </padding>
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                                                             <children>
-                                                                <StackPane style="-fx-background-color: #ffe0e0; -fx-background-radius: 8;" minWidth="50" minHeight="50" maxWidth="50" maxHeight="50">
+                                                                <StackPane maxHeight="50" maxWidth="50" minHeight="50" minWidth="50" style="-fx-background-color: #ffe0e0; -fx-background-radius: 8;">
                                                                     <children>
                                                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                             <image>
@@ -145,14 +142,14 @@
                                                 </VBox>
 
                                                 <!-- Average Rating Card -->
-                                                <VBox styleClass="stats-card" style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);" GridPane.columnIndex="2">
+                                                <VBox style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);" styleClass="stats-card" GridPane.columnIndex="2">
                                                     <padding>
                                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                                     </padding>
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                                                             <children>
-                                                                <StackPane style="-fx-background-color: #e0f7fa; -fx-background-radius: 8;" minWidth="50" minHeight="50" maxWidth="50" maxHeight="50">
+                                                                <StackPane maxHeight="50" maxWidth="50" minHeight="50" minWidth="50" style="-fx-background-color: #e0f7fa; -fx-background-radius: 8;">
                                                                     <children>
                                                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                             <image>
@@ -180,12 +177,15 @@
                                                     </children>
                                                 </VBox>
                                             </children>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                 </rowConstraints>
                                         </GridPane>
                                     </children>
                                 </VBox>
 
                                 <!-- Top Products Section -->
-                                <VBox fx:id="topProductsSection" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);">
+                                <VBox fx:id="topProductsSection" prefHeight="458.0" prefWidth="882.0" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);">
                                     <padding>
                                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                                     </padding>
@@ -211,7 +211,7 @@
                                                 <!-- Empty state message (shown when no products) -->
                                                 <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="20.0" visible="false">
                                                     <children>
-                                                        <StackPane style="-fx-background-color: #f0f5ff; -fx-background-radius: 100;" minWidth="120" minHeight="120" maxWidth="120" maxHeight="120">
+                                                        <StackPane maxHeight="120" maxWidth="120" minHeight="120" minWidth="120" style="-fx-background-color: #f0f5ff; -fx-background-radius: 100;">
                                                             <children>
                                                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
@@ -225,14 +225,12 @@
                                                                 <Font name="System Bold" size="16.0" />
                                                             </font>
                                                         </Label>
-                                                        <Label text="Ajoutez des produits et recevez des likes pour les voir apparaître ici" textFill="#7f8c8d" textAlignment="CENTER" wrapText="true">
+                                                        <Label text="Ajoutez des produits et recevez des likes pour les voir apparaître ici" textAlignment="CENTER" textFill="#7f8c8d" wrapText="true">
                                                             <font>
                                                                 <Font size="14.0" />
                                                             </font>
                                                         </Label>
-                                                        <Button fx:id="addProductButton" text="Ajouter un Produit"
-                                                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;"
-                                                               >
+                                                        <Button fx:id="addProductButton" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;" text="Ajouter un Produit">
                                                             <padding>
                                                                 <Insets bottom="12.0" left="25.0" right="25.0" top="12.0" />
                                                             </padding>
@@ -247,7 +245,7 @@
                                                 </VBox>
 
                                                 <!-- Product cards container -->
-                                                <FlowPane fx:id="topProductsPane" hgap="20.0" vgap="20.0" prefWrapLength="955.0">
+                                                <FlowPane fx:id="topProductsPane" hgap="25.0" minWidth="-Infinity" prefHeight="350.0" prefWidth="811.0" prefWrapLength="955.0" vgap="20.0">
                                                     <!-- Product cards will be added here dynamically -->
                                                 </FlowPane>
                                             </children>
@@ -269,11 +267,10 @@
                                         <HBox spacing="20.0">
                                             <children>
                                                 <!-- PieChart with proper sizing -->
-                                                <PieChart fx:id="ratingChart" prefHeight="300.0" prefWidth="400.0" legendVisible="true"
-                                                          legendSide="RIGHT" style="-fx-pie-label-visible: false;"/>
+                                                <PieChart fx:id="ratingChart" legendSide="RIGHT" legendVisible="true" prefHeight="300.0" prefWidth="400.0" style="-fx-pie-label-visible: false;" />
 
                                                 <!-- Rating stats container -->
-                                                <VBox fx:id="ratingStatsContainer" spacing="15.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                                <VBox fx:id="ratingStatsContainer" alignment="CENTER_LEFT" spacing="15.0" HBox.hgrow="ALWAYS">
                                                     <!-- Rating stats will be added here dynamically -->
                                                 </VBox>
                                             </children>
@@ -284,9 +281,7 @@
                                 <!-- Refresh button section -->
                                 <HBox alignment="CENTER_RIGHT">
                                     <children>
-                                        <Button fx:id="refreshButton" text="Actualiser les Données"
-                                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;"
-                                                onAction="#refreshDashboard">
+                                        <Button fx:id="refreshButton" onAction="#refreshDashboard" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;" text="Actualiser les Données">
                                             <padding>
                                                 <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                                             </padding>

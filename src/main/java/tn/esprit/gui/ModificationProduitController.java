@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.gui;
 
 import java.net.URL;
 import java.sql.SQLException;

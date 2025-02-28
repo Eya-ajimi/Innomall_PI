@@ -12,7 +12,7 @@
       prefWidth="400" prefHeight="500"
       style="-fx-padding: 30; -fx-background-color: #ffffff; "
       xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="tn.esprit.controllers.AjoutProduitController">
+      fx:controller="tn.esprit.gui.AjoutProduitController">
 
     <children>
         <Label text="Ajouter un Produit"

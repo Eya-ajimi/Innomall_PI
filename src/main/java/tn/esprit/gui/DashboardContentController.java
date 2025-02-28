@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,15 +13,11 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.entities.Product;
@@ -70,7 +66,7 @@ public class DashboardContentController implements Initializable {
     private LikedProductService likedProductService;
     private FeedbackService feedbackService;
 
-    private int currentShopId = 1; // This should be set from login or session
+    private int currentShopId = 1; // set from login or session
 
     // Define chart colors array for consistent styling
     private static final String[] CHART_COLORS = {
