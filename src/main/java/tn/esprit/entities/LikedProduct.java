@@ -4,13 +4,13 @@ public class LikedProduct {
 
     private int id;
     private User user;
-    private Product product;
+    private Produit produit;
     private Timestamp date;
     public LikedProduct() {}
 
-    public LikedProduct(User user, Product product, Timestamp date) {
+    public LikedProduct(User user, Produit produit, Timestamp date) {
         this.user = user;
-        this.product = product;
+        this.produit = produit;
         this.date = date;
     }
 
@@ -34,12 +34,12 @@ public class LikedProduct {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
+    public Produit getProduct() {
+        return produit;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct(Produit produit) {
+        this.produit = produit;
     }
 
     public Timestamp getDate() {

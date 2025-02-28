@@ -10,5 +10,5 @@ public interface CRUD<T> {
     int update(T t) throws SQLException;
     int delete(T t) throws SQLException;
     List<T> showAll() throws SQLException;
-    T getEntityById(int id) throws SQLException;
+
 }

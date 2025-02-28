@@ -70,7 +70,7 @@ public class LikedProductService {
         String query = """
         SELECT p.id 
         FROM likedProducts lp
-        JOIN product p ON lp.product_id = p.id
+        JOIN produit p ON lp.product_id = p.id
         WHERE p.shop_id = ?
         GROUP BY p.id
         ORDER BY COUNT(lp.id) DESC
@@ -92,7 +92,7 @@ public class LikedProductService {
         String query = """
         SELECT COUNT(lp.id) 
         FROM likedProducts lp
-        JOIN product p ON lp.product_id = p.id
+        JOIN produit p ON lp.product_id = p.id
         WHERE p.shop_id = ?
     """;
 

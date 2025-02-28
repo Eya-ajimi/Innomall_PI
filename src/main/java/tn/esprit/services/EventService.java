@@ -94,7 +94,7 @@ public class EventService implements CRUD<Event> {
     }
 
 
-    @Override
+
     public Event getEntityById(int id) throws SQLException {
         String query = "SELECT * FROM event WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {

@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import tn.esprit.entities.Product;
+import tn.esprit.entities.Produit;
 import tn.esprit.services.ProductService;
 
 import java.io.File;
@@ -138,16 +138,16 @@ public class AjoutProduitController {
                 }
             }
 
-            Product product = new Product();
-            product.setTitle(titleField.getText());
-            product.setDescription(descriptionField.getText());
-            product.setPrice(price);
-            product.setStock(stock);
-            product.setShop_id(1);
-            product.setDiscount_id(discountId);
-            product.setPhotoUrl(imagePath);
+            Produit produit = new Produit();
+            produit.setNom(titleField.getText());
+            produit.setDescription(descriptionField.getText());
+            produit.setPrix(price);
+            produit.setStock(stock);
+            produit.setShopId(1);
+            produit.setPromotionId(discountId);
+            produit.setPhotoUrl(imagePath);
 
-            int result = productService.insert(product);
+            int result = productService.insert(produit);
 
             if (result > 0) {
                 showAlert("Produit ajouté avec succès!", Alert.AlertType.INFORMATION);

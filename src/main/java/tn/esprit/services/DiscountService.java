@@ -77,7 +77,7 @@ public class DiscountService implements CRUD<Discount> {
         return discounts;
     }
 
-    @Override
+
     public Discount getEntityById(int id) throws SQLException {
         String query = "SELECT * FROM discount WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {

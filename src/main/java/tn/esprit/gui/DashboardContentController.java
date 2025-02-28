@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import tn.esprit.entities.Product;
+import tn.esprit.entities.Produit;
 import tn.esprit.services.FeedbackService;
 import tn.esprit.services.LikedProductService;
 import tn.esprit.services.ProductService;
@@ -152,9 +152,9 @@ public class DashboardContentController implements Initializable {
 
                 for (Integer productId : topProductIds) {
                     try {
-                        Product product = productService.getEntityById(productId);
-                        if (product != null) {
-                            topProductsPane.getChildren().add(createProductCard(product));
+                        Produit produit = productService.getEntityById(productId);
+                        if (produit != null) {
+                            topProductsPane.getChildren().add(createProductCard(produit));
                         }
                     } catch (SQLException e) {
                         System.err.println("Error loading product with ID: " + productId);
@@ -288,11 +288,11 @@ public class DashboardContentController implements Initializable {
     };
 
 
-    private VBox createProductCard(Product product) {
+    private VBox createProductCard(Produit produit) {
         VBox card = null;
         try {
             ProduitController produitController = new ProduitController();
-            card = produitController.createProductCard(product);
+            card = produitController.createProductCard(produit);
 
             // Apply consistent styling to product cards
             card.setStyle("-fx-background-color: white; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);");
@@ -301,7 +301,7 @@ public class DashboardContentController implements Initializable {
             card.setPrefWidth(280);
 
         } catch (Exception e) {
-            System.err.println("Error creating product card for product ID: " + product.getId());
+            System.err.println("Error creating product card for product ID: " + produit.getId());
             e.printStackTrace();
 
             // Create a simple fallback card on error

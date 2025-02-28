@@ -67,7 +67,7 @@ public class ScheduleService implements CRUD<Schedule> {
         return schedules;
     }
 
-    @Override
+
     public Schedule getEntityById(int id) throws SQLException {
         String query = "SELECT * FROM schedule WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {

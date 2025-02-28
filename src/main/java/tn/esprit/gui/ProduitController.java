@@ -13,7 +13,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tn.esprit.entities.Discount;
-import tn.esprit.entities.Product;
+import tn.esprit.entities.Produit;
 import tn.esprit.services.DiscountService;
 import tn.esprit.services.ProductService;
 import tn.esprit.services.LikedProductService;
@@ -38,16 +38,16 @@ public class ProduitController {
     public void initialize() {
 
         try {
-            List<Product> products = productService.getProductsByShopId(1);
+            List<Produit> produits = productService.getProductsByShopId(1);
             loadProducts();
 
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
                 productContainer.getChildren().clear();
                 try {
-                    List<Product> filteredProducts = productService.getProductsByShopId(1).stream()
+                    List<Produit> filteredProduits = productService.getProductsByShopId(1).stream()
                             .filter(p -> p.getDescription().toLowerCase().contains(newValue.toLowerCase()))
                             .toList();
-                    displayProducts(filteredProducts);
+                    displayProducts(filteredProduits);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -66,21 +66,21 @@ public class ProduitController {
     private void loadProducts() {
         try {
             productContainer.getChildren().clear(); // Clear old products
-            List<Product> products = productService.getProductsByShopId(1);
-            displayProducts(products);
+            List<Produit> produits = productService.getProductsByShopId(1);
+            displayProducts(produits);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void displayProducts(List<Product> products) {
-        for (Product product : products) {
-            VBox productBox = createProductCard(product);
+    private void displayProducts(List<Produit> produits) {
+        for (Produit produit : produits) {
+            VBox productBox = createProductCard(produit);
             productContainer.getChildren().add(productBox);
         }
     }
-    public VBox createProductCard(Product product) {
+    public VBox createProductCard(Produit produit) {
         DiscountService discountService = new DiscountService();
         LikedProductService likedProductService = new LikedProductService();
         VBox productBox = new VBox();
@@ -96,8 +96,8 @@ public class ProduitController {
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
 
         // Load product image or default image
-        System.out.println(product.getPhotoUrl());
-        String imagePath = product.getPhotoUrl();
+        System.out.println(produit.getPhotoUrl());
+        String imagePath = produit.getPhotoUrl();
         Image image;
 
         try {
@@ -179,12 +179,12 @@ public class ProduitController {
                 "-fx-background-radius: 0 0 15px 15px;");
 
         // Add title label - NEW ADDITION
-        Label titleLabel = new Label(product.getTitle());
+        Label titleLabel = new Label(produit.getNom());
         titleLabel.setStyle("-fx-text-fill: #000000; -fx-font-size: 16px; -fx-font-weight: bold;");
         titleLabel.setWrapText(true);
         titleLabel.setMaxWidth(220);
 
-        Label descLabel = new Label(product.getDescription());
+        Label descLabel = new Label(produit.getDescription());
         descLabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px; -fx-font-weight: normal;");
         descLabel.setWrapText(true);
         descLabel.setMaxHeight(60);
@@ -197,13 +197,13 @@ public class ProduitController {
         VBox priceBox = new VBox();
         priceBox.setSpacing(2);
 
-        Label priceLabel = new Label("Price: " + product.getPrice() + " DT");
+        Label priceLabel = new Label("Price: " + produit.getPrix() + " DT");
         priceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill:#000000; -fx-font-size: 15px;");
 
-        Label stockLabel = new Label("Stock: " + product.getStock());
-        if (product.getStock() > 10) {
+        Label stockLabel = new Label("Stock: " + produit.getStock());
+        if (produit.getStock() > 10) {
             stockLabel.setStyle("-fx-text-fill: #10813f; -fx-font-size: 14px;");
-        } else if (product.getStock() > 0) {
+        } else if (produit.getStock() > 0) {
             stockLabel.setStyle("-fx-text-fill: #ed8936; -fx-font-size: 14px;");
         } else {
             stockLabel.setStyle("-fx-text-fill: #e53e3e; -fx-font-size: 14px;");
@@ -212,7 +212,7 @@ public class ProduitController {
         // Add likes count label
         Label likesLabel = new Label();
         try {
-            int likesCount = likedProductService.countLikesByProductId(product.getId());
+            int likesCount = likedProductService.countLikesByProductId(produit.getId());
             likesLabel.setText("Likes: " + likesCount);
             likesLabel.setStyle("-fx-text-fill: #000000; -fx-font-size: 16px;");
             likesLabel.setGraphic(createLikeIcon());
@@ -230,7 +230,7 @@ public class ProduitController {
         // Discount badge - CHANGED TO RED BACKGROUND
         Label discountLabel;
         try {
-            Integer discountId = product.getDiscount_id();
+            Integer discountId = produit.getPromotionId();
 
             if (discountId != null) {
                 Discount discount = discountService.getEntityById(discountId);
@@ -292,8 +292,8 @@ public class ProduitController {
         });
 
         // event handlers for edit and delete buttons
-        editButton.setOnAction(e -> showEditDialog(product));
-        deleteButton.setOnAction(e -> showDeleteConfirmation(product));
+        editButton.setOnAction(e -> showEditDialog(produit));
+        deleteButton.setOnAction(e -> showDeleteConfirmation(produit));
 
         return productBox;
     }
@@ -312,22 +312,22 @@ public class ProduitController {
             return null;
         }
     }
-    private void showEditDialog(Product product) {
-        if (product == null) {
+    private void showEditDialog(Produit produit) {
+        if (produit == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Aucun produit n'est sélectionné.");
             return;
         }
         try {
             // Create a copy of the product to edit
-            Product product_copy = new Product();
-            product_copy.setId(product.getId());
-            product_copy.setShop_id(product.getShop_id());
-            product_copy.setTitle(product.getTitle());           // Add this line for title
-            product_copy.setPhotoUrl(product.getPhotoUrl());   // Add this line for image path
-            product_copy.setDescription(product.getDescription());
-            product_copy.setPrice(product.getPrice());
-            product_copy.setStock(product.getStock());
-            product_copy.setDiscount_id(product.getDiscount_id()); // Add this line if not already there
+            Produit produit_copy = new Produit();
+            produit_copy.setId(produit.getId());
+            produit_copy.setShopId(produit.getShopId());
+            produit_copy.setNom(produit.getNom());           // Add this line for title
+            produit_copy.setPhotoUrl(produit.getPhotoUrl());   // Add this line for image path
+            produit_copy.setDescription(produit.getDescription());
+            produit_copy.setPrix(produit.getPrix());
+            produit_copy.setStock(produit.getStock());
+            produit_copy.setPromotionId(produit.getPromotionId()); // Add this line if not already there
 
             // Load the FXML file
             FXMLLoader loader = new FXMLLoader();
@@ -344,7 +344,7 @@ public class ProduitController {
             // Get the controller
             ModificationProduitController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setProduct(product_copy);
+            controller.setProduct(produit_copy);
 
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
@@ -363,11 +363,11 @@ public class ProduitController {
         }
     }
 
-    private void showDeleteConfirmation(Product product) {
+    private void showDeleteConfirmation(Produit produit) {
         Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
         confirmDialog.setTitle("Confirmation de suppression");
         confirmDialog.setHeaderText("Supprimer le produit");
-        confirmDialog.setContentText("Êtes-vous sûr de vouloir supprimer le produit: " + product.getDescription() + "?");
+        confirmDialog.setContentText("Êtes-vous sûr de vouloir supprimer le produit: " + produit.getDescription() + "?");
 
         // Add custom styling to match app theme (if style.css exists)
         try {
@@ -386,7 +386,7 @@ public class ProduitController {
 
                     // The delete method takes a Product object, not just an ID
                     // If your service has a deleteById method, use that instead
-                    int result = productService.delete(product);  // Changed from productService.delete(product.getId())
+                    int result = productService.delete(produit);  // Changed from productService.delete(product.getId())
 
                     if (result > 0) {
                         // Refresh product list
@@ -428,10 +428,10 @@ public class ProduitController {
     }
 
     // Method to call the product delete service
-    private int deleteProduct(Product product) throws SQLException {
+    private int deleteProduct(Produit produit) throws SQLException {
         // Assuming you have a service or DAO instance
         ProductService productService = new ProductService();
-        return productService.delete(product);
+        return productService.delete(produit);
     }
 
 

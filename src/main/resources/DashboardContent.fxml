@@ -81,7 +81,7 @@
                                                                     <children>
                                                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                             <image>
-                                                                                <Image url="@assets/product.png" />
+                                                                                <Image url="@assets/produit.png" />
                                                                             </image>
                                                                         </ImageView>
                                                                     </children>
@@ -208,14 +208,14 @@
                                         <!-- Top Products Container -->
                                         <StackPane>
                                             <children>
-                                                <!-- Empty state message (shown when no products) -->
+                                                <!-- Empty state message (shown when no produits) -->
                                                 <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="20.0" visible="false">
                                                     <children>
                                                         <StackPane maxHeight="120" maxWidth="120" minHeight="120" minWidth="120" style="-fx-background-color: #f0f5ff; -fx-background-radius: 100;">
                                                             <children>
                                                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
-                                                                        <Image url="@assets/product.png" />
+                                                                        <Image url="@assets/produit.png" />
                                                                     </image>
                                                                 </ImageView>
                                                             </children>
