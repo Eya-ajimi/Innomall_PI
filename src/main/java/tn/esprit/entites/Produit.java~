@@ -13,7 +13,7 @@ public class Produit {
     private int stock;
     private double prix;
     private String imageUrl;
-    //private LocalDateTime dateAjout;
+    private LocalDateTime dateAjout;
 
     // Getters and Setters
     public int getId() {
@@ -80,11 +80,11 @@ public class Produit {
         this.imageUrl = imageUrl;
     }
 
-//    public LocalDateTime getDateAjout() {
-//        return dateAjout;
-//    }
-//
-//    public void setDateAjout(LocalDateTime dateAjout) {
-//        this.dateAjout = dateAjout;
-//    }
+    public LocalDateTime getDateAjout() {
+        return dateAjout;
+    }
+
+    public void setDateAjout(LocalDateTime dateAjout) {
+        this.dateAjout = dateAjout;
+    }
 }

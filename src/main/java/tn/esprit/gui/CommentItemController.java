@@ -96,27 +96,43 @@ public class CommentItemController {
 
     private void addSousCommentaire() {
         String contenu = txtSousCommentaire.getText().trim();
-        if (!contenu.isEmpty()) {
-            try {
-                SousCommentaire sousCommentaire = new SousCommentaire();
-                sousCommentaire.setContenu(contenu);
-                sousCommentaire.setCommentaireId(commentaire.getId());
-                sousCommentaire.setUtilisateurId(17); // Replace with actual user ID
-                sousCommentaire.setDateCreation(java.time.LocalDateTime.now().toString());
-
-                // Insert the sous-commentaire into the database
-                sousCommentaireService.insert(sousCommentaire);
-
-                // Reload sous-commentaires to display the new one
-                loadSousCommentaires();
-
-                // Clear the text area
-                txtSousCommentaire.clear();
-            } catch (SQLException e) {
-                System.err.println("Erreur lors de l'ajout du sous-commentaire : " + e.getMessage());
-                e.printStackTrace();
-            }
+        if (contenu.isEmpty()) {
+            return;
         }
+
+        // Check for bad words
+        if (BadWordChecker.containsBadWords(contenu)) {
+            showAlert("Erreur", "Le sous-commentaire contient des mots inappropriés.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        try {
+            SousCommentaire sousCommentaire = new SousCommentaire();
+            sousCommentaire.setContenu(contenu);
+            sousCommentaire.setCommentaireId(commentaire.getId());
+            sousCommentaire.setUtilisateurId(17); // Replace with actual user ID
+            sousCommentaire.setDateCreation(java.time.LocalDateTime.now().toString());
+
+            // Insert the sous-commentaire into the database
+            sousCommentaireService.insert(sousCommentaire);
+
+            // Reload sous-commentaires to display the new one
+            loadSousCommentaires();
+
+            // Clear the text area
+            txtSousCommentaire.clear();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'ajout du sous-commentaire : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     /*************************/
 

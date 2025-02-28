@@ -60,8 +60,9 @@ public class PostItemController {
     }
 
 
-    @FXML
 
+
+    @FXML
     private void handleAddComment() {
         String content = commentInputField.getText().trim();
         if (content.isEmpty()) {
@@ -69,9 +70,15 @@ public class PostItemController {
             return;
         }
 
+        // Check for bad words
+        if (BadWordChecker.containsBadWords(content)) {
+            showAlert("Erreur", "Le commentaire contient des mots inappropriés.", Alert.AlertType.ERROR);
+            return;
+        }
+
         Commentaire newComment = new Commentaire();
         newComment.setPostId(currentPost.getId());
-        newComment.setUtilisateurId(20);
+        newComment.setUtilisateurId(20); // Replace with actual user ID
         newComment.setContenu(content);
 
         try {
@@ -86,7 +93,6 @@ public class PostItemController {
             showAlert("Erreur", "Problème lors de l'ajout du commentaire.", Alert.AlertType.ERROR);
         }
     }
-
     private void showAlert(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
