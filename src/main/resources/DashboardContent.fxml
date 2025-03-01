@@ -177,9 +177,9 @@
                                                     </children>
                                                 </VBox>
                                             </children>
-                                 <rowConstraints>
-                                    <RowConstraints />
-                                 </rowConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints />
+                                            </rowConstraints>
                                         </GridPane>
                                     </children>
                                 </VBox>

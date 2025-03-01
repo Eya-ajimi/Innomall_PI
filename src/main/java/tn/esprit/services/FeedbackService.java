@@ -55,13 +55,13 @@ public class FeedbackService {
         return ratingDistribution;
     }
     public Double getAverageRatingByShopId(int shopId) throws SQLException {
-        String query = "SELECT AVG(rating) AS average FROM feedback WHERE shop_owner_id = ?";
+        String query = "SELECT AVG(rating) AS average FROM feedback WHERE shop_id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, shopId);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     Double avg = rs.getObject("average", Double.class);
-                    return (avg != null) ? avg : null; // Return null if no ratings exist
+                    return (avg != null) ? avg : null;
                 }
             }
         }

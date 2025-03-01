@@ -5,7 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -67,89 +70,225 @@ public class EvenementController {
     //----------------------------------------------------
     private void displayProducts( List<Event> events) {
         for (Event event : events) {
-            VBox productBox = createEvenetCard(event);
+            VBox productBox = createEventCard(event);
             eventContainer.getChildren().add(productBox);
         }
     }
-    //----------------------------------------------------
-    private VBox createEvenetCard(Event event) {
-        VBox productBox = new VBox();
 
+    private VBox createEventCard(Event event) {
+        VBox productBox = new VBox();
         productBox.setPrefWidth(300);
         productBox.setMaxWidth(400);
         productBox.setMinHeight(200);
         productBox.getStyleClass().add("event-card");
         productBox.setStyle("-fx-background-color: white; " +
-                "-fx-border-color: #cccccc; " +
+                "-fx-border-color: #e2e8f0; " +
                 "-fx-border-width: 1px; " +
                 "-fx-border-radius: 15px; " +
                 "-fx-background-radius: 15px; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);");
 
-        // ------Event header
-        VBox productHeader = new VBox();
-        productHeader.setStyle("-fx-background-color: rgba(255, 165, 0, 0.50); " +
+        // ------Event header with the specified orange shade and action buttons
+        HBox productHeader = new HBox();
+        productHeader.setStyle("-fx-background-color: rgba(255, 165, 0, 0.75); " +
                 "-fx-border-radius: 15px 15px 0 0; " +
                 "-fx-background-radius: 15px 15px 0 0; " +
-                "-fx-padding: 12 15; " +
+                "-fx-padding: 15 20; " +
                 "-fx-border-color: #e2e8f0; " +
                 "-fx-border-width: 0 0 1 0;");
-        //event title
-        Label titlelabel = new Label("Titre de l'evenement:\n" + event.getEventTitle());
-        titlelabel.setStyle(" -fx-text-fill: #000000; -fx-font-size: 15px;");
-        productHeader.getChildren().add(titlelabel);
 
-        //------ Event body
-        VBox productBody = new VBox();
-        productBody.setStyle("-fx-padding: 15;");
+        // Left side - Event title
+        VBox titleBox = new VBox();
+        titleBox.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(titleBox, javafx.scene.layout.Priority.ALWAYS);
 
-        Label organizorlable = new Label("Id Organisateur: " + event.getDescription());
-        organizorlable.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 14px;");
-        organizorlable.setWrapText(true);
-        Label descriptionlabel = new Label("Id Organisateur: " + event.getIdOrganizer());
-        descriptionlabel.setStyle("-fx-text-fill: #000000; -fx-wrap-text: true; -fx-font-size: 12px;");
-        descriptionlabel.setWrapText(true);
+        Label titleLabel = new Label(event.getEventTitle());
+        titleLabel.setStyle("-fx-text-fill: #333333; " +
+                "-fx-font-size: 18px; " +
+                "-fx-font-weight: bold;");
+        titleLabel.setWrapText(true);
+        titleBox.getChildren().add(titleLabel);
 
-        productBody.getChildren().addAll(organizorlable,descriptionlabel);
+        // Right side - Edit and Delete buttons
+        HBox actionButtons = new HBox(10);
+        actionButtons.setAlignment(javafx.geometry.Pos.CENTER);
 
-        // Product footer
-        VBox productFooter = new VBox();
-        productFooter.setStyle("-fx-background-color: rgb(255,255,255); " +
+        // Edit button with image icon
+        Button editButton = new Button();
+        ImageView editIcon = new ImageView(new Image("/assets/edit.png"));
+        editIcon.setFitHeight(16);
+        editIcon.setFitWidth(16);
+        editButton.setGraphic(editIcon);
+        editButton.setStyle("-fx-background-color: transparent; " +
+                "-fx-cursor: hand; " +
+                "-fx-padding: 5; " +
+                "-fx-background-radius: 100;");
+
+        // Add hover effect for edit button
+        editButton.setOnMouseEntered(e -> {
+            editButton.setStyle("-fx-background-color: rgba(255,255,255,0.2); " +
+                    "-fx-cursor: hand; " +
+                    "-fx-padding: 5; " +
+                    "-fx-background-radius: 100;");
+        });
+
+        editButton.setOnMouseExited(e -> {
+            editButton.setStyle("-fx-background-color: transparent; " +
+                    "-fx-cursor: hand; " +
+                    "-fx-padding: 5; " +
+                    "-fx-background-radius: 100;");
+        });
+
+        // Edit button action
+        editButton.setOnAction(e -> {
+            // Add edit action here
+            System.out.println("Edit event: " + event.getEventTitle());
+        });
+
+        // Delete button with image icon
+        Button deleteButton = new Button();
+        ImageView deleteIcon = new ImageView(new Image("/assets/trash.png"));
+        deleteIcon.setFitHeight(16);
+        deleteIcon.setFitWidth(16);
+        deleteButton.setGraphic(deleteIcon);
+        deleteButton.setStyle("-fx-background-color: transparent; " +
+                "-fx-cursor: hand; " +
+                "-fx-padding: 5; " +
+                "-fx-background-radius: 100;");
+
+        // Add hover effect for delete button
+        deleteButton.setOnMouseEntered(e -> {
+            deleteButton.setStyle("-fx-background-color: rgba(255,0,0,0.1); " +
+                    "-fx-cursor: hand; " +
+                    "-fx-padding: 5; " +
+                    "-fx-background-radius: 100;");
+        });
+
+        deleteButton.setOnMouseExited(e -> {
+            deleteButton.setStyle("-fx-background-color: transparent; " +
+                    "-fx-cursor: hand; " +
+                    "-fx-padding: 5; " +
+                    "-fx-background-radius: 100;");
+        });
+
+        // Delete button action
+        deleteButton.setOnAction(e -> {
+            // Add delete action here
+            System.out.println("Delete event: " + event.getEventTitle());
+        });
+
+        actionButtons.getChildren().addAll(editButton, deleteButton);
+        productHeader.getChildren().addAll(titleBox, actionButtons);
+
+        // ------ Event body with the specified blue shade
+        VBox productBody = new VBox(10); // Added spacing between elements
+        productBody.setStyle("-fx-background-color: rgba(191, 226, 246, 0.82); " +
+                "-fx-padding: 15 20;");
+
+        // Description with icon and better formatting
+        HBox descriptionBox = new HBox(8);
+        Label descriptionLabel = new Label("Description: ");
+        descriptionLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333; -fx-font-size: 14px;");
+        Label descriptionValue = new Label(event.getDescription());
+        descriptionValue.setStyle("-fx-text-fill: #333333; -fx-wrap-text: true; -fx-font-size: 14px;");
+        descriptionValue.setWrapText(true);
+        descriptionBox.getChildren().addAll(descriptionLabel, descriptionValue);
+
+        // Organizer info with icon
+        HBox organizerBox = new HBox(8);
+        Label organizerLabel = new Label("Organisateur: ");
+        organizerLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333; -fx-font-size: 14px;");
+
+        organizerBox.getChildren().addAll(organizerLabel);
+
+        productBody.getChildren().addAll(descriptionBox, organizerBox);
+
+        // Product footer with improved design
+        VBox productFooter = new VBox(8); // Added spacing between elements
+        productFooter.setStyle("-fx-background-color: white; " +
                 "-fx-border-radius: 0 0 15px 15px; " +
                 "-fx-background-radius: 0 0 15px 15px; " +
-                "-fx-padding: 10 15; " +
+                "-fx-padding: 15 20; " +
                 "-fx-border-color: #e2e8f0; " +
                 "-fx-border-width: 1 0 0 0;");
-        productFooter.setMinHeight(5);  // did this to to avoid excess space
 
-        Label startlabel = new Label("Commence en : " + event.getStart() );
-        startlabel.setStyle("-fx-font-weight: light; -fx-text-fill: #000000; -fx-font-size: 12px;");
-        Label endlable = new Label("Se termine en : " + event.getEnd());
-        endlable.setStyle("-fx-font-weight: light; -fx-text-fill: #000000; -fx-font-size: 12px;");
+        // Place info with icon
+        HBox placeBox = new HBox(8);
+        Label placeIcon = new Label("📍");
+        placeIcon.setStyle("-fx-font-size: 16px;");
+        Label placeLabel = new Label(event.getPlace());
+        placeLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333; -fx-font-size: 15px;");
+        placeBox.getChildren().addAll(placeIcon, placeLabel);
 
-        Label placelabel = new Label("L'emplacement: " + event.getPlace());
-        placelabel.setStyle("-fx-font-weight:bold; -fx-text-fill: #000000; -fx-font-size: 14px;");
+        // Time info with improved formatting and icons
+        HBox timeBox = new HBox(15);
+        timeBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
-        productFooter.getChildren().addAll(startlabel,endlable, placelabel);
+        // Format the Timestamp objects to strings
+        String startTimeStr = event.getStart() != null ? formatTimestamp(event.getStart()) : "N/A";
+        String endTimeStr = event.getEnd() != null ? formatTimestamp(event.getEnd()) : "N/A";
+
+        // Start time
+        VBox startBox = new VBox(2);
+        Label startIcon = new Label("🕒");
+        startIcon.setStyle("-fx-font-size: 14px;");
+        Label startTitle = new Label("Début:");
+        startTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #555555; -fx-font-size: 12px;");
+        Label startValue = new Label(startTimeStr);
+        startValue.setStyle("-fx-text-fill: #333333; -fx-font-size: 12px;");
+        startBox.getChildren().addAll(startTitle, startValue);
+
+        // End time
+        VBox endBox = new VBox(2);
+        Label endTitle = new Label("Fin:");
+        endTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #555555; -fx-font-size: 12px;");
+        Label endValue = new Label(endTimeStr);
+        endValue.setStyle("-fx-text-fill: #333333; -fx-font-size: 12px;");
+        endBox.getChildren().addAll(endTitle, endValue);
+
+        // Add icon and both time boxes to the timeBox
+        timeBox.getChildren().addAll(startIcon, startBox, endBox);
+
+        productFooter.getChildren().addAll(placeBox, timeBox);
 
         // Add all sections to the product card
         productBox.getChildren().addAll(productHeader, productBody, productFooter);
 
-        // Add hover effect
+        // Improved hover effect with smooth transition
+        String baseStyle = productBox.getStyle();
+        String hoverStyle = baseStyle +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0, 0, 4); " +
+                "-fx-translate-y: -3; " +
+                "-fx-cursor: hand;";
+
+        productBox.setStyle(baseStyle + "-fx-transition: all 0.3s ease;");
+
         productBox.setOnMouseEntered(e -> {
-            productBox.setStyle(productBox.getStyle() +
-                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
-                    "-fx-translate-y: -5;");
+            productBox.setStyle(hoverStyle);
         });
 
         productBox.setOnMouseExited(e -> {
-            productBox.setStyle(productBox.getStyle().replace("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 5); " +
-                    "-fx-translate-y: -2;", "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"));
+            productBox.setStyle(baseStyle);
         });
 
         return productBox;
     }
 
+    // Helper method to format Timestamp to a readable string
+    private String formatTimestamp(java.sql.Timestamp timestamp) {
+        if (timestamp == null) return "N/A";
+
+        // Create a formatter for the date and time
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(timestamp);
+    }
+
+    // Helper method to create icon labels with consistent styling
+    private Label createIcon(String iconText, int size) {
+        Label icon = new Label(iconText);
+        icon.setStyle("-fx-font-size: " + size + "px;");
+        return icon;
+    }
     private void showAddEvenementPopup() {
         try {
             // Change this line

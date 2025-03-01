@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import tn.esprit.entities.Product;
+import tn.esprit.entities.Produit;
 import tn.esprit.services.FeedbackService;
 import tn.esprit.services.LikedProductService;
 import tn.esprit.services.ProductService;
@@ -152,7 +152,7 @@ public class DashboardContentController implements Initializable {
 
                 for (Integer productId : topProductIds) {
                     try {
-                        Product product = productService.getEntityById(productId);
+                        Produit product = productService.getEntityById(productId);
                         if (product != null) {
                             topProductsPane.getChildren().add(createProductCard(product));
                         }
@@ -288,7 +288,7 @@ public class DashboardContentController implements Initializable {
     };
 
 
-    private VBox createProductCard(Product product) {
+    private VBox createProductCard(Produit product) {
         VBox card = null;
         try {
             ProduitController produitController = new ProduitController();

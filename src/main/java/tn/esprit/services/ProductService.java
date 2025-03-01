@@ -1,12 +1,12 @@
 package tn.esprit.services;
-import tn.esprit.entities.Product;
+import tn.esprit.entities.Produit;
 import tn.esprit.utils.DataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductService implements CRUD<Product> {
+public class ProductService implements CRUD<Produit> {
 
     private Connection connection;
 
@@ -15,126 +15,149 @@ public class ProductService implements CRUD<Product> {
     }
 
     @Override
-    public int insert(Product product) throws SQLException {
-        String query = "INSERT INTO product (shop_id, discount_id, title, description, stock, price, photo_url) " +
+    public int insert(Produit produit) throws SQLException {
+        String query = "INSERT INTO produit (shopId, promotionId, nom, description, stock, prix, photoUrl) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, product.getShop_id());
-            if (product.getDiscount_id() != null) {
-                pst.setInt(2, product.getDiscount_id());
+            pst.setInt(1, produit.getShopId());
+            if (produit.getPromotionId() != null) {
+                pst.setInt(2, produit.getPromotionId());
             } else {
                 pst.setNull(2, Types.INTEGER);
             }
-            pst.setString(3, product.getTitle());
-            pst.setString(4, product.getDescription());
-            pst.setInt(5, product.getStock());
-            pst.setFloat(6, product.getPrice());
-            pst.setString(7, product.getPhotoUrl());
+            pst.setString(3, produit.getNom());
+            pst.setString(4, produit.getDescription());
+            pst.setInt(5, produit.getStock());
+            pst.setDouble(6, produit.getPrix());
+            pst.setString(7, produit.getPhotoUrl());
 
             return pst.executeUpdate();
         }
     }
 
     @Override
-    public int update(Product product) throws SQLException {
-        String query = "UPDATE product SET discount_id = ?, title = ?, description = ?, stock = ?, price = ?, photo_url = ? WHERE id = ?";
+    public int update(Produit produit) throws SQLException {
+        String query = "UPDATE produit SET promotionId = ?, nom = ?, description = ?, stock = ?, prix = ?, photoUrl = ? WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            if (product.getDiscount_id() == null) {
+            if (produit.getPromotionId() == null) {
                 pst.setNull(1, java.sql.Types.INTEGER);
             } else {
-                pst.setInt(1, product.getDiscount_id());
+                pst.setInt(1, produit.getPromotionId());
             }
-            pst.setString(2, product.getTitle());
-            pst.setString(3, product.getDescription());
-            pst.setInt(4, product.getStock());
-            pst.setFloat(5, product.getPrice());
-            pst.setString(6, product.getPhotoUrl());
-            pst.setInt(7, product.getId());
+            pst.setString(2, produit.getNom());
+            pst.setString(3, produit.getDescription());
+            pst.setInt(4, produit.getStock());
+            pst.setDouble(5, produit.getPrix());
+            pst.setString(6, produit.getPhotoUrl());
+            pst.setInt(7, produit.getId());
 
             return pst.executeUpdate();
         }
     }
 
     @Override
-    public int delete(Product product) throws SQLException {
-        String query = "DELETE FROM product WHERE id = ?";
+    public int delete(Produit produit) throws SQLException {
+        String query = "DELETE FROM produit WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, product.getId());
+            pst.setInt(1, produit.getId());
             return pst.executeUpdate();
         }
     }
 
     @Override
-    public List<Product> showAll() throws SQLException {
-        List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM product";
+    public List<Produit> showAll() throws SQLException {
+        List<Produit> produits = new ArrayList<>();
+        String query = "SELECT * FROM produit";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                Product product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setShop_id(rs.getInt("shop_id"));
-                product.setDiscount_id(rs.getObject("discount_id") != null ? rs.getInt("discount_id") : null);
-                product.setTitle(rs.getString("title"));
-                product.setDescription(rs.getString("description"));
-                product.setStock(rs.getInt("stock"));
-                product.setPrice(rs.getFloat("price"));
-                product.setPhotoUrl(rs.getString("photo_url"));
-                products.add(product);
+                Produit produit = new Produit();
+                produit.setId(rs.getInt("id"));
+                produit.setShopId(rs.getInt("shopId"));
+                produit.setPromotionId(rs.getObject("promotionId") != null ? rs.getInt("promotionId") : null);
+                produit.setNom(rs.getString("nom"));
+                produit.setDescription(rs.getString("description"));
+                produit.setStock(rs.getInt("stock"));
+                produit.setPrix(rs.getDouble("prix"));
+                produit.setPhotoUrl(rs.getString("photoUrl"));
+                produits.add(produit);
             }
         }
-        return products;
+        return produits;
     }
 
-    @Override
-    public Product getEntityById(int id) throws SQLException {
-        String query = "SELECT * FROM product WHERE id = ?";
+
+//    public Produit getEntityById(int id) throws SQLException {
+//        String query = "SELECT * FROM produit WHERE id = ?";
+//        try (PreparedStatement pst = connection.prepareStatement(query)) {
+//            pst.setInt(1, id);
+//            ResultSet rs = pst.executeQuery();
+//            if (rs.next()) {
+//                return new Produit(
+//                        rs.getInt("id"),
+//                        rs.getInt("shopId"),
+//                        rs.getObject("promotionId") != null ? rs.getInt("promotionId") : null,
+//                        rs.getString("nom"),
+//                        rs.getString("description"),
+//                        rs.getInt("stock"),
+//                        rs.getFloat("prix"),
+//                        rs.getString("photoUrl")
+//                );
+//            }
+//        }
+//        return null;
+//    }
+
+    public Produit getEntityById(int id) throws SQLException {
+        String query = "SELECT * FROM produit WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                return new Product(
+                Integer promotionId = rs.getObject("promotionId") != null ? rs.getInt("promotionId") : null;
+                return new Produit(
                         rs.getInt("id"),
-                        rs.getInt("shop_id"),
-                        rs.getObject("discount_id") != null ? rs.getInt("discount_id") : null,
-                        rs.getString("title"),
+                        rs.getInt("shopId"), // Ensure "shopId" exists, otherwise use "shop_id"
+                        rs.getInt("promotionId"),
+                        rs.getString("nom"),
                         rs.getString("description"),
                         rs.getInt("stock"),
-                        rs.getFloat("price"),
-                        rs.getString("photo_url")
+                        rs.getFloat("prix"),
+                        rs.getString("photoUrl")
                 );
             }
         }
-        return null;
+        return null;  // Return null if no product found
     }
 
-    public List<Product> getProductsByShopId(int shopId) throws SQLException {
-        String query = "SELECT * FROM product WHERE shop_id = ?";
-        List<Product> productList = new ArrayList<>();
+
+    public List<Produit> getProductsByShopId(int shopId) throws SQLException {
+        String query = "SELECT * FROM produit WHERE shopId = ?";
+        List<Produit> produitList = new ArrayList<>();
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, shopId);
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                Product product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setShop_id(rs.getInt("shop_id"));
-                product.setDiscount_id(rs.getObject("discount_id") != null ? rs.getInt("discount_id") : null);
-                product.setTitle(rs.getString("title"));
-                product.setDescription(rs.getString("description"));
-                product.setStock(rs.getInt("stock"));
-                product.setPrice(rs.getFloat("price"));
-                product.setPhotoUrl(rs.getString("photo_url"));
-                productList.add(product);
+                Produit produit = new Produit();
+                produit.setId(rs.getInt("id"));
+                produit.setShopId(rs.getInt("shopId"));
+                produit.setPromotionId(rs.getObject("promotionId") != null ? rs.getInt("promotionId") : null);
+                produit.setNom(rs.getString("nom"));
+                produit.setDescription(rs.getString("description"));
+                produit.setStock(rs.getInt("stock"));
+                produit.setPrix(rs.getFloat("prix"));
+                produit.setPhotoUrl(rs.getString("photoUrl"));
+                produitList.add(produit);
             }
         }
 
-        return productList;
+        return produitList;
     }
 
     public int countProductsByShopId(int shopId) throws SQLException {
-        String query = "SELECT COUNT(*) FROM product WHERE shop_id = ?";
+        String query = "SELECT COUNT(*) FROM produit WHERE shopId = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, shopId);
             ResultSet rs = pst.executeQuery();

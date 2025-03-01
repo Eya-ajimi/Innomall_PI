@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.gui.PanierPopupController"
+            prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: rgba(191, 226, 246, 0.82); -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;">
+
+    <VBox spacing="15" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
+
+        <!-- Title -->
+        <Label text="Détails des Paniers"
+               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+        <!-- Panier Items Container -->
+        <VBox fx:id="panierContainer" spacing="10"
+              style="-fx-background-color: white; -fx-padding: 15px; -fx-border-radius: 10px;
+                     -fx-background-radius: 10px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 3);"/>
+
+        <!-- Total Commande -->
+        <Label fx:id="totalCommandeLabel" text="Total Commande: 0 DT"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+        <!-- Confirmation Button -->
+        <Button fx:id="btnConfirmer" text="Confirmer" onAction="#confirmerCommande"
+                style="-fx-background-color: rgba(255, 165, 0, 0.5); -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-padding: 10px; -fx-border-radius: 5px; -fx-background-radius: 5px;"/>
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </VBox>
+</AnchorPane>

@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import tn.esprit.entities.Discount;
-import tn.esprit.entities.Product;
+import tn.esprit.entities.Produit;
 import tn.esprit.services.DiscountService;
 import tn.esprit.services.ProductService;
 
@@ -51,7 +51,7 @@ public class ModificationProduitController implements Initializable {
 
     private String imagePath; // To store the image path
 
-    private Product currentProduct;
+    private Produit currentProduit;
     private Integer originalDiscountId; // Store the original discount_id
     private ProductService productService;
     private DiscountService discountService;
@@ -82,7 +82,7 @@ public class ModificationProduitController implements Initializable {
             javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
             fileChooser.setTitle("Sélectionner une image");
             fileChooser.getExtensionFilters().addAll(
-                    new javafx.stage.FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
+                    new javafx.stage.FileChooser.ExtensionFilter("Images", ".png", ".jpg", ".jpeg", ".gif")
             );
             java.io.File selectedFile = fileChooser.showOpenDialog(dialogStage);
             if (selectedFile != null) {
@@ -141,23 +141,23 @@ public class ModificationProduitController implements Initializable {
     /**
      * Sets the product to be edited
      *
-     * @param product The product to edit
+     * @param produit The product to edit
      */
-    public void setProduct(Product product) {
-        this.currentProduct = product;
+    public void setProduct(Produit produit) {
+        this.currentProduit = produit;
 
         // Store the original discount_id
-        this.originalDiscountId = product.getDiscount_id();
+        this.originalDiscountId = produit.getPromotionId();
 
         // Populate fields with product data
-        titleField.setText(product.getTitle());
-        descriptionField.setText(product.getDescription());
-        stockField.setText(Integer.toString(product.getStock()));
-        priceField.setText(Float.toString(product.getPrice()));
+        titleField.setText(produit.getNom());
+        descriptionField.setText(produit.getDescription());
+        stockField.setText(Integer.toString(produit.getStock()));
+        priceField.setText(Double.toString(produit.getPrix()));
 
         // Load product image if available
-        if (product.getPhotoUrl() != null && !product.getPhotoUrl().isEmpty()) {
-            imagePath = product.getPhotoUrl();
+        if (produit.getPhotoUrl() != null && !produit.getPhotoUrl().isEmpty()) {
+            imagePath = produit.getPhotoUrl();
             try {
                 java.io.File imageFile = new java.io.File(imagePath);
                 if (imageFile.exists()) {
@@ -171,14 +171,14 @@ public class ModificationProduitController implements Initializable {
 
         // Set the selected discount or "No discount" if null
         try {
-            if (product.getDiscount_id() == null || product.getDiscount_id() == 0 || product.getDiscount_id() == -1) {
+            if (produit.getPromotionId() == null || produit.getPromotionId() == 0 || produit.getPromotionId() == -1) {
                 // Select the "No discount" option (first in the list)
                 discountComboBox.getSelectionModel().select(0);
             } else {
                 // Try to find and select the matching discount
                 boolean found = false;
                 for (Discount discount : discountComboBox.getItems()) {
-                    if (discount.getId() == product.getDiscount_id()) {
+                    if (discount.getId() == produit.getPromotionId()) {
                         discountComboBox.setValue(discount);
                         found = true;
                         break;
@@ -225,28 +225,28 @@ public class ModificationProduitController implements Initializable {
 
                 if (selectedDiscount != null && selectedDiscount.getId() == -1) {
                     // If "No discount" is selected, set discount_id to null
-                    currentProduct.setDiscount_id(null);
+                    currentProduit.setPromotionId(null);
                 } else if (selectedDiscount != null) {
                     // Normal discount selected
-                    currentProduct.setDiscount_id(selectedDiscount.getId());
+                    currentProduit.setPromotionId(selectedDiscount.getId());
                 } else {
                     // Keep the original discount_id if no selection was made
-                    currentProduct.setDiscount_id(originalDiscountId);
+                    currentProduit.setPromotionId(originalDiscountId);
                 }
 
-                currentProduct.setTitle(titleField.getText());
-                currentProduct.setDescription(descriptionField.getText());
-                currentProduct.setStock(Integer.parseInt(stockField.getText()));
-                currentProduct.setPrice(Float.parseFloat(priceField.getText()));
-                currentProduct.setPhotoUrl(imagePath);
+                currentProduit.setNom(titleField.getText());
+                currentProduit.setDescription(descriptionField.getText());
+                currentProduit.setStock(Integer.parseInt(stockField.getText()));
+                currentProduit.setPrix(Double.parseDouble(priceField.getText()));
+                currentProduit.setPhotoUrl(imagePath);
 
                 // Print debug info
-                System.out.println("Updating product: " + currentProduct.getId());
+                System.out.println("Updating product: " + currentProduit.getId());
                 System.out.println("Original discount_id: " + originalDiscountId);
-                System.out.println("New discount_id: " + currentProduct.getDiscount_id());
+                System.out.println("New discount_id: " + currentProduit.getPromotionId());
 
                 // Update in database
-                int result = productService.update(currentProduct);
+                int result = productService.update(currentProduit);
 
                 if (result > 0) {
                     okClicked = true;

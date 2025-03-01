@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="tn.esprit.gui.CommandeController"
+            minHeight="-Infinity" minWidth="-Infinity" prefWidth="999.0" style="-fx-background-color: #f5f6fa;"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="@css/commandestyle.css">
+
+    <VBox spacing="15" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+        <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+        </padding>
+
+        <!-- Top Bar with Padding & Border Radius -->
+        <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="900" spacing="15" styleClass="header-container">
+            <padding>
+                <Insets bottom="10" left="15" right="15" top="10" />
+            </padding>
+            <Label styleClass="header-title" text="Gestion des Commandes" textFill="black">
+                <font>
+                    <Font name="System Bold" size="21" />
+                </font>
+            </Label>
+
+            <!-- Filter par date -->
+            <Label styleClass="filter-label" text=" | Filtrer par date :" />
+            <DatePicker fx:id="datePicker" promptText="Sélectionner une date" />
+
+            <!-- Push to right -->
+            <Region HBox.hgrow="ALWAYS" />
+
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label fx:id="resultCountLabel" text="" />
+            <Region HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="sortComboBox" promptText="Trier par" />
+        </HBox>
+
+        <HBox>
+            <TableView fx:id="tableView" prefHeight="400" prefWidth="600"  VBox.vgrow="ALWAYS" styleClass="order-table" >
+                <columns>
+                    <TableColumn fx:id="numeroTicketCol" text="Numéro Ticket" />
+                    <TableColumn fx:id="nomClientCol" text="Nom Client" />
+                    <TableColumn fx:id="totalCommandeCol" text="Total Commande" />
+                    <TableColumn fx:id="dateCommandeCol" text="Date Commande" />
+                </columns>
+            </TableView>
+        </HBox>
+
+        <Pagination fx:id="pagination" />
+    </VBox>
+</AnchorPane>
+

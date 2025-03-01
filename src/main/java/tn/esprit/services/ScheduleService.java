@@ -15,7 +15,7 @@ public class ScheduleService implements CRUD<Schedule> {
 
     @Override
     public int insert(Schedule schedule) throws SQLException {
-        String query = "INSERT INTO schedule (day_of_week, opening_time, closing_time, shop_owner_id) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO schedule (day_of_week, opening_time, closing_time, shopId) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setString(1, schedule.getDay().name());
             pst.setTime(2, schedule.getOpeningTime());
@@ -27,7 +27,7 @@ public class ScheduleService implements CRUD<Schedule> {
 
     @Override
     public int update(Schedule schedule) throws SQLException {
-        String query = "UPDATE schedule SET day_of_week = ?, opening_time = ?, closing_time = ?, shop_owner_id = ? WHERE id = ?";
+        String query = "UPDATE schedule SET day_of_week = ?, opening_time = ?, closing_time = ?, shopId = ? WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setString(1, schedule.getDay().name());
             pst.setTime(2, schedule.getOpeningTime());
@@ -59,7 +59,7 @@ public class ScheduleService implements CRUD<Schedule> {
                         tn.esprit.entities.enums.Days.valueOf(rs.getString("day_of_week")),
                         rs.getTime("opening_time"),
                         rs.getTime("closing_time"),
-                        rs.getInt("shop_owner_id")
+                        rs.getInt("shopId")
                 );
                 schedules.add(schedule);
             }
@@ -67,7 +67,7 @@ public class ScheduleService implements CRUD<Schedule> {
         return schedules;
     }
 
-    @Override
+
     public Schedule getEntityById(int id) throws SQLException {
         String query = "SELECT * FROM schedule WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
@@ -79,7 +79,7 @@ public class ScheduleService implements CRUD<Schedule> {
                         tn.esprit.entities.enums.Days.valueOf(rs.getString("day_of_week")),
                         rs.getTime("opening_time"),
                         rs.getTime("closing_time"),
-                        rs.getInt("shop_owner_id")
+                        rs.getInt("shopId")
                 );
             }
         }
@@ -88,7 +88,7 @@ public class ScheduleService implements CRUD<Schedule> {
 
     public List<Schedule> getScheduleByShopOwnerId(int shopOwnerId) throws SQLException {
         List<Schedule> schedules = new ArrayList<>();
-        String query = "SELECT * FROM schedule WHERE shop_owner_id = ?";
+        String query = "SELECT * FROM schedule WHERE shopId = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, shopOwnerId);
             ResultSet rs = pst.executeQuery();
@@ -98,7 +98,7 @@ public class ScheduleService implements CRUD<Schedule> {
                         tn.esprit.entities.enums.Days.valueOf(rs.getString("day_of_week")),
                         rs.getTime("opening_time"),
                         rs.getTime("closing_time"),
-                        rs.getInt("shop_owner_id")
+                        rs.getInt("shopId")
                 );
                 schedules.add(schedule);
             }

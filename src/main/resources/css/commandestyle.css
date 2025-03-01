@@ -1,0 +1,246 @@
+/* Main application styles */
+.root {
+    -fx-background-color: #f9fcff;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #333333;
+}
+
+/* Header styles */
+.header-container {
+    -fx-background-color: rgba(191, 226, 246, 0.82);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 2);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.header-title {
+    -fx-text-fill: Black;
+    -fx-font-weight: bold;
+}
+
+/* Sidebar styles */
+.sidebar {
+    -fx-background-color: rgba(211, 236, 255, 0.9); /* Fixed typo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 2, 0);
+    -fx-min-width: 200px;
+    -fx-pref-width: 220px;
+    -fx-border-color: rgba(191, 226, 246, 0.5);
+    -fx-border-width: 0 1 0 0;
+}
+
+.filter-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 5 0 2 0;
+    -fx-text-fill: #333333;
+}
+
+.sidebar-button {
+    -fx-background-color: rgba(255, 165, 0, 0.5);
+    -fx-background-radius: 4;
+    -fx-padding: 8 12;
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgba(235, 145, 0, 0.9);
+    -fx-text-fill: white;
+}
+
+/* Table styles */
+.order-table {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+.order-table .column-header {
+    -fx-background-color: rgba(235, 145, 0, 0.80); /* Darker background for better contrast */
+    -fx-padding: 10 5;
+}
+
+.order-table .column-header .label {
+    -fx-text-fill: white; /* Ensure text is visible */
+    -fx-font-weight: bold;
+}
+
+
+
+.order-table .table-row-cell:odd {
+    -fx-background-color: #f9fcff;
+    -fx-text-fill: black; /* Ensure text is visible */
+}
+
+.order-table .table-row-cell:selected {
+    -fx-background-color: rgba(100, 150, 200, 0.82); /* Darker background for better contrast */
+    -fx-text-fill: white; /* Ensure text is visible */
+}
+
+.order-table .table-column {
+    -fx-alignment: CENTER;
+    -fx-text-fill: black; /* Ensure text is visible */
+}
+
+/*55555555555555555555555555555555555*/
+/* Button styles */
+.action-button {
+    -fx-background-color: rgba(255, 165, 0, 0.5);
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.action-button:hover {
+    -fx-background-color: rgba(235, 145, 0, 0.9);
+}
+
+/* Footer styles */
+.footer {
+    -fx-background-color: rgba(191, 226, 246, 0.82);
+    -fx-border-color: rgba(171, 206, 226, 1);
+    -fx-border-width: 1 0 0 0;
+}
+
+/* Date picker styles */
+.date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: rgba(191, 226, 246, 0.82);
+    -fx-border-radius: 4;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: rgba(191, 226, 246, 0.82);
+    -fx-background-radius: 0 4 4 0;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: rgba(171, 206, 226, 1);
+}
+
+.date-picker .cell:hover {
+    -fx-background-color: rgba(255, 185, 20, 0.6);
+}
+
+.date-picker .cell:focused {
+    -fx-background-color: rgba(255, 165, 0, 0.5);
+}
+
+.date-picker .selected {
+    -fx-background-color: rgba(255, 165, 0, 0.5);
+    -fx-text-fill: white;
+}
+
+.date-picker .today {
+    -fx-background-color: rgba(211, 236, 255, 0.9);
+}
+
+/* Text field styles */
+.text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: rgba(191, 226, 246, 0.82);
+    -fx-border-radius: 4;
+    -fx-padding: 8 10;
+}
+
+.text-field:focused {
+    -fx-border-color: rgba(255, 165, 0, 0.5);
+}
+
+/* Combo box styles */
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: rgba(191, 226, 246, 0.82);
+    -fx-border-radius: 4;
+}
+
+.combo-box:focused {
+    -fx-border-color: rgba(255, 165, 0, 0.5);
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: rgba(191, 226, 246, 0.82);
+    -fx-background-radius: 0 4 4 0;
+}
+
+.combo-box .arrow-button:hover {
+    -fx-background-color: rgba(171, 206, 226, 1);
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(211, 236, 255, 0.9);
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: rgba(255, 165, 0, 0.5);
+    -fx-text-fill: white;
+}
+
+/* Pagination styles */
+.pagination {
+    -fx-page-information-visible: false;
+}
+
+.pagination .pagination-control .button {
+    -fx-background-color: white;
+    -fx-border-color: rgba(191, 226, 246, 0.82);
+}
+
+.pagination .pagination-control .button:hover {
+    -fx-background-color: rgba(211, 236, 255, 0.9);
+}
+
+.pagination .pagination-control .page-number {
+    -fx-background-color: white;
+    -fx-border-color: rgba(191, 226, 246, 0.82);
+}
+
+.pagination .pagination-control .page-number:hover {
+    -fx-background-color: rgba(211, 236, 255, 0.9);
+}
+
+.pagination .pagination-control .page-number:selected {
+    -fx-background-color: rgba(255, 165, 0, 0.5);
+    -fx-text-fill: white;
+}
+
+/* Separator styles */
+.separator {
+    -fx-padding: 5 0;
+}
+
+/* Custom status indicators for orders */
+.status-pending {
+    -fx-background-color: rgba(211, 236, 255, 0.9);
+    -fx-text-fill: #333333;
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+}
+
+.status-processing {
+    -fx-background-color: rgba(255, 185, 20, 0.6);
+    -fx-text-fill: #333333;
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+}
+
+.status-completed {
+    -fx-background-color: rgba(100, 220, 120, 0.6);
+    -fx-text-fill: #333333;
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+}
+
+.status-cancelled {
+    -fx-background-color: rgba(220, 100, 100, 0.6);
+    -fx-text-fill: #333333;
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+}

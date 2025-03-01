@@ -52,7 +52,7 @@ public class DashboardController {
 
     @FXML
     private void showCommandes() {
-        loadView("/Commandes.fxml");
+        loadView("/Commande.fxml");
     }
     @FXML
     private void showProfil() {

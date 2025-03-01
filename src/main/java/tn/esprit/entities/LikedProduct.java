@@ -3,14 +3,14 @@ import java.sql.Timestamp;
 public class LikedProduct {
 
     private int id;
-    private User user;
-    private Product product;
+    private Utilisateur user;
+    private Produit produit;
     private Timestamp date;
     public LikedProduct() {}
 
-    public LikedProduct(User user, Product product, Timestamp date) {
+    public LikedProduct(Utilisateur user, Produit produit, Timestamp date) {
         this.user = user;
-        this.product = product;
+        this.produit = produit;
         this.date = date;
     }
 
@@ -26,20 +26,20 @@ public class LikedProduct {
         this.id = id;
     }
 
-    public User getUser() {
+    public Utilisateur getUtilisateur() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUtilisateur(Utilisateur user) {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
+    public Produit getProduct() {
+        return produit;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct(Produit produit) {
+        this.produit = produit;
     }
 
     public Timestamp getDate() {

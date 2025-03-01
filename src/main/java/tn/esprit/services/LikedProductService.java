@@ -2,7 +2,7 @@ package tn.esprit.services;
 
 import tn.esprit.entities.LikedProduct;
 import tn.esprit.utils.DataBase;
-import java.sql.Timestamp;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,9 @@ public class LikedProductService {
         this.connection = DataBase.getInstance().getCnx();
     }
 
-
     public List<LikedProduct> showAll() throws SQLException {
-        List<LikedProduct> likedProducts = new ArrayList<>();
-        String query = "SELECT * FROM likedProducts";
+        List<LikedProduct> likedproducts = new ArrayList<>();
+        String query = "SELECT * FROM likedproducts";
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -29,14 +28,14 @@ public class LikedProductService {
                         rs.getInt("product_id"),
                         rs.getTimestamp("date")
                 );
-                likedProducts.add(likedProduct);
+                likedproducts.add(likedProduct);
             }
         }
-        return likedProducts;
+        return likedproducts;
     }
 
     public LikedProduct getEntityById(int id) throws SQLException {
-        String query = "SELECT * FROM likedProducts WHERE id = ?";
+        String query = "SELECT * FROM likedproducts WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, id);
@@ -54,7 +53,7 @@ public class LikedProductService {
     }
 
     public int countLikesByProductId(int productId) throws SQLException {
-        String query = "SELECT COUNT(*) FROM likedProducts WHERE product_id = ?";
+        String query = "SELECT COUNT(*) FROM likedproducts WHERE product_id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, productId);
@@ -69,9 +68,9 @@ public class LikedProductService {
     public List<Integer> getTopLikedProductsByShopId(int shopId) throws SQLException {
         String query = """
         SELECT p.id 
-        FROM likedProducts lp
-        JOIN product p ON lp.product_id = p.id
-        WHERE p.shop_id = ?
+        FROM likedproducts lp
+        JOIN produit p ON lp.product_id = p.id
+        WHERE p.shopId = ?  
         GROUP BY p.id
         ORDER BY COUNT(lp.id) DESC
         LIMIT 3
@@ -91,9 +90,9 @@ public class LikedProductService {
     public int countTotalLikesByShopId(int shopId) throws SQLException {
         String query = """
         SELECT COUNT(lp.id) 
-        FROM likedProducts lp
-        JOIN product p ON lp.product_id = p.id
-        WHERE p.shop_id = ?
+        FROM likedproducts lp
+        JOIN produit p ON lp.product_id = p.id
+        WHERE p.shopId = ?   -- FIXED: Replaced user_id with shopId
     """;
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
@@ -105,5 +104,4 @@ public class LikedProductService {
         }
         return 0;
     }
-
 }
