@@ -514,5 +514,29 @@ public class ParkingLotController implements Initializable {
 
         return false; // Reservation has not expired
     }
+    @FXML
 
+
+    private void handleCancelReservationButtonAction() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/cancel_reservation_dialog.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Cancel Reservation");
+
+            // Get the controller and set the user reservations
+            CancelReservationDialogController controller = loader.getController();
+            List<Reservation> userReservations = getUserReservations(); // Fetch reservations for the user
+            controller.setUserReservations(userReservations); // Set the reservations
+
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<Reservation> getUserReservations() throws SQLException {
+        int hardcodedUserId = 1; // Hardcoded user ID
+        return new ReservationService().getReservationsByUserId(hardcodedUserId);
+    }
 }

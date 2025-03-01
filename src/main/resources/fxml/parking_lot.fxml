@@ -74,10 +74,19 @@
         <Label styleClass="title-label" text="Parking Management System" />
     </HBox>
 
-    <!-- Floor Selection -->
+    <!-- Control Panel HBox -->
     <HBox alignment="CENTER" spacing="20">
-        <Label text="Select Floor:" styleClass="floor-label" />
-        <ComboBox fx:id="floorComboBox" styleClass="floor-combo-box" />
+        <!-- Left side: Floor selection -->
+        <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+            <Label text="Select Floor:" styleClass="floor-label" />
+            <ComboBox fx:id="floorComboBox" styleClass="floor-combo-box" />
+        </HBox>
+
+        <!-- Right side: Action buttons -->
+        <HBox alignment="CENTER_RIGHT" spacing="15">
+            <Button onAction="#handleCancelReservationButtonAction" styleClass="cancel-reservation-button" text="Cancel Reservation" />
+            <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="View Reserved Spots" />
+        </HBox>
     </HBox>
 
     <!-- Statistics Cards -->
@@ -104,7 +113,6 @@
                     <Rectangle height="20" styleClass="occupied-spot" width="20" />
                     <Label styleClass="legend-label" text="Occupied" />
                 </HBox>
-                <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="View Reserved Spots" />
             </HBox>
 
             <!-- Top Row for Parking Spots -->

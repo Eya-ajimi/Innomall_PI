@@ -75,4 +75,27 @@ public class UtilisateurService {
         }
         return utilisateurs;
     }
+    public Utilisateur getUtilisateurById(int userId) throws SQLException {
+        String sql = "SELECT * FROM utilisateur WHERE id = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Utilisateur utilisateur = new Utilisateur(
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("mot_de_passe"),
+                        rs.getString("adresse"),
+                        rs.getString("telephone"),
+                        Role.valueOf(rs.getString("role"))
+                );
+                utilisateur.setId(rs.getInt("id"));
+                utilisateur.setPoints(rs.getInt("points"));
+                utilisateur.setNombreDeGain(rs.getInt("nombre_de_gain"));
+                return utilisateur;
+            }
+        }
+        return null; // Return null if no user is found
+    }
 }

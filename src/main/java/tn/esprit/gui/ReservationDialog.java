@@ -169,11 +169,11 @@ public class ReservationDialog {
 
         // Set up car wash options
         carWashTypeCombo.getItems().addAll(
-                "Basic Wash - $8.99",
-                "Premium Wash - $14.99",
-                "Deluxe Package - $19.99"
+                "Basic Wash - 8.99 TND",
+                "Premium Wash - 14.99 TND",
+                "Deluxe Package - 19.99 TND"
         );
-        carWashTypeCombo.setValue("Basic Wash - $8.99");
+        carWashTypeCombo.setValue("Basic Wash - 8.99 TND");
         carWashTypeCombo.setDisable(true);
 
         // Connect car wash checkbox with combo box
@@ -258,20 +258,20 @@ public class ReservationDialog {
                 double totalHours = hours + (minutes / 60.0);
                 double vehicleMultiplier = VEHICLE_TYPE_MULTIPLIERS.getOrDefault(vehicleTypeCombo.getValue(), 1.0);
                 double parkingPrice = totalHours * BASE_HOURLY_RATE * vehicleMultiplier;
-                parkingPriceLabel.setText(String.format("$%.2f", parkingPrice));
+                parkingPriceLabel.setText(String.format("%.2f TND", parkingPrice));
 
                 // Calculate car wash price
                 double carWashPrice = 0.0;
                 if (carWashCheckBox.isSelected() && carWashTypeCombo.getValue() != null) {
                     carWashPrice = getCarWashPrice(carWashTypeCombo.getValue());
-                    carWashPriceLabel.setText(String.format("$%.2f", carWashPrice));
+                    carWashPriceLabel.setText(String.format("%.2f TND", carWashPrice));
                 } else {
                     carWashPriceLabel.setText("N/A");
                 }
 
                 // Calculate total price
                 double totalPrice = parkingPrice + carWashPrice;
-                totalPriceLabel.setText(String.format("$%.2f", totalPrice));
+                totalPriceLabel.setText(String.format("%.2f TND", totalPrice));
 
                 errorLabel.setVisible(false);
                 confirmButton.setDisable(false);

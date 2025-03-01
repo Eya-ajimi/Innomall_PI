@@ -12,7 +12,6 @@ import java.util.List;
 public class ReservationService implements CRUD<Reservation> {
 
     @Override
-
     public int insert(Reservation reservation) throws SQLException {
         String sql = "INSERT INTO Reservation (idUtilisateur, idParking, dateReservation, dateExpiration, statut, vehicleType, carWashType, notes, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DataBase.getInstance().getCnx();
@@ -42,7 +41,7 @@ public class ReservationService implements CRUD<Reservation> {
 
     @Override
     public int update(Reservation reservation) throws SQLException {
-        String sql = "UPDATE Reservation SET idUtilisateur = ?, idParking = ?, dateReservation = ?, dateExpiration = ?, statut = ? WHERE idReservation = ?";
+        String sql = "UPDATE Reservation SET idUtilisateur = ?, idParking = ?, dateReservation = ?, dateExpiration = ?, statut = ?, vehicleType = ?, carWashType = ?, notes = ?, price = ? WHERE idReservation = ?";
         try (Connection connection = DataBase.getInstance().getCnx();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, reservation.getIdUtilisateur());
@@ -50,7 +49,11 @@ public class ReservationService implements CRUD<Reservation> {
             statement.setTimestamp(3, reservation.getDateReservation());
             statement.setTimestamp(4, reservation.getDateExpiration());
             statement.setString(5, reservation.getStatut().toString());
-            statement.setInt(6, reservation.getIdReservation());
+            statement.setString(6, reservation.getVehicleType());
+            statement.setString(7, reservation.getCarWashType());
+            statement.setString(8, reservation.getNotes());
+            statement.setDouble(9, reservation.getPrice());
+            statement.setInt(10, reservation.getIdReservation());
 
             return statement.executeUpdate();
         }
@@ -70,8 +73,6 @@ public class ReservationService implements CRUD<Reservation> {
         }
     }
 
-    // In ReservationService
-    
     @Override
     public List<Reservation> showAll() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
@@ -134,6 +135,7 @@ public class ReservationService implements CRUD<Reservation> {
             e.printStackTrace();
         }
     }
+
     public void updateExpiredReservations() throws SQLException {
         String sql = "UPDATE Reservation SET statut = ? WHERE dateExpiration < ? AND statut = ?";
         try (Connection connection = DataBase.getInstance().getCnx();
@@ -144,6 +146,7 @@ public class ReservationService implements CRUD<Reservation> {
             statement.executeUpdate();
         }
     }
+
     public void updateReservationStatus(int reservationId, Reservation.StatutReservation status) throws SQLException {
         String sql = "UPDATE Reservation SET statut = ? WHERE idReservation = ?";
         try (Connection connection = DataBase.getInstance().getCnx();
@@ -151,6 +154,63 @@ public class ReservationService implements CRUD<Reservation> {
             statement.setString(1, status.name());
             statement.setInt(2, reservationId);
             statement.executeUpdate();
+        }
+    }
+
+    // New method to get reservations by user ID
+    public List<Reservation> getReservationsByUserId(int userId) throws SQLException {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT * FROM Reservation WHERE idUtilisateur = ?";
+
+        try (Connection connection = DataBase.getInstance().getCnx();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Reservation reservation = new Reservation(
+                        resultSet.getInt("idUtilisateur"),
+                        resultSet.getInt("idParking"),
+                        resultSet.getTimestamp("dateReservation"),
+                        resultSet.getTimestamp("dateExpiration"),
+                        StatutReservation.valueOf(resultSet.getString("statut")),
+                        resultSet.getString("vehicleType"),
+                        resultSet.getString("carWashType"),
+                        resultSet.getString("notes"),
+                        resultSet.getDouble("price")
+                );
+                reservation.setIdReservation(resultSet.getInt("idReservation"));
+                reservations.add(reservation);
+            }
+        }
+        return reservations;
+    }
+
+    // New method to cancel a reservation
+    public void cancelReservation(int reservationId) throws SQLException {
+        String sql = "UPDATE Reservation SET statut = ? WHERE idReservation = ?";
+        try (Connection connection = DataBase.getInstance().getCnx();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, StatutReservation.canceled.name());
+            statement.setInt(2, reservationId);
+            statement.executeUpdate();
+
+            // Update parking status to 'free'
+            updateParkingStatusForReservation(reservationId);
+        }
+    }
+
+    // Helper method to update parking status for a reservation
+    private void updateParkingStatusForReservation(int reservationId) throws SQLException {
+        String sql = "SELECT idParking FROM Reservation WHERE idReservation = ?";
+        try (Connection connection = DataBase.getInstance().getCnx();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, reservationId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int parkingId = resultSet.getInt("idParking");
+                updateParkingStatus(parkingId, "free");
+            }
         }
     }
 }
