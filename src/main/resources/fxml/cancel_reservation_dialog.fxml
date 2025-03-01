@@ -70,13 +70,13 @@
                 </HBox>
 
                 <HBox styleClass="detail-row">
-                    <Label styleClass="detail-label" text="Date:" />
+                    <Label styleClass="detail-label" text="Date of Reservation:" />
                     <Region minWidth="10" HBox.hgrow="ALWAYS" />
                     <Label fx:id="dateValueLabel" styleClass="detail-value" />
                 </HBox>
 
                 <HBox styleClass="detail-row">
-                    <Label styleClass="detail-label" text="Time:" />
+                    <Label styleClass="detail-label" text="Date of Expiration:" />
                     <Region minWidth="10" HBox.hgrow="ALWAYS" />
                     <Label fx:id="timeValueLabel" styleClass="detail-value" />
                 </HBox>
@@ -85,15 +85,21 @@
             <!-- Right column -->
             <VBox spacing="10" HBox.hgrow="ALWAYS">
                 <HBox styleClass="detail-row">
-                    <Label styleClass="detail-label" text="Location:" />
+                    <Label styleClass="detail-label" text="Car Wash:" />
                     <Region minWidth="10" HBox.hgrow="ALWAYS" />
                     <Label fx:id="locationValueLabel" styleClass="detail-value" />
                 </HBox>
 
                 <HBox styleClass="detail-row">
-                    <Label styleClass="detail-label" text="Type:" />
+                    <Label styleClass="detail-label" text="Vehicle Type:" />
                     <Region minWidth="10" HBox.hgrow="ALWAYS" />
                     <Label fx:id="typeValueLabel" styleClass="detail-value" />
+                </HBox>
+
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Notes:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="notesValueLabel" styleClass="detail-value" />
                 </HBox>
 
                 <HBox styleClass="detail-row">

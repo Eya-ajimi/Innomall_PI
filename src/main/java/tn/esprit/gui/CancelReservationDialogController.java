@@ -38,6 +38,7 @@ public class CancelReservationDialogController {
     @FXML private Label locationValueLabel;
     @FXML private Label typeValueLabel;
     @FXML private Label priceValueLabel;
+    @FXML private Label notesValueLabel;
 
     private List<Reservation> userReservations;
     private FilteredList<Reservation> filteredReservations;
@@ -110,14 +111,27 @@ public class CancelReservationDialogController {
 
     private void showReservationDetails(Reservation reservation) {
         if (detailsContainer != null) {
-            // Set detail values
+            // Set Reservation ID
             idValueLabel.setText(String.valueOf(reservation.getIdReservation()));
-            dateValueLabel.setText(reservation.getDateReservation().toString());
-            // Set other fields as appropriate based on your Reservation class
-            // For example:
-            // timeValueLabel.setText(reservation.getTime());
-            // locationValueLabel.setText(reservation.getLocation());
-            // typeValueLabel.setText(reservation.getType());
+
+            // Set Date of Reservation
+            String dateReservation = reservation.getDateReservation().toString(); // Default format
+            dateValueLabel.setText(dateReservation);
+
+            // Set Date of Expiration
+            String dateExpiration = reservation.getDateExpiration().toString(); // Default format
+            timeValueLabel.setText(dateExpiration); // Reusing the timeValueLabel for expiration date
+
+            // Set Car Wash Type
+            locationValueLabel.setText(reservation.getCarWashType() != null ? reservation.getCarWashType() : "N/A");
+
+            // Set Vehicle Type
+            typeValueLabel.setText(reservation.getVehicleType() != null ? reservation.getVehicleType() : "N/A");
+
+            // Set Notes
+            notesValueLabel.setText(reservation.getNotes() != null ? reservation.getNotes() : "N/A");
+
+            // Set Price
             priceValueLabel.setText(String.valueOf(reservation.getPrice()) + " TND");
 
             // Show details container
