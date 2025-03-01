@@ -1,6 +1,8 @@
 package tn.esprit.services;
 
 import tn.esprit.entities.Discount;
+import tn.esprit.events.DiscountEvent;
+import tn.esprit.listeners.DiscountListener;
 import tn.esprit.utils.DataBase;
 
 import java.sql.*;
@@ -9,6 +11,18 @@ import java.util.List;
 
 public class DiscountService implements CRUD<Discount> {
     private Connection connection;
+    private List<DiscountListener> listeners = new ArrayList<>();
+    // Méthode pour ajouter un listener
+    public void addListener(DiscountListener listener) {
+        listeners.add(listener);
+    }
+
+    // Méthode pour notifier les listeners
+    private void notifyListeners(DiscountEvent event) {
+        for (DiscountListener listener : listeners) {
+            listener.onDiscountCreated(event);
+        }
+    }
 
     public DiscountService() {
         this.connection = DataBase.getInstance().getCnx();
@@ -22,9 +36,23 @@ public class DiscountService implements CRUD<Discount> {
             pst.setFloat(2, discount.getDiscountPercentage());
             pst.setDate(3, new java.sql.Date(discount.getStartDate().getTime()));
             pst.setDate(4, new java.sql.Date(discount.getEndDate().getTime()));
-            return pst.executeUpdate();
+
+            int affectedRows = pst.executeUpdate(); // Execute only once
+
+            if (affectedRows > 0) {
+                DiscountEvent event = new DiscountEvent(
+                        discount.getShopId(),
+                        discount.getDiscountPercentage(),
+                        discount.getStartDate(),
+                        discount.getEndDate()
+                );
+                notifyListeners(event);
+            }
+
+            return affectedRows; // Return the correct number of affected rows
         }
     }
+
 
     @Override
     public int update(Discount discount) throws SQLException {

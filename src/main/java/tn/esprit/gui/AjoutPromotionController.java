@@ -4,12 +4,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.entities.Discount;
+import tn.esprit.listeners.EmailNotificationListener;
 import tn.esprit.services.DiscountService;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class AjoutPromotionController {
     @FXML
@@ -91,6 +94,10 @@ public class AjoutPromotionController {
             discount.setStartDate(start);
             discount.setEndDate(end);
 
+            // Add email notification listener
+            List<String> userEmails = Arrays.asList("ammarim073@gmail.com"); // here is the emails of users
+            discountService.addListener(new EmailNotificationListener(userEmails));
+
             // Save the discount
             int result = discountService.insert(discount);
 
@@ -106,6 +113,7 @@ public class AjoutPromotionController {
             e.printStackTrace();
         }
     }
+
 
     private void closePopup() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
