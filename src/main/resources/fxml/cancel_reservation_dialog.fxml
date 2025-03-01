@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="root" spacing="20" styleClass="cancel-reservation-dialog" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.CancelReservationDialogController">
+<VBox fx:id="root" spacing="20" styleClass="cancel-reservation-dialog" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.CancelReservationDialogController">
     <stylesheets>
         <URL value="@/css/cancel_reservation_dialog_css.css" />
     </stylesheets>
