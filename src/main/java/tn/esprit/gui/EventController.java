@@ -13,7 +13,7 @@ import tn.esprit.services.EventService;
 import java.io.IOException;
 import java.util.List;
 
-public class MainController {
+public class EventController {
 
     @FXML
     private FlowPane eventsContainer; // FlowPane to hold the event cards

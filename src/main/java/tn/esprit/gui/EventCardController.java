@@ -27,7 +27,7 @@ public class EventCardController {
 
     private Event event;
     private EventService eventService = new EventService();
-    private MainController mainController; // Reference to the MainController
+    private EventController mainController; // Reference to the MainController
 
     public void setEvent(Event event) {
         this.event = event;
@@ -38,7 +38,7 @@ public class EventCardController {
     }
 
     // Setter for MainController
-    public void setMainController(MainController mainController) {
+    public void setMainController(EventController mainController) {
         this.mainController = mainController;
     }
 

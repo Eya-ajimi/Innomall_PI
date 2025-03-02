@@ -5,18 +5,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import tn.esprit.gui.MainController;
+import tn.esprit.gui.EventController;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
         // Load the FXML file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/event.fxml"));
         Parent root = loader.load();
 
         // Get the controller instance
-        MainController mainController = loader.getController();
+        EventController mainController = loader.getController();
 
 
         mainController.setIdOrganisateur(1); // Example: Set organizer ID to 2
