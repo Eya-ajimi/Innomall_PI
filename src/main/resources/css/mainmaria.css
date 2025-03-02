@@ -1,0 +1,238 @@
+.root {
+    -fx-blue: #97d4f5;
+    -fx-blue-light: #bfe2f6;
+    -fx-orange: #ff791f;
+    -fx-grey: #7C7876;
+    -fx-grey_light: #e6e6e6;
+}
+.root {
+    -fx-background-color: #ffffff;
+}
+
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 4);
+}
+
+.whitebox {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+}
+
+.button {
+    -fx-background-color: #ff791f;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+}
+
+.button_two {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-border-color: #ff791f;
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
+}
+
+.button {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(191, 226, 246, 0.82);
+    -fx-border-width: 0.7px;
+    -fx-border-radius: 10px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 16px;
+    -fx-font-weight: lighter;
+    -fx-padding: 10px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0.2, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: rgba(255, 165, 0, 0.90);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.6, 0, 4);
+}
+
+.button:pressed {
+    -fx-background-color: #E69500;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 14, 0.7, 0, 5);
+}
+
+.logout-button {
+    -fx-background-color: rgba(191, 226, 246, 0.82);
+    -fx-text-fill: black;
+    -fx-font-size: 25px;
+    -fx-font-weight: lighter;
+    -fx-border-radius: 2px;
+    -fx-border-color: rgba(255, 255, 255, 0);
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 4, 0.2, 0, 2);
+}
+
+.logout-button:hover,
+.logout-button:pressed {
+    -fx-background-color:#FFA500;
+    -fx-text-fill: white;
+    -fx-border-color: #FFA500;
+    -fx-border-width: 2px;
+}
+
+.header {
+    -fx-background-color: #4a5568;
+    -fx-padding: 15;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.header-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 18.0;
+    -fx-text-fill: white;
+}
+
+.search-field {
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: #e2e8f0;
+    -fx-background-color: white;
+    -fx-pref-height: 30.0;
+    -fx-pref-width: 250.0;
+}
+
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.product-container {
+    -fx-background-color: transparent;
+    -fx-hgap: 15.0;
+    -fx-vgap: 15.0;
+}
+
+.product-card {
+    -fx-background-color: white;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-max-width: 250;
+    -fx-pref-width: 250;
+    -fx-min-height: 150;
+}
+
+.product-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 0, 6);
+    -fx-translate-y: -2;
+}
+
+.product-header {
+    -fx-background-color: rgba(255, 165, 0, 0.77);
+    -fx-padding: 12 15;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.product-id {
+    -fx-font-weight: bold;
+    -fx-text-fill: #4a5568;
+}
+
+.product-body {
+    -fx-padding: 15;
+}
+
+.product-description {
+    -fx-text-fill: #4a5568;
+    -fx-wrap-text: true;
+}
+
+.product-footer {
+    -fx-background-color: #f9fafb;
+    -fx-padding: 10 15;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1 0 0 0;
+}
+
+.product-price {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3748;
+}
+
+.stock-high {
+    -fx-text-fill: #48bb78;
+}
+
+.stock-low {
+    -fx-text-fill: #ed8936;
+}
+
+.stock-out {
+    -fx-text-fill: #e53e3e;
+}
+
+.main-container {
+    -fx-spacing: 15.0;
+}
+
+#addButton {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #ff791f;
+    -fx-background-radius: 4;
+    -fx-border-color: #ff791f;
+    -fx-border-width: 1;
+}
+
+#addButton:hover {
+    -fx-background-color: rgba(255, 165, 0, 0.77);
+    -fx-text-fill: white;
+}
+
+#addButton:pressed {
+    -fx-background-color: #cc5f1a;
+}
+
+#cancelButton {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #333333;
+    -fx-background-radius: 4;
+}
+
+#cancelButton:hover {
+    -fx-background-color: #d6d6d6;
+}
+
+#cancelButton:pressed {
+    -fx-background-color: #bfbfbf;
+}
+
+#saveButton {
+    -fx-background-color: #ff791f;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-font-weight: bold;
+}
+
+#saveButton:hover {
+    -fx-background-color:rgba(191, 226, 246, 0.82);
+}
+
+#saveButton:pressed {
+    -fx-background-color:rgba(191, 226, 246, 0.82);
+}
+/* Custom CSS for the pie chart */
+.pie-chart {
+    -fx-pie-label-visible: true;
+    -fx-pie-label-line-length: 10;
+    -fx-pie-label-font-size: 14px;
+    -fx-pie-label-fill: #333333;
+}
+
+/* Custom CSS for the legend */
+.legend {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="10"  minWidth="-Infinity" prefHeight="904.0" prefWidth="1353.0" style="-fx-background-color: #E1F4FF;"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.eyacontroller.ShopsController" stylesheets="@../css/Styles.css" >
+
+    <!-- Top Navigation Bar -->
+    <HBox alignment="CENTER" prefHeight="73.0">
+        <children>
+            <!-- Logo Label -->
+            <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall"  >
+                <HBox.margin>
+                    <Insets left="-140.0" />
+                </HBox.margin>
+            </Label>
+
+            <!-- Separator -->
+            <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
+
+            <!-- Search Bar -->
+            <!-- Search Bar -->
+            <HBox alignment="CENTER" spacing="5.0">
+                <TextField fx:id="searchField" prefHeight="26.0" prefWidth="258.0" promptText="Search..."
+                           style="-fx-background-radius: 15; -fx-background-color: white;" />
+                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/searchbare.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="50.0" />
+
+            <!-- Navigation Labels -->
+            <HBox alignment="CENTER" spacing="30.0">
+                <Label fx:id="homeLabel" styleClass="nav-label" text="Home" />
+                <Label styleClass="nav-label" text="Shops" />
+                <Label styleClass="nav-label" text="Events" />
+                <Label styleClass="nav-label" text="Parking" />
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="105.0" />
+
+            <!-- Notifications Icon -->
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/notif.png" />
+                </image>
+            </ImageView>
+
+            <!-- User Profile -->
+            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="150.0" spacing="10.0">
+                <Label styleClass="user-label" text="Eyaaa" />
+                <ImageView fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/user3.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+        </children>
+    </HBox>
+
+    <!-- Main Content (Filter on Left, Shops on Right) -->
+    <HBox alignment="TOP_LEFT" spacing="40.0" style="-fx-background-color: white; -fx-padding: 20;">
+        <children>
+            <!-- Filter Card (Left) -->
+
+            <VBox styleClass="filter-card" spacing="15.0" alignment="CENTER_LEFT" prefWidth="250.0">
+                <!-- Filter by category -->
+                <Label text="~Filters~" styleClass="filter-title" style="-fx-alignment: center"/>
+                <Label text="Filter by category..." styleClass="filter-title"/>
+                <HBox spacing="5.0" alignment="CENTER_LEFT">
+                    <TextField promptText="Filter by category..." styleClass="filter-field" />
+                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../assets/searchbare.png" />
+                        </image>
+                    </ImageView>
+                </HBox>
+                <!-- Category Chips -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <Button text="Food" styleClass="chip-button"/>
+                    <Button text="Coffee" styleClass="chip-button"/>
+                    <Button text="Clothes" styleClass="chip-button"/>
+                </HBox>
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <Button text="Beauty" styleClass="chip-button"/>
+                    <Button text="Jewelry" styleClass="chip-button"/>
+                </HBox>
+
+                <Separator/>
+
+                <!-- Filter by Promotions -->
+                <Label text="Filter by Promotions..." styleClass="filter-title"/>
+                <HBox spacing="5.0" alignment="CENTER_LEFT">
+                    <TextField promptText="Filter by Promotions..." styleClass="filter-field" />
+                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../assets/searchbare.png" />
+                        </image>
+                    </ImageView>
+                </HBox>
+                <!-- Promotion Chips -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <Button text="10%" styleClass="chip1-button"/>
+                    <Button text="20%" styleClass="chip1-button"/>
+                    <Button text="30%" styleClass="chip1-button"/>
+                </HBox>
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <Button text="40%" styleClass="chip1-button"/>
+                    <Button text="All" styleClass="chip1-button"/>
+                </HBox>
+            </VBox>
+
+            <!-- ScrollPane for the shops (Right) -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                <content>
+                    <VBox alignment="CENTER" spacing="30.0" style="-fx-padding: 20; -fx-background-color: white;">
+                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: Gray;" text="SHOPS" />
+                        <GridPane fx:id="shopGrid" alignment="CENTER" hgap="20" vgap="20">
+                            <!-- Shop cards will be dynamically added here -->
+                        </GridPane>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+        </children>
+    </HBox>
+</VBox>

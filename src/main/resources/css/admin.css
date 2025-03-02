@@ -1,0 +1,106 @@
+/* Style général pour la TableView */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-padding: 15;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-size: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0.3, 0, 2);
+    -fx-background-radius: 10;
+}
+
+/* Style pour l'en-tête de la TableView */
+.table-view .column-header {
+    -fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+    -fx-border-color: transparent;
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+    -fx-padding: 10;
+    -fx-background-radius: 10 10 0 0;
+}
+
+/* Séparateur entre les colonnes */
+.table-view .column-header-background {
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+/* Style pour les lignes */
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #ffffff;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #f8f9fa;
+}
+
+/* Survol d'une ligne */
+.table-row-cell:hover {
+    -fx-background-color: #e2e6ea;
+    -fx-cursor: hand;
+    -fx-background-radius: 8;
+}
+
+/* Style pour les cellules */
+.table-cell {
+    -fx-padding: 10;
+    -fx-text-fill: #495057;
+    -fx-font-size: 14px;
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 5 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.2, 0, 2);
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #0056b3;
+}
+
+/* Style pour le bouton de déconnexion */
+#handleLogout {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 5 15;
+}
+
+#handleLogout:hover {
+    -fx-background-color: #c82333;
+}
+
+/* Effet de carte pour la table */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.3, 0, 4);
+}
+/* Supprimer les barres de défilement horizontale et verticale */
+.table-view .scroll-bar:vertical,
+.table-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+/* Ajustement de la largeur et de la hauteur */
+.table-view {
+    -fx-max-height: Infinity;
+    -fx-max-width: Infinity;
+}

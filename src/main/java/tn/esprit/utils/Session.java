@@ -1,10 +1,10 @@
 package tn.esprit.utils;
 
-import tn.esprit.entites.User;
+import tn.esprit.entities.Utilisateur;
 
 public class Session {
     private static Session instance;
-    private User currentUser;
+    private Utilisateur currentUser;
 
     // Constructeur privé pour empêcher l'instanciation directe
     private Session() {}
@@ -18,11 +18,11 @@ public class Session {
     }
 
     // Getter et Setter pour l'utilisateur connecté
-    public User getCurrentUser() {
+    public Utilisateur getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(User currentUser) {
+    public void setCurrentUser(Utilisateur currentUser) {
         this.currentUser = currentUser;
     }
 

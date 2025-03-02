@@ -1,0 +1,108 @@
+/* Style général */
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20px;
+}
+
+/* Logo */
+.logo-container {
+    -fx-padding: 10px;
+}
+
+.logo {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);
+}
+
+/* Titres */
+.title-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-padding: 10px 0;
+}
+
+.subtitle-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #555;
+    -fx-padding: 5px 0;
+}
+
+/* Boutons */
+.btn {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 2);
+    -fx-min-width: 160px;
+}
+
+.btn-primary {
+    -fx-background-color: #007bff;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #0056b3;
+}
+
+.btn-secondary {
+    -fx-background-color: #dc3545;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #a71d2a;
+}
+
+.large {
+    -fx-min-width: 100%;
+}
+
+/* Champs de formulaire */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #444;
+    -fx-padding: 0;
+}
+
+.input-field {
+    -fx-padding: 10px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-background-radius: 8px;
+    -fx-min-width: 100%;
+}
+
+.input-field:focused {
+    -fx-border-color: #007bff;
+}
+
+/* Conteneur de formulaire */
+.form-container {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-spacing: 5px;
+}
+
+/* Organisation des champs en colonne sans espace */
+VBox > .form-label, VBox > .input-field {
+    -fx-margin: 0;
+    -fx-padding: 0;
+}
+.btn_signin {
+    -fx-background-color: #FFA500; /* Orange */
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.btn_signup {
+    -fx-background-color: #007BFF; /* Bleu */
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}

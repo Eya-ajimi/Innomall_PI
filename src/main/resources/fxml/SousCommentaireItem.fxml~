@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.SousCommentItemController">
+    <children>
+        <!-- Display userId -->
+        
+
+
+        <Label fx:id="userIdLabel" layoutX="10" layoutY="10" />
+        <Label fx:id="contentLabel" layoutX="10" layoutY="40" />
+        <Label fx:id="timeLabel" layoutX="10" layoutY="70" />
+    </children>
+</AnchorPane>
+
+
+

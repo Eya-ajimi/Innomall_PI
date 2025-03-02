@@ -1,0 +1,139 @@
+/* Style pour la Card */
+.card {
+    -fx-padding: 20;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #1E3A5F;
+    -fx-border-width: 1;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
+    -fx-max-width: 350px; /* Réduit la largeur */
+}
+
+/* Style pour le titre */
+.title-label {
+    -fx-font-size: 28px;
+    -fx-text-fill: #1E3A5F;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+    -fx-underline: true;
+}
+
+/* Style pour les sous-titres */
+.subtitle-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #1E3A5F;
+    -fx-font-weight: bold;
+    -fx-padding: 20 0 10 0;
+}
+
+/* Style pour les labels des champs de texte */
+.field-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #1E3A5F;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 5 0;
+}
+
+/* Style pour les champs de texte */
+TextField, PasswordField {
+    -fx-background-color: #F8F9FA;
+    -fx-border-color: #1E3A5F;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #9E9E9E;
+    -fx-text-fill: #333333;
+}
+
+TextField:focused, PasswordField:focused {
+    -fx-border-color: #FFA500;
+    -fx-box-shadow: 0 0 5px #FFA500;
+}
+
+/* Bouton Enregistrer */
+.btn-save {
+    -fx-background-color: #FFA500;
+    -fx-border-color: #353A56;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-min-width: 100px;
+    -fx-pref-height: 35px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+    -fx-transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+    -fx-background-color: #FF8C00;
+}
+
+.btn-save:pressed {
+    -fx-background-color: #E67E00;
+}
+
+/* Bouton Annuler */
+.btn-cancel {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #353A56;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-text-fill: #353A56;
+    -fx-font-size: 14px;
+    -fx-min-width: 100px;
+    -fx-pref-height: 35px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+    -fx-transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    -fx-background-color: #F0F0F0;
+}
+
+.btn-cancel:pressed {
+    -fx-background-color: #E0E0E0;
+}
+.custom-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.custom-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.custom-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #A8D8FF;
+    -fx-background-radius: 5;
+}
+
+.custom-scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: #E0E0E0;
+    -fx-background-radius: 5;
+}
+/* Profile Image Styling */
+.profile-img {
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
+
+/* Upload Button Styling */
+.btn-upload {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+.btn-upload:hover {
+    -fx-background-color: #45a049;
+}
