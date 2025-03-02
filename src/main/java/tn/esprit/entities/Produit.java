@@ -3,12 +3,12 @@ package tn.esprit.entities;
 public class Produit {
     private int id;
     private int shopId;
-    private Integer promotionId;
+    private int promotionId;
     private String nom;
     private String description;
     private int stock;
     private double prix;
-    private String photoUrl; // New attribute for storing the photo URL
+    private String image_url; // New attribute for storing the photo URL
 
     public Produit() {
 
@@ -31,14 +31,14 @@ public class Produit {
         this.description = description;
         this.stock = stock;
         this.prix = prix;
-        this.photoUrl = photoUrl;
+        this.image_url = photoUrl;
     }
 
 
 
 
     // Constructor without product id
-//    public Produit(int shop_id, Integer discount_id, String title, String description, int stock, float price, String photoUrl) {
+//    public Produit(int shop_id, int discount_id, String title, String description, int stock, float price, String photoUrl) {
 //        this.shop_id = shop_id;
 //        this.discount_id = discount_id;
 //        this.title = title;
@@ -65,11 +65,11 @@ public class Produit {
         this.shopId = shopId;
     }
 
-    public Integer getPromotionId() {
+    public int getPromotionId() {
         return promotionId;
     }
 
-    public void setPromotionId(Integer promotionId) {
+    public void setPromotionId(int promotionId) {
         this.promotionId = promotionId;
     }
 
@@ -105,12 +105,12 @@ public class Produit {
         this.prix = prix;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getImage_url() {
+        return image_url;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     @Override
@@ -123,7 +123,7 @@ public class Produit {
                 ", description='" + description + '\'' +
                 ", stock=" + stock +
                 ", prix=" + prix +
-                ", photoUrl='" + photoUrl + '\'' +
+                ", photoUrl='" + image_url + '\'' +
                 '}';
     }
 }

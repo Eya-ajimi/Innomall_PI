@@ -8,7 +8,7 @@ public class DataBase {
 
     private final String USER = "root"; // Nom d'utilisateur MySQL
     private final String PWD = ""; // Mot de passe MySQL
-    private final String URL = "jdbc:mysql://localhost:3306/innomall"; // URL de la base de données
+    private final String URL = "jdbc:mysql://localhost:3306/innomallnew"; // URL de la base de données
 
     // Singleton instance
     private static DataBase instance;

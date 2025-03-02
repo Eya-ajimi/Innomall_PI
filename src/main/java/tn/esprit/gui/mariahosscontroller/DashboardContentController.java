@@ -95,10 +95,7 @@ public class DashboardContentController implements Initializable {
         loadRatingStatistics();
     }
 
-    /**
-     * Handle refresh button action
-     * Reloads all dashboard data
-     */
+
     @FXML
     public void refreshDashboard(ActionEvent event) {
         loadTopLikedProducts();
@@ -106,10 +103,6 @@ public class DashboardContentController implements Initializable {
         loadRatingStatistics();
     }
 
-    /**
-     * Handle add product button click
-     * Opens the product creation form
-     */
     @FXML
     public void handleAddProductButton(ActionEvent event) {
         try {
@@ -144,6 +137,7 @@ public class DashboardContentController implements Initializable {
     private void loadTopLikedProducts() {
         try {
             List<Integer> topProductIds = likedProductService.getTopLikedProductsByShopId(session.getCurrentUser().getId()); // Use current user's ID
+            System.out.println("*************************************"+topProductIds);
             topProductsPane.getChildren().clear();
 
             if (topProductIds.isEmpty()) {
@@ -153,9 +147,11 @@ public class DashboardContentController implements Initializable {
                 emptyStatePane.setVisible(false);
                 topProductsPane.setVisible(true);
 
-                for (Integer productId : topProductIds) {
+                for (int productId : topProductIds) {
                     try {
                         Produit produit = productService.getEntityById(productId);
+                        System.out.println(produit + "uuuuuuuuh");
+
                         if (produit != null) {
                             topProductsPane.getChildren().add(createProductCard(produit));
                         }

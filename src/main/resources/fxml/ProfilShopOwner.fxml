@@ -6,36 +6,113 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Separator?>
 
-<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="tn.esprit.gui.azizcontroller.ShopOwnerDashboardController"
-           stylesheets="@../css/shopownerdash.css">
+<AnchorPane style="-fx-padding: 30; -fx-background-color: #ffffff; "
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../css/profilemaria.css"
+            fx:controller="tn.esprit.gui.azizcontroller.ProfilShopOwnerController">
 
-    <!-- Carte de profil centrée et responsive -->
-    <VBox styleClass="card" alignment="CENTER" spacing="20">
-        <!-- Image de profil -->
-        <ImageView fx:id="profileImageView" fitWidth="120" fitHeight="120" styleClass="profile-img">
-            <image>
-                <Image url="@../assets/7.png" />
-            </image>
-        </ImageView>
+    <VBox spacing="20" alignment="CENTER"
+          prefWidth="400" prefHeight="600"
+          AnchorPane.topAnchor="0.0"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0">
 
-        <!-- Titre de bienvenue -->
-        <Label fx:id="welcomeLabel" text="Bienvenue !" styleClass="welcome-label"/>
+        <!-- Header section with welcome message -->
+        <HBox alignment="CENTER" styleClass="header-container">
+            <padding>
+                <Insets top="50" bottom="10" />
+            </padding>
+            <Label fx:id="welcomeLabel" text="Editer votre profil!"
+                   styleClass="welcome-label"/>
+        </HBox>
 
-        <!-- Informations utilisateur -->
-        <VBox alignment="CENTER_LEFT" spacing="10" styleClass="info-container">
-            <Label fx:id="nomLabel" text="Nom: " styleClass="info-label"/>
-            <Label fx:id="emailLabel" text="Email: " styleClass="info-label"/>
-            <Label fx:id="categorieLabel" text="Catégorie: " styleClass="info-label"/>
-            <Label fx:id="descriptionLabel" text="Description: " styleClass="info-label"/>
+        <Separator styleClass="header-separator" />
+
+        <!-- Profile image section - now at the top -->
+        <VBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets top="10" bottom="10" />
+            </padding>
+            <StackPane styleClass="image-container">
+
+                <ImageView fx:id="profileImageView" fitWidth="135" fitHeight="135"
+                           styleClass="profile-img" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/7.png" />
+                    </image>
+                </ImageView>
+            </StackPane>
         </VBox>
 
-        <!-- Boutons d'action -->
-        <VBox spacing="15" alignment="CENTER" styleClass="button-container">
-            <Button text="Éditer le Profil" onAction="#handleEditProfile" styleClass="btn-modifier"/>
-            <Button text="Déconnexion" onAction="#handleLogout" styleClass="btn-deconnexion"/>
+        <!-- User information section - now in the middle -->
+        <VBox styleClass="info-container" spacing="15" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets left="30" right="30" top="10" bottom="10" />
+            </padding>
+
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Informations du Profil" styleClass="section-title"/>
+            </HBox>
+
+            <GridPane vgap="15" hgap="15">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="110" prefWidth="130" />
+                    <ColumnConstraints hgrow="ALWAYS" />
+                </columnConstraints>
+
+                <!-- Row 0 -->
+                <Label text="Nom:" styleClass="info-label-title"
+                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label fx:id="nomLabel" text="Ahmed Ben Salem" styleClass="info-value"
+                       GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <!-- Row 1 -->
+                <Label text="Email:" styleClass="info-label-title"
+                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="emailLabel" text="ahmed.bensalem@email.com" styleClass="info-value"
+                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <!-- Row 2 -->
+                <Label text="Catégorie:" styleClass="info-label-title"
+                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="categorieLabel" text="Produits Artisanaux" styleClass="info-value"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <!-- Row 3 -->
+                <Label text="Description:" styleClass="info-label-title"
+                       GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.valignment="TOP"/>
+                <Label fx:id="descriptionLabel" text="Spécialiste en produits artisanaux tunisiens depuis 2015. Notre boutique propose des articles authentiques fabriqués par des artisans locaux."
+                       styleClass="info-value" wrapText="true"
+                       GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+        </VBox>
+
+        <Separator styleClass="content-separator" />
+
+        <!-- Action buttons - now at the bottom -->
+        <VBox spacing="15" alignment="CENTER">
+            <padding>
+                <Insets bottom="20" left="30" right="30" />
+            </padding>
+            <Button text="Editer le profil" onAction="#editProfile"
+                    styleClass="btn-manage" maxWidth="200" />
+            <Button text="Déconnexion" onAction="#handleLogout"
+                    styleClass="btn-deconnexion" maxWidth="200" />
         </VBox>
     </VBox>
 
-</StackPane>
+</AnchorPane>

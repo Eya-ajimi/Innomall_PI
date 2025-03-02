@@ -69,7 +69,7 @@ public class LikedProductService {
     public List<Integer> getTopLikedProductsByShopId(int shopId) throws SQLException {
         String query = """
         SELECT p.id 
-        FROM likeProduit lp
+        FROM likeproduit lp
         JOIN produit p ON lp.produitId = p.id
         WHERE p.shopId = ?
         GROUP BY p.id
@@ -82,7 +82,10 @@ public class LikedProductService {
             pst.setInt(1, shopId);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                topProducts.add(rs.getInt("id"));
+                int productId = rs.getInt("id");
+                if (!rs.wasNull()) {
+                    topProducts.add(productId);
+                }
             }
         }
         return topProducts;

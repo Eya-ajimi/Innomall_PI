@@ -241,7 +241,7 @@ public class PromotionController {
 
     private void showAddPromotionPopup() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutPromotion.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AjoutPromotion.fxml"));
             Parent root = loader.load();
 
             Stage popupStage = new Stage();
@@ -283,7 +283,7 @@ public class PromotionController {
             discountCopy.setEndDate(discount.getEndDate());
 
             // Load the FXML page
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModificationPromotion.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ModificationPromotion.fxml"));
             Parent root = loader.load();
             // Set the discount copy in the controller
             ModificationPromotionController controller = loader.getController();

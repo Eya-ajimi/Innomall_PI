@@ -1,15 +1,31 @@
 package tn.esprit.services.mariahossservice;
 
 import tn.esprit.entities.Discount;
+import tn.esprit.events.DiscountEvent;
+import tn.esprit.listeners.EmailNotificationListener;
 import tn.esprit.utils.DataBase;
-
+import tn.esprit.services.mariahossservice.DiscountNotifier;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import tn.esprit.entities.Discount;
+import tn.esprit.events.DiscountEvent;
+import tn.esprit.listeners.DiscountListener;
 
 public class DiscountService implements CRUD<Discount> {
     private Connection connection;
+    private List<DiscountListener> listeners = new ArrayList<>();
 
+    public void addListener(DiscountListener listener) {
+        listeners.add(listener);
+    }
+
+    // Méthode pour notifier les listeners
+    private void notifyListeners(DiscountEvent event) {
+        for (DiscountListener listener : listeners) {
+            listener.onDiscountCreated(event);
+        }
+    }
     public DiscountService() {
         this.connection = DataBase.getInstance().getCnx();
     }
@@ -22,7 +38,18 @@ public class DiscountService implements CRUD<Discount> {
             pst.setFloat(2, discount.getDiscountPercentage());
             pst.setDate(3, new java.sql.Date(discount.getStartDate().getTime()));
             pst.setDate(4, new java.sql.Date(discount.getEndDate().getTime()));
-            return pst.executeUpdate();
+            int affectedRows = pst.executeUpdate();
+            if (affectedRows > 0) {
+                DiscountEvent event = new DiscountEvent(
+                        discount.getShopId(),
+                        discount.getDiscountPercentage(),
+                        discount.getStartDate(),
+                        discount.getEndDate()
+                );
+                notifyListeners(event);
+            }
+
+            return affectedRows;
         }
     }
 

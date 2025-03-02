@@ -18,7 +18,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="dashboardMainPane" prefHeight="800.0" prefWidth="955.0" style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.mariahosscontroller.DashboardContentController">
+<AnchorPane fx:id="dashboardMainPane" prefHeight="800.0" prefWidth="955.0" style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.gui.mariahosscontroller.DashboardContentController">
     <children>
         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
@@ -177,9 +178,9 @@
                                                     </children>
                                                 </VBox>
                                             </children>
-                                 <rowConstraints>
-                                    <RowConstraints />
-                                 </rowConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints />
+                                            </rowConstraints>
                                         </GridPane>
                                     </children>
                                 </VBox>
@@ -208,7 +209,7 @@
                                         <!-- Top Products Container -->
                                         <StackPane>
                                             <children>
-                                                <!-- Empty state message (shown when no produits) -->
+                                                <!-- Empty state message (shown when no products) -->
                                                 <VBox fx:id="emptyStatePane" alignment="CENTER" spacing="20.0" visible="false">
                                                     <children>
                                                         <StackPane maxHeight="120" maxWidth="120" minHeight="120" minWidth="120" style="-fx-background-color: #f0f5ff; -fx-background-radius: 100;">

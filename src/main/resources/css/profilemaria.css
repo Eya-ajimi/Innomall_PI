@@ -1,0 +1,166 @@
+/* Base styles - without using .root */
+* {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+AnchorPane {
+    -fx-background-color: white;
+}
+
+/* Main card styling */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-padding: 30px;
+    -fx-spacing: 15px;
+    -fx-max-width: 800px;
+    -fx-min-width: 300px;
+}
+
+/* Welcome label styling */
+.welcome-label {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Header section */
+.header-container {
+    -fx-padding: 0 0 10px 0;
+    -fx-border-color: transparent transparent rgba(255, 165, 0, 0.3) transparent;
+    -fx-border-width: 0 0 2px 0;
+}
+
+/* Profile image styling */
+.image-container {
+    -fx-padding: 5px;
+}
+
+.image-circle {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 3);
+}
+
+.profile-img {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-background-radius: 100%;
+    -fx-cursor: hand;
+}
+
+/* Section title */
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 165, 0, 0.77);
+    -fx-padding: 0 0 5px 0;
+}
+
+/* Info container styling */
+.info-container {
+    -fx-padding: 15px;
+    -fx-background-color: rgba(191, 226, 246, 0.2);
+    -fx-background-radius: 8px;
+    -fx-min-width: 200px;
+}
+
+.info-label-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+}
+
+.info-value {
+    -fx-text-fill: #333333;
+}
+
+/* Statistics boxes */
+.stat-box {
+    -fx-alignment: center;
+    -fx-padding: 15px 25px;
+    -fx-background-color: rgba(255, 165, 0, 0.15);
+    -fx-background-radius: 8px;
+    -fx-min-width: 100px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.stat-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 165, 0, 0.77);
+}
+
+.stat-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #444444;
+}
+
+/* Button container */
+.button-container {
+    -fx-padding: 15px 0 0 0;
+}
+
+/* Button styles */
+.btn-modifier, .btn-deconnexion, .btn-manage, .btn-photo {
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-min-width: 150px;
+}
+
+.btn-modifier {
+    -fx-background-color: rgba(255, 165, 0, 0.77);
+    -fx-text-fill: white;
+}
+
+.btn-modifier:hover {
+    -fx-background-color: rgba(255, 165, 0, 0.9);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.btn-manage {
+    -fx-background-color: rgba(191, 226, 246, 0.82);
+    -fx-text-fill: #333333;
+}
+
+.btn-manage:hover {
+    -fx-background-color: rgba(191, 226, 246, 0.95);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.btn-deconnexion {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #555555;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 1px;
+}
+
+.btn-deconnexion:hover {
+    -fx-background-color: #e5e5e5;
+}
+
+.btn-photo {
+    -fx-background-color: white;
+    -fx-text-fill: rgba(255, 165, 0, 0.77);
+    -fx-border-color: rgba(255, 165, 0, 0.5);
+    -fx-border-width: 1px;
+    -fx-min-width: 120px;
+    -fx-font-size: 12px;
+}
+
+.btn-photo:hover {
+    -fx-background-color: rgba(255, 165, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .card {
+        -fx-padding: 15px;
+    }
+
+    /* Stack horizontally aligned elements vertically on small screens */
+    .button-container, .info-container {
+        -fx-orientation: vertical;
+    }
+}

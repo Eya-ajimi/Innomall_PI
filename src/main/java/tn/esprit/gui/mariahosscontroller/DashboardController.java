@@ -1,3 +1,4 @@
+
 package tn.esprit.gui.mariahosscontroller;
 
 import javafx.fxml.FXML;
@@ -56,6 +57,6 @@ public class DashboardController {
     }
     @FXML
     private void showProfil() {
-        loadView("/fxml/Profil.fxml");
+        loadView("/fxml/ProfilShopOwner.fxml");
     }
 }

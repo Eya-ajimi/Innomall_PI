@@ -39,6 +39,7 @@ public class ProduitController {
     public void initialize() {
         try {
             List<Produit> produits = productService.getProductsByShopId(session.getCurrentUser().getId()); // Use current user's ID
+            System.out.println(produits);
             loadProducts();
 
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -96,8 +97,8 @@ public class ProduitController {
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);");
 
         // Load product image or default image
-        System.out.println(produit.getPhotoUrl());
-        String imagePath = produit.getPhotoUrl();
+        System.out.println(produit.getImage_url());
+        String imagePath = produit.getImage_url();
         Image image;
 
         try {
@@ -323,7 +324,7 @@ public class ProduitController {
             produit_copy.setId(produit.getId());
             produit_copy.setShopId(produit.getShopId());
             produit_copy.setNom(produit.getNom());           // Add this line for title
-            produit_copy.setPhotoUrl(produit.getPhotoUrl());   // Add this line for image path
+            produit_copy.setImage_url(produit.getImage_url());   // Add this line for image path
             produit_copy.setDescription(produit.getDescription());
             produit_copy.setPrix(produit.getPrix());
             produit_copy.setStock(produit.getStock());
@@ -331,7 +332,7 @@ public class ProduitController {
 
             // Load the FXML file
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/ModificationProduit.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/ModificationProduit.fxml"));
             // Create the dialog Stage
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Modifier un Produit");
@@ -438,7 +439,7 @@ public class ProduitController {
     private void showAddProductPopup() {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutProduit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AjoutProduit.fxml"));
             Parent root = loader.load();
             Stage popupStage = new Stage();
             popupStage.initModality(Modality.APPLICATION_MODAL);

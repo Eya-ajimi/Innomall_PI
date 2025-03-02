@@ -21,7 +21,7 @@
 
 /* Sidebar styles */
 .sidebar {
-    -fx-background-color: rgba(211, 236, 255, 0.9);
+    -fx-background-color: rgba(211, 236, 255, 0.9); /* Fixed typo */
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 2, 0);
     -fx-min-width: 200px;
     -fx-pref-width: 220px;
@@ -57,31 +57,34 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 1);
 }
 
-.table-view .column-header {
-    -fx-background-color:  rgba(235, 145, 0, 0.50);
+.order-table .column-header {
+    -fx-background-color: rgba(235, 145, 0, 0.80); /* Darker background for better contrast */
     -fx-padding: 10 5;
 }
 
-.table-view .column-header .label {
-    -fx-text-fill: #ffffff;
+.order-table .column-header .label {
+    -fx-text-fill: white; /* Ensure text is visible */
     -fx-font-weight: bold;
 }
 
-.table-row-cell {
-    -fx-background-color: white;
-    -fx-border-color: transparent transparent rgba(211, 236, 255, 0.9) transparent;
-    -fx-padding: 5;
-}
 
-.table-row-cell:odd {
+
+.order-table .table-row-cell:odd {
     -fx-background-color: #f9fcff;
+    -fx-text-fill: black; /* Ensure text is visible */
 }
 
-.table-row-cell:selected {
-    -fx-background-color: rgba(191, 226, 246, 0.82);
-    -fx-text-fill: #ffffff;
+.order-table .table-row-cell:selected {
+    -fx-background-color: rgba(100, 150, 200, 0.82); /* Darker background for better contrast */
+    -fx-text-fill: white; /* Ensure text is visible */
 }
 
+.order-table .table-column {
+    -fx-alignment: CENTER;
+    -fx-text-fill: black; /* Ensure text is visible */
+}
+
+/*55555555555555555555555555555555555*/
 /* Button styles */
 .action-button {
     -fx-background-color: rgba(255, 165, 0, 0.5);

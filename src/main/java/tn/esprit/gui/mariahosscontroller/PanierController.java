@@ -8,7 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import tn.esprit.entities.Commande;
 import tn.esprit.entities.Panier;
-import tn.esprit.services.mariahossservice.*;
+import tn.esprit.services.mariahossservice.CommandeService;
+import tn.esprit.services.mariahossservice.panierService;
 
 import java.io.IOException;
 import java.sql.SQLException;

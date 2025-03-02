@@ -1,4 +1,5 @@
 package tn.esprit.services.mariahossservice;
+
 import tn.esprit.entities.Produit;
 import tn.esprit.utils.DataBase;
 
@@ -16,12 +17,12 @@ public class ProductService implements CRUD<Produit> {
 
     @Override
     public int insert(Produit produit) throws SQLException {
-        String query = "INSERT INTO produit (shopId, promotionId, nom, description, stock, prix, photoUrl) " +
+        String query = "INSERT INTO produit (shopId, promotionId, nom, description, stock, prix, image_url) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, produit.getShopId());
-            if (produit.getPromotionId() != null) {
+            if (produit.getPromotionId() != 0) {
                 pst.setInt(2, produit.getPromotionId());
             } else {
                 pst.setNull(2, Types.INTEGER);
@@ -30,17 +31,24 @@ public class ProductService implements CRUD<Produit> {
             pst.setString(4, produit.getDescription());
             pst.setInt(5, produit.getStock());
             pst.setDouble(6, produit.getPrix());
-            pst.setString(7, produit.getPhotoUrl());
+            pst.setString(7, produit.getImage_url());
 
-            return pst.executeUpdate();
+            int affectedRows = pst.executeUpdate();
+            if (affectedRows > 0) {
+                ResultSet rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
         }
+        return -1; // Indicate failure
     }
 
     @Override
     public int update(Produit produit) throws SQLException {
-        String query = "UPDATE produit SET promotionId = ?, nom = ?, description = ?, stock = ?, prix = ?, photoUrl = ? WHERE id = ?";
+        String query = "UPDATE produit SET promotionId = ?, nom = ?, description = ?, stock = ?, prix = ?, image_url = ? WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            if (produit.getPromotionId() == null) {
+            if (produit.getPromotionId() == 0) {
                 pst.setNull(1, java.sql.Types.INTEGER);
             } else {
                 pst.setInt(1, produit.getPromotionId());
@@ -49,7 +57,7 @@ public class ProductService implements CRUD<Produit> {
             pst.setString(3, produit.getDescription());
             pst.setInt(4, produit.getStock());
             pst.setDouble(5, produit.getPrix());
-            pst.setString(6, produit.getPhotoUrl());
+            pst.setString(6, produit.getImage_url());
             pst.setInt(7, produit.getId());
 
             return pst.executeUpdate();
@@ -72,21 +80,21 @@ public class ProductService implements CRUD<Produit> {
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                Produit produit = new Produit();
-                produit.setId(rs.getInt("id"));
-                produit.setShopId(rs.getInt("shopId"));
-                produit.setPromotionId(rs.getObject("promotionId") != null ? rs.getInt("promotionId") : null);
-                produit.setNom(rs.getString("nom"));
-                produit.setDescription(rs.getString("description"));
-                produit.setStock(rs.getInt("stock"));
-                produit.setPrix(rs.getDouble("prix"));
-                produit.setPhotoUrl(rs.getString("photoUrl"));
-                produits.add(produit);
+                int promotionId = rs.getInt("promotionId");
+                produits.add(new Produit(
+                        rs.getInt("id"),
+                        rs.getInt("shopId"),
+                        rs.wasNull() ? 0 : promotionId,  // Ensure int
+                        rs.getString("nom"),
+                        rs.getString("description"),
+                        rs.getInt("stock"),
+                        rs.getDouble("prix"),
+                        rs.getString("image_url")
+                ));
             }
         }
         return produits;
     }
-
 
     public Produit getEntityById(int id) throws SQLException {
         String query = "SELECT * FROM produit WHERE id = ?";
@@ -94,15 +102,16 @@ public class ProductService implements CRUD<Produit> {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
+                int promotionId = rs.getInt("promotionId");
                 return new Produit(
                         rs.getInt("id"),
                         rs.getInt("shopId"),
-                        rs.getObject("promotionId") != null ? rs.getInt("promotionId") : null,
+                        rs.wasNull() ? 0 : promotionId,  // Ensure int
                         rs.getString("nom"),
                         rs.getString("description"),
                         rs.getInt("stock"),
                         rs.getFloat("prix"),
-                        rs.getString("photoUrl")
+                        rs.getString("image_url")
                 );
             }
         }
@@ -117,19 +126,19 @@ public class ProductService implements CRUD<Produit> {
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                Produit produit = new Produit();
-                produit.setId(rs.getInt("id"));
-                produit.setShopId(rs.getInt("shopId"));
-                produit.setPromotionId(rs.getObject("promotionId") != null ? rs.getInt("promotionId") : null);
-                produit.setNom(rs.getString("nom"));
-                produit.setDescription(rs.getString("description"));
-                produit.setStock(rs.getInt("stock"));
-                produit.setPrix(rs.getFloat("prix"));
-                produit.setPhotoUrl(rs.getString("photoUrl"));
-                produitList.add(produit);
+                int promotionId = rs.getInt("promotionId");
+                produitList.add(new Produit(
+                        rs.getInt("id"),
+                        rs.getInt("shopId"),
+                        rs.wasNull() ? 0 : promotionId,  // Ensure int
+                        rs.getString("nom"),
+                        rs.getString("description"),
+                        rs.getInt("stock"),
+                        rs.getFloat("prix"),
+                        rs.getString("image_url")
+                ));
             }
         }
-
         return produitList;
     }
 
@@ -145,4 +154,25 @@ public class ProductService implements CRUD<Produit> {
         return 0;
     }
 
+    public List<Integer> getTopLikedProductsByShopId(int shopId) throws SQLException {
+        String query = """
+        SELECT p.id 
+        FROM likeProduit lp
+        JOIN produit p ON lp.produitId = p.id
+        WHERE p.shopId = ?
+        GROUP BY p.id
+        ORDER BY COUNT(lp.id) DESC
+        LIMIT 3
+        """;
+
+        List<Integer> topProducts = new ArrayList<>();
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, shopId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                topProducts.add(rs.getInt("id"));
+            }
+        }
+        return topProducts;
+    }
 }

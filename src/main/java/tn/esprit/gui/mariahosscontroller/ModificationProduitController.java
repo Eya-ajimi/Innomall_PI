@@ -3,6 +3,7 @@ package tn.esprit.gui.mariahosscontroller;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -153,8 +154,8 @@ public class ModificationProduitController implements Initializable {
         priceField.setText(Double.toString(produit.getPrix()));
 
         // Load product image if available
-        if (produit.getPhotoUrl() != null && !produit.getPhotoUrl().isEmpty()) {
-            imagePath = produit.getPhotoUrl();
+        if (produit.getImage_url() != null && !produit.getImage_url().isEmpty()) {
+            imagePath = produit.getImage_url();
             try {
                 java.io.File imageFile = new java.io.File(imagePath);
                 if (imageFile.exists()) {
@@ -168,7 +169,7 @@ public class ModificationProduitController implements Initializable {
 
         // Set the selected discount or "No discount" if null
         try {
-            if (produit.getPromotionId() == null || produit.getPromotionId() == 0 || produit.getPromotionId() == -1) {
+            if (produit.getPromotionId() == 0 || Objects.equals(produit.getPromotionId(), 0) || Objects.equals(produit.getPromotionId(), -1)) {
                 // Select the "No discount" option (first in the list)
                 discountComboBox.getSelectionModel().select(0);
             } else {
@@ -192,6 +193,7 @@ public class ModificationProduitController implements Initializable {
             discountComboBox.getSelectionModel().select(0);
         }
     }
+
 
     /**
      * Sets the stage for this dialog
@@ -222,7 +224,7 @@ public class ModificationProduitController implements Initializable {
 
                 if (selectedDiscount != null && selectedDiscount.getId() == -1) {
                     // If "No discount" is selected, set discount_id to null
-                    currentProduit.setPromotionId(null);
+                    currentProduit.setPromotionId(0);
                 } else if (selectedDiscount != null) {
                     // Normal discount selected
                     currentProduit.setPromotionId(selectedDiscount.getId());
@@ -235,7 +237,7 @@ public class ModificationProduitController implements Initializable {
                 currentProduit.setDescription(descriptionField.getText());
                 currentProduit.setStock(Integer.parseInt(stockField.getText()));
                 currentProduit.setPrix(Double.parseDouble(priceField.getText()));
-                currentProduit.setPhotoUrl(imagePath);
+                currentProduit.setImage_url(imagePath);
 
                 // Print debug info
                 System.out.println("Updating product: " + currentProduit.getId());

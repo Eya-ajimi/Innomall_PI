@@ -125,7 +125,7 @@ public class AjoutProduitController {
                 return;
             }
 
-            Integer discountId = null;
+            int discountId = 0;
             if (!discountField.getText().isEmpty()) {
                 try {
                     discountId = Integer.parseInt(discountField.getText());
@@ -146,7 +146,7 @@ public class AjoutProduitController {
             produit.setStock(stock);
             produit.setShopId(session.getCurrentUser().getId()); // Use current user's ID
             produit.setPromotionId(discountId);
-            produit.setPhotoUrl(imagePath);
+            produit.setImage_url(imagePath);
 
             int result = productService.insert(produit);
 

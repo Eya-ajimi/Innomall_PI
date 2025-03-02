@@ -8,8 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tn.esprit.entities.Commande;
 import tn.esprit.entities.Panier;
-import tn.esprit.services.mariahossservice.*;
-
+import tn.esprit.services.mariahossservice.CommandeService;
+import tn.esprit.utils.Session;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,6 +26,7 @@ public class PanierPopupController {
     private Commande commande;
     private CommandeController parentController;
     private CommandeService commandeService = new CommandeService();
+    private Session session = Session.getInstance();
 
     public void setData(Commande commande, CommandeController parentController) {
         this.commande = commande;
@@ -59,7 +60,7 @@ public class PanierPopupController {
     @FXML
     private void confirmerCommande() {
         try {
-            commandeService.updateStatutCommandeEtPaniers(commande.getId(), 3);
+            commandeService.updateStatutCommandeEtPaniers(commande.getId(), session.getCurrentUser().getId());
 
             parentController.refreshTable();
             fermerFenetre();
