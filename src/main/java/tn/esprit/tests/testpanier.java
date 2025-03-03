@@ -50,13 +50,16 @@ public class testpanier {
             ps.ajouterAuPanier(9, 18);
             ps.ajouterAuPanier(9, 20);
             ps.ajouterAuPanier(9, 23);
+            ps.ajouterAuPanier(9, 25);
+            ps.ajouterAuPanier(9, 26);
+            ps.ajouterAuPanier(9, 29);
 
 
             // Affichage des résultats
             System.out.println(cs.getCommandeEnCours(6));
             System.out.println(ps.showAllClientPanier(6));
             System.out.println("-----------------------------------------------------------------------------------");
-            cs.payerCommande(9);
+//            cs.payerCommande(9);
             System.out.println(cs.getCommandesPayeesAujourdhuiPourShopOwner(1));
 //            cs.updateStatutCommandeEtPaniers(33,3);
         } catch (SQLException e) {

@@ -30,7 +30,7 @@ public class ProduitService {
                 produit.setPromotionId(rs.getInt("promotionId"));
                 produit.setStock(rs.getInt("stock"));
                 produit.setPrix(rs.getDouble("prix"));
-                produit.setImage_url(rs.getString("photoUrl"));
+                produit.setImage_url(rs.getString("image_url"));
                // produit.setDateAjout(rs.getTimestamp("date_ajout").toLocalDateTime());
 
                 produits.add(produit);

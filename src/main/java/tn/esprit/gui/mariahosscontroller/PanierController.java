@@ -2,14 +2,20 @@ package tn.esprit.gui.mariahosscontroller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import tn.esprit.entities.Commande;
 import tn.esprit.entities.Panier;
 import tn.esprit.services.mariahossservice.CommandeService;
 import tn.esprit.services.mariahossservice.panierService;
+import tn.esprit.utils.Session;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,14 +25,16 @@ public class PanierController {
 
     @FXML
     private VBox panierVBox;
-
+    @FXML
+    private Label homeLabel;
     @FXML
     private Label totalLabel;
 
     private panierService panierService = new panierService();
     private CommandeService commandeService = new CommandeService();
 
-    private int idClient = 1; // ID du client connecté (à initialiser)
+    Session session = Session.getInstance();
+    private int idClient = session.getCurrentUser().getId(); // ID du client connecté (à initialiser)
 
     @FXML
     public void initialize() {
@@ -34,8 +42,8 @@ public class PanierController {
             List<Panier> paniers = panierService.showAllClientPanier(idClient);
             if (paniers != null) {
                 for (Panier panier : paniers) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/panierCard.fxml"));
-                    HBox card = loader.load();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PanierCard.fxml"));
+                    AnchorPane card = loader.load();
                     PanierCardController cardController = loader.getController();
 
                     cardController.setPanier(panier);
@@ -50,6 +58,24 @@ public class PanierController {
                     panierVBox.getChildren().add(card);
                 }
             }
+            // Add event handler to the Home label
+            homeLabel.setOnMouseClicked(event -> {
+                try {
+                    // Load the Homepage.fxml file
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Homepage.fxml"));
+                    Parent root = loader.load();
+
+                    // Get the current stage (window)
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                    // Set the new scene
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
             updateTotal();
         } catch (SQLException | IOException e) {

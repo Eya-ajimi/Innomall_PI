@@ -1,0 +1,52 @@
+/* panier.css */
+
+/* Button styling */
+.button {
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-transition-duration: 0.2s;
+    -fx-font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+
+.button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(three-pass-box, rgba(136, 209, 231, 0.5), 5, 0, 0, 2);
+}
+
+/* Specific for the plus/minus buttons */
+.button:pressed {
+    -fx-background-color: #6bb9d2;
+}
+
+/* Customize scrollbars */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12;
+}
+
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 12;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #88d1e7;
+    -fx-background-radius: 10;
+}
+
+/* Hover effect for the main card */
+HBox:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(136, 209, 231, 0.4), 15, 0, 0, 5);
+    -fx-translate-y: -2;
+}
+
+/* Label styling */
+Label {
+    -fx-font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+
+/* Animation for quantity changes */
+#quantiteLabel {
+    -fx-transition-duration: 0.3s;
+}

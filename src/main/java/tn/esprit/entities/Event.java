@@ -3,48 +3,25 @@ package tn.esprit.entities;
 import java.sql.Timestamp;
 
 public class Event {
-     int id;
-    private int organizer_id;
-    private String event_title;
+    private int id;
+    private int idOrganisateur;
+    private String nomOrganisateur;
     private String description;
-    private Timestamp start;
-    private Timestamp end;
-    private String place;
+    private String dateDebut;
+    private String dateFin;
+    private String emplacement;
 
-    //constru with Id
-    public Event(int id, int organizer_id, String event_title,
-                 String description, Timestamp start,
-                 Timestamp end, String place) {
+    // Constructors
+    public Event() {}
+
+    public Event(int id, int idOrganisateur, String nomOrganisateur, String description, String dateDebut, String dateFin, String emplacement) {
         this.id = id;
-        this.organizer_id = organizer_id;
-        this.event_title = event_title;
+        this.idOrganisateur = idOrganisateur;
+        this.nomOrganisateur = nomOrganisateur;
         this.description = description;
-        this.start = start;
-        this.end = end;
-        this.place = place;
-    }
-    //without id
-    public Event(int organizer_id, String event_title,
-                 String description, Timestamp start,
-                 Timestamp end, String place) {
-        this.organizer_id = organizer_id;
-        this.event_title = event_title;
-        this.description = description;
-        this.start = start;
-        this.end = end;
-        this.place = place;
-    }
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", organizer_id=" + organizer_id +
-                ", event_title='" + event_title + '\'' +
-                ", description='" + description + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                ", place='" + place + '\'' +
-                '}';
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.emplacement = emplacement;
     }
 
     // Getters and Setters
@@ -52,22 +29,24 @@ public class Event {
         return id;
     }
 
-
-
-    public int getIdOrganizer() {
-        return organizer_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setIdOrganizerr(int organizer_id) {
-        this.organizer_id = organizer_id;
+    public int getIdOrganisateur() {
+        return idOrganisateur;
     }
 
-    public String getEventTitle() {
-        return event_title;
+    public void setIdOrganisateur(int idOrganisateur) {
+        this.idOrganisateur = idOrganisateur;
     }
 
-    public void setEventTitle(String event_title) {
-        this.event_title = event_title;
+    public String getNomOrganisateur() {
+        return nomOrganisateur;
+    }
+
+    public void setNomOrganisateur(String nomOrganisateur) {
+        this.nomOrganisateur = nomOrganisateur;
     }
 
     public String getDescription() {
@@ -78,27 +57,27 @@ public class Event {
         this.description = description;
     }
 
-    public Timestamp getStart() {
-        return start;
+    public String getDateDebut() {
+        return dateDebut;
     }
 
-    public void setStart(Timestamp start) {
-        this.start = start;
+    public void setDateDebut(String dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
-    public Timestamp getEnd() {
-        return end;
+    public String getDateFin() {
+        return dateFin;
     }
 
-    public void setEnd(Timestamp end) {
-        this.end = end;
+    public void setDateFin(String dateFin) {
+        this.dateFin = dateFin;
     }
 
-    public String getPlace() {
-        return place;
+    public String getEmplacement() {
+        return emplacement;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setEmplacement(String emplacement) {
+        this.emplacement = emplacement;
     }
 }

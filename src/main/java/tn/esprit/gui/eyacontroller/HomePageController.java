@@ -422,6 +422,22 @@ private WebView mapWebView;
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handlePanierClick() {
+        try {
+            // Load the Shops.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Panier.fxml"));
+            Pane shopsPage = loader.load();
+
+            // Get the current stage
+            Stage stage = (Stage) postsContainer.getScene().getWindow(); // Use an existing node to get the stage
+            stage.setScene(new Scene(shopsPage));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /*****chatbot*****/
 

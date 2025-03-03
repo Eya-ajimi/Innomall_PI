@@ -6,13 +6,18 @@ import javafx.scene.control.Label;
 import tn.esprit.entities.Produit;
 import tn.esprit.entities.LikeProduit;
 import tn.esprit.services.eyaservice.LikeProduitService;
+import tn.esprit.services.mariahossservice.panierService;
+import tn.esprit.utils.Session;
+
+import java.sql.SQLException;
 
 public class ProduitCardController {
     @FXML private Label nomLabel;
     @FXML private Label prixLabel;
     @FXML private Label stockLabel;
     @FXML private Label Description;
-    @FXML private Button likeButton; // Like button from FXML
+    @FXML private Button likeButton;
+    @FXML private Button addToCartButton; // Add to Cart button from FXML
 
     private Produit currentProduit;
 
@@ -24,7 +29,8 @@ public class ProduitCardController {
         Description.setText(produit.getDescription());
 
         // Using user ID 14 as the current user.
-        int currentUserId = 14;
+        Session session = Session.getInstance();
+        int currentUserId = session.getCurrentUser().getId() ;
         LikeProduitService likeService = new LikeProduitService();
 
         try {
@@ -53,6 +59,18 @@ public class ProduitCardController {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        });
+
+        // Add to Cart button action
+        addToCartButton.setOnAction(event -> {
+            panierService panierService = new panierService();
+            try {
+                panierService.ajouterAuPanier(currentUserId, produit.getId());
+                System.out.println("Produit ajouté au panier avec succès.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Erreur lors de l'ajout du produit au panier.");
             }
         });
     }

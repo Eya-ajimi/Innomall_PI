@@ -48,7 +48,7 @@ public class DashboardController {
 
     @FXML
     private void showEvenements() {
-        loadView("/fxml/Evenement.fxml");
+        loadView("/fxml/event.fxml");
     }
 
     @FXML

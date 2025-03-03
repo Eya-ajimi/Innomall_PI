@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="tn.esprit.gui.mariahosscontroller.PanierCardController"
+            prefHeight="400.0" prefWidth="600.0">
+    <?xml version="1.0" encoding="UTF-8"?>
+
+
+
+    <HBox prefWidth="570.0" spacing="10" style="-fx-border-color: #578FCA; -fx-border-radius: 15; -fx-background-radius: 20; -fx-border-width: 2;" >
+
+       <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+        </padding>
+
+        <!-- Colonne gauche : Informations produit -->
+        <VBox prefHeight="63.0" prefWidth="386.0" spacing="5">
+            <!-- Nom du produit -->
+            <HBox alignment="CENTER_LEFT" spacing="5">
+                <Label style="-fx-font-weight: bold;" text="Nom :" />
+                <Label fx:id="nomLabel" style="-fx-font-weight: bold;">
+                    <font>
+                        <Font name="Corbel" size="12.0" />
+                    </font></Label>
+            </HBox>
+
+            <!-- Description du produit -->
+            <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="328.0" spacing="5">
+                <Label style="-fx-font-weight: bold;" text="Description :" />
+                <Label fx:id="descriptionLabel" style="-fx-text-fill: #666;" />
+            </HBox>
+
+            <!-- Prix du produit -->
+            <HBox alignment="CENTER_LEFT" spacing="5">
+                <Label style="-fx-font-weight: bold;" text="Prix :" />
+                <Label fx:id="prixLabel" style="-fx-font-weight: bold; -fx-text-fill: #2ecc71;" />
+            </HBox>
+        </VBox>
+
+        <!-- Colonne droite : Contrôles quantité -->
+        <HBox alignment="CENTER_RIGHT" spacing="20.0">
+            <Button onAction="#handleDiminuerQuantite" style="-fx-background-radius: 15;" stylesheets="@../css/panier.css" text="-" />
+            <Label fx:id="quantiteLabel" style="-fx-padding: 0 10 0 10;" />
+            <Button onAction="#handleAugmenterQuantite" style="-fx-background-radius: 15;" stylesheets="@../css/panier.css" text="+" />
+            <Button onAction="#handleSupprimerArticle" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 15;" text="🗑" />
+        </HBox>
+    </HBox>
+</AnchorPane>

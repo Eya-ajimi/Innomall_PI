@@ -5,11 +5,10 @@ import tn.esprit.services.mariahossservice.DiscountNotifier;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.List;
 import java.util.Locale;
 
 public class EmailNotificationListener implements DiscountListener {
-    private List<String> userEmails; // Liste des e-mails des utilisateurs
+    private List<String> userEmails;
 
     public EmailNotificationListener(List<String> userEmails) {
         this.userEmails = userEmails;
@@ -19,7 +18,6 @@ public class EmailNotificationListener implements DiscountListener {
     public void onDiscountCreated(DiscountEvent event) {
         String subject = "Nouvelle promotion exclusive chez Innomall !";
 
-        // Create an HTML email body with better styling
         String body = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -33,7 +31,7 @@ public class EmailNotificationListener implements DiscountListener {
                 "            margin: 0 auto;\n" +
                 "        }\n" +
                 "        .header {\n" +
-                "            background-color: #4a90e2;\n" +
+                "            background-color: rgba(191, 226, 246, 0.82);\n" +
                 "            color: white;\n" +
                 "            padding: 20px;\n" +
                 "            text-align: center;\n" +
@@ -56,7 +54,7 @@ public class EmailNotificationListener implements DiscountListener {
                 "        .discount-value {\n" +
                 "            font-size: 24px;\n" +
                 "            font-weight: bold;\n" +
-                "            color: #e74c3c;\n" +
+                "            color: rgba(255, 165, 0, 0.77);\n" +
                 "        }\n" +
                 "        .dates {\n" +
                 "            font-style: italic;\n" +
@@ -65,7 +63,7 @@ public class EmailNotificationListener implements DiscountListener {
                 "        .cta-button {\n" +
                 "            display: block;\n" +
                 "            width: 200px;\n" +
-                "            background-color: #e74c3c;\n" +
+                "            background-color: rgba(255, 165, 0, 0.77);\n" +
                 "            color: white;\n" +
                 "            text-align: center;\n" +
                 "            padding: 12px 0;\n" +
@@ -73,12 +71,6 @@ public class EmailNotificationListener implements DiscountListener {
                 "            text-decoration: none;\n" +
                 "            border-radius: 5px;\n" +
                 "            font-weight: bold;\n" +
-                "        }\n" +
-                "        .footer {\n" +
-                "            font-size: 12px;\n" +
-                "            text-align: center;\n" +
-                "            color: #777777;\n" +
-                "            margin-top: 30px;\n" +
                 "        }\n" +
                 "    </style>\n" +
                 "</head>\n" +
@@ -89,36 +81,22 @@ public class EmailNotificationListener implements DiscountListener {
                 "    <div class=\"content\">\n" +
                 "        <p>Cher(e) client(e),</p>\n" +
                 "        <p>Nous sommes ravis de vous annoncer une nouvelle promotion exclusive chez Innomall !</p>\n" +
-                "        \n" +
                 "        <div class=\"offer-details\">\n" +
                 "            <p><strong>Boutique :</strong> " + event.getShopId() + "</p>\n" +
                 "            <p class=\"discount-value\">" + event.getDiscountPercentage() + "% de réduction</p>\n" +
                 "            <p class=\"dates\">Valable du " + formatDate(event.getStartDate()) + " au " + formatDate(event.getEndDate()) + "</p>\n" +
                 "        </div>\n" +
-                "        \n" +
-                "        <p>Ne manquez pas cette opportunité exceptionnelle de profiter de réductions sur vos produits préférés !</p>\n" +
-                "        \n" +
                 "        <a href=\"https://innomall.com/promotions?shop=" + event.getShopId() + "\" class=\"cta-button\">Découvrir l'offre</a>\n" +
-                "        \n" +
                 "        <p>À bientôt sur Innomall !</p>\n" +
-                "        \n" +
-                "        <div class=\"footer\">\n" +
-                "            <p>Cet email a été envoyé à {{email}} car vous êtes inscrit aux notifications de Innomall.</p>\n" +
-                "            <p>Pour vous désabonner, <a href=\"https://innomall.com/unsubscribe\">cliquez ici</a>.</p>\n" +
-                "            <p>© 2025 Innomall. Tous droits réservés.</p>\n" +
-                "        </div>\n" +
                 "    </div>\n" +
                 "</body>\n" +
                 "</html>";
 
-        // Envoyer un e-mail à tous les utilisateurs
-        DiscountNotifier.notifyUsers(userEmails, subject, body,true); // Added boolean parameter to indicate HTML format
+        DiscountNotifier.notifyUsers(userEmails, subject, body, true);
     }
 
-    // Helper method to format dates in a more user-friendly way
     private String formatDate(Date date) {
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("fr", "FR"));
         return outputFormat.format(date);
     }
-
 }

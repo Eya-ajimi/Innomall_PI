@@ -58,13 +58,20 @@
          <Pane prefWidth="50.0" />
 
          <!-- Navigation Labels -->
+<!--         <HBox alignment="CENTER" spacing="30.0">-->
+<!--            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Home" />-->
+<!--            <Label onMouseClicked="#handleShopsClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Shops" />-->
+<!--            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Events" />-->
+<!--            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Parking" />-->
+<!--         </HBox>-->
+         <!--i added partie houssem-->
          <HBox alignment="CENTER" spacing="30.0">
             <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Home" />
             <Label onMouseClicked="#handleShopsClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Shops" />
             <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Events" />
             <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Parking" />
+            <Label onMouseClicked="#handlePanierClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Panier" />
          </HBox>
-
          <!-- Spacer -->
          <Pane prefWidth="105.0" />
 
