@@ -6,6 +6,7 @@ public class Panier {
     private int idProduit;
     private int quantite;
     private StatutCommande statut;
+    private String image_url;
 
     public int getNumeroTicket() {
         return numeroTicket;
@@ -55,6 +56,9 @@ public class Panier {
                 "idCommande=" + idCommande +
                 ", idProduit=" + idProduit +
                 ", quantite=" + quantite +
+                ", statut=" + statut +
+                ", image_url='" + image_url + '\'' +
+                ", numeroTicket=" + numeroTicket +
                 ", nomProduit='" + nomProduit + '\'' +
                 ", prix=" + prix +
                 ", description='" + description + '\'' +
@@ -114,5 +118,13 @@ public class Panier {
 
     public void setStatut(StatutCommande statut) {
         this.statut = statut;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

@@ -56,8 +56,8 @@ public class testpanier {
 
 
             // Affichage des résultats
-            System.out.println(cs.getCommandeEnCours(6));
-            System.out.println(ps.showAllClientPanier(6));
+           // System.out.println(cs.getCommandeEnCours(6));
+            System.out.println(ps.showAllClientPanier(9));
             System.out.println("-----------------------------------------------------------------------------------");
 //            cs.payerCommande(9);
             System.out.println(cs.getCommandesPayeesAujourdhuiPourShopOwner(1));

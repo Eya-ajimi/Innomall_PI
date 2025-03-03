@@ -61,7 +61,7 @@ AnchorPane {
 .info-container {
     -fx-padding: 15px;
     -fx-background-color: rgba(191, 226, 246, 0.2);
-    -fx-background-radius: 8px;
+    -fx-background-radius: 15px;
     -fx-min-width: 200px;
 }
 
@@ -79,7 +79,7 @@ AnchorPane {
     -fx-alignment: center;
     -fx-padding: 15px 25px;
     -fx-background-color: rgba(255, 165, 0, 0.15);
-    -fx-background-radius: 8px;
+    -fx-background-radius: 18px;
     -fx-min-width: 100px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
@@ -103,7 +103,7 @@ AnchorPane {
 /* Button styles */
 .btn-modifier, .btn-deconnexion, .btn-manage, .btn-photo {
     -fx-padding: 10px 20px;
-    -fx-background-radius: 5px;
+    -fx-background-radius: 15px;
     -fx-cursor: hand;
     -fx-font-weight: bold;
     -fx-min-width: 150px;

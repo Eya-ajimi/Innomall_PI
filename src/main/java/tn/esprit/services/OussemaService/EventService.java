@@ -36,6 +36,10 @@ public class EventService implements CRUD<Event> {
     public void update(Event event) {
         String query = "UPDATE event SET idOrganisateur=?, nomOrganisateur=?, description=?, dateDebut=?, dateFin=?, emplacement=? WHERE id=?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
+            // Debugging: Print the event object
+            System.out.println("Updating event: " + event.toString());
+
+            // Set parameters for the PreparedStatement
             pst.setInt(1, event.getIdOrganisateur());
             pst.setString(2, event.getNomOrganisateur());
             pst.setString(3, event.getDescription());
@@ -43,8 +47,20 @@ public class EventService implements CRUD<Event> {
             pst.setString(5, event.getDateFin());
             pst.setString(6, event.getEmplacement());
             pst.setInt(7, event.getId());
-            pst.executeUpdate();
+
+            // Debugging: Print the SQL query with parameters
+            System.out.println("Executing SQL query: " + pst.toString());
+
+            // Execute the update
+            int rowsUpdated = pst.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated); // Debugging: Print the number of rows updated
+
+            // If no rows were updated, log a warning
+            if (rowsUpdated == 0) {
+                System.out.println("Warning: No rows were updated. Check if the event ID exists in the database.");
+            }
         } catch (SQLException e) {
+            System.err.println("SQL Exception occurred while updating event:");
             e.printStackTrace();
         }
     }

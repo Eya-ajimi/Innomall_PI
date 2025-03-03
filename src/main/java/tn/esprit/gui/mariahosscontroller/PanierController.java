@@ -30,6 +30,7 @@ public class PanierController {
     @FXML
     private Label totalLabel;
 
+
     private panierService panierService = new panierService();
     private CommandeService commandeService = new CommandeService();
 

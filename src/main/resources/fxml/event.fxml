@@ -1,42 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
-
 <?import javafx.scene.layout.HBox?>
-<AnchorPane prefHeight="678.0" prefWidth="902.0" style="-fx-background-color: #E1F4FF; -fx-padding: 20;"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefWidth="Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+            style="-fx-background-color: #f5f6fa;" xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="tn.esprit.gui.oussemacontroller.EventController">
 
-    <!-- ScrollPane to hold the event cards -->
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="10.0" layoutY="50.0" prefHeight="520.0" prefWidth="862.0"
-                style="-fx-background-color: transparent; -fx-border-color: transparent;
-                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 5, 0, 1, 1);">
-        <FlowPane fx:id="eventsContainer" hgap="15" vgap="15" prefWrapLength="850"
-                  style="-fx-padding: 15; -fx-background-radius: 10;" />
-    </ScrollPane>
+    <children>
+        <VBox style="-fx-background-color: #f5f6fa; -fx-padding: 20 20 20 20;" spacing="0"
+              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
-    <!-- "Add Event" button at the bottom -->
-    <Button layoutX="375.0" layoutY="600.0" mnemonicParsing="false" onAction="#handleAddEvent"
-            style="-fx-background-color: #F9A66A;
-                   -fx-text-fill: white;
-                   -fx-font-size: 16px;
-                   -fx-font-weight: bold;
-                   -fx-background-radius: 8;
-                   -fx-padding: 10 20;"
-            text="Add Event">
-        <HBox style="-fx-background-color: transparent;">
-            <style>
-                button:hover {
-                -fx-scale-x: 1.05;
-                -fx-scale-y: 1.05;
-                -fx-opacity: 0.9;
-                }
-            </style>
-        </HBox>
-    </Button>
+            <children>
+                <HBox style="-fx-background-color: rgba(191, 226, 246, 0.82);
+             -fx-padding: 15;
+             -fx-background-radius: 15;
+             -fx-border-color: black;
+             -fx-border-width: 0;
+             -fx-border-radius: 15;">
+                    <children>
+                        <Label text="Les Evenements" textFill="#000000">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" spacing="15">
+                            <children>
+                                <TextField fx:id="searchField" prefHeight="30.0" prefWidth="250.0" promptText="chercher par pourcentage de promotion..."
+                                           style="-fx-background-radius: 4; -fx-border-radius: 4; -fx-border-color: #bfe2f6; -fx-background-color: white;" />
+                                <Button fx:id="addButton" text="Ajouter Un evenement" prefHeight="30.0"
+                                        style="-fx-background-color: #ffffff; -fx-text-fill: rgba(255, 165, 0, 0.77); -fx-background-radius: 4; -fx-font-weight: bold;" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" style="-fx-background-color:#f5f6fa;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <FlowPane fx:id="eventContainer" hgap="50.0" vgap="50.0"
+                                  prefHeight="200.0" prefWidth="200.0"
+                                  style="-fx-background-color: #f5f6fa; -fx-padding: 10;"
+                                  alignment="CENTER" />
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
 
 </AnchorPane>

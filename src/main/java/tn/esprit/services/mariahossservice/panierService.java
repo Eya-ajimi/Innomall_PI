@@ -163,7 +163,7 @@ public class panierService implements CRUD<Panier>{
 
         if (cmd != null) {
             int commandeId = cmd.getId();
-            String query = "SELECT p.idCommande, p.idProduit, p.quantite, pr.nom, pr.prix, pr.description, pr.stock " +
+            String query = "SELECT p.idCommande, p.idProduit, p.quantite, pr.nom, pr.prix, pr.description, pr.stock, pr.image_url " +
                     "FROM panier p " +
                     "JOIN Produit pr ON p.idProduit = pr.id " +
                     "WHERE p.idCommande = ?";
@@ -183,6 +183,7 @@ public class panierService implements CRUD<Panier>{
                             rs.getString("description")
                     );
                     panier.setPrix(panier.getPrix() * panier.getQuantite());
+                    panier.setImage_url(rs.getString("image_url"));
                     paniers.add(panier);
                 }
             }

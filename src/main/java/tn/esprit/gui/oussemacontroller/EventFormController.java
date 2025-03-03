@@ -35,6 +35,7 @@ public class EventFormController {
     private boolean updated = false; // Flag to check if the event was updated
     private EventService eventService = new EventService();
     private int idOrganisateur; // Add this field
+
     private Session session = Session.getInstance(); // Session instance
 
     // Setter for idOrganisateur
@@ -42,25 +43,21 @@ public class EventFormController {
         this.idOrganisateur = idOrganisateur;
     }
 
-    /**
-     * Set the event to be modified or initialize a new event.
-     *
-     * @param event The event to modify, or null to add a new event.
-     */
     public void setEvent(Event event) {
+
         if (event == null) {
             // This is a new event
-            this.event = new Event();
-            this.isNewEvent = true;
+            this.event = new Event(); // Initialize a new event
+            this.isNewEvent = true; // Set the flag to indicate this is a new event
         } else {
             // This is an existing event being modified
             this.event = event;
-            this.isNewEvent = false;
+            this.isNewEvent = false; // Set the flag to indicate this is an existing event
 
             // Pre-fill the form with the event's current data
-            eventNameField.setText(event.getNomOrganisateur());
-            eventDescriptionField.setText(event.getDescription());
-            locationField.setText(event.getEmplacement());
+            eventNameField.setText(event.getNomOrganisateur()); // Set the organizer name
+            eventDescriptionField.setText(event.getDescription()); // Set the description
+            locationField.setText(event.getEmplacement()); // Set the location
 
             // Convert String dates to LocalDate for DatePicker
             if (event.getDateDebut() != null && !event.getDateDebut().isEmpty()) {
@@ -72,20 +69,11 @@ public class EventFormController {
         }
     }
 
-    /**
-     * Check if the event was updated or added.
-     *
-     * @return True if the event was updated or added, false otherwise.
-     */
     public boolean isUpdated() {
         return updated;
     }
 
-    /**
-     * Get the event (used after the form is closed).
-     *
-     * @return The event that was added or modified.
-     */
+
     public Event getEvent() {
         return event;
     }
@@ -109,6 +97,12 @@ public class EventFormController {
             return;
         }
 
+        // Ensure the event object is not null
+        if (this.event == null) {
+            System.out.println("Event is null. Initializing a new event.");
+            this.event = new Event(); // Initialize a new event
+        }
+
         // Update the event object with the new data
         event.setNomOrganisateur(eventNameField.getText());
         event.setDescription(eventDescriptionField.getText());
@@ -116,11 +110,20 @@ public class EventFormController {
         event.setDateFin(endDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         event.setEmplacement(locationField.getText());
 
-        // Set the idOrganisateur from the session
+        // Fetch the current user from the session
         Utilisateur currentUser = session.getCurrentUser();
-        if (currentUser != null) {
-            event.setIdOrganisateur(currentUser.getId());
+        if (currentUser == null) {
+            System.out.println("Current user is null. Cannot set organizer ID.");
+            showErrorAlert("Error", "No user is logged in.");
+            return; // Exit the method if the user is not logged in
         }
+        System.out.println("Current user ID: " + currentUser.getId());
+
+        // Set the organizer ID
+        event.setIdOrganisateur(currentUser.getId());
+
+        // Debugging: Print the event object
+        System.out.println("Event before saving: " + event.toString());
 
         // Mark the event as updated
         updated = true;
@@ -129,13 +132,6 @@ public class EventFormController {
         Stage stage = (Stage) eventNameField.getScene().getWindow();
         stage.close();
     }
-
-    /**
-     * Show an error alert with the given title and message.
-     *
-     * @param title   The title of the alert.
-     * @param message The message to display.
-     */
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
