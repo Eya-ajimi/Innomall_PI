@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.eyacontroller.ProduitCardController"
+      spacing="10" styleClass="produit-card">
+    <VBox spacing="5" alignment="CENTER">
+        <Label fx:id="nomLabel" styleClass="produit-nom" />
+        <Label fx:id="prixLabel" styleClass="produit-prix" />
+        <Label fx:id="stockLabel" styleClass="produit-stock" />
+        <Label fx:id="Description" styleClass="produit-Description" />
+        <!-- Add this Label for discount information -->
+        <Label fx:id="discountLabel" styleClass="produit-discount" />
+
+
+        <!-- Like Button with Icon -->
+        <Button fx:id="likeButton" styleClass="like-button" text="Like">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/heart (1).png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+
+        <!-- Add to Cart Button with Icon -->
+        <Button fx:id="addToCartButton" styleClass="add-to-cart-button" text="Add to Cart">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/shopping-cart-add.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+</VBox>

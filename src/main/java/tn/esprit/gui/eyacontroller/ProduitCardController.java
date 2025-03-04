@@ -1,0 +1,91 @@
+package tn.esprit.gui.eyacontroller;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import tn.esprit.entities.Discount;
+import tn.esprit.entities.Produit;
+import tn.esprit.entities.LikeProduit;
+import tn.esprit.entities.Utilisateur;
+import tn.esprit.services.eyaservice.LikeProduitService;
+import tn.esprit.services.mariahossservice.DiscountService;
+import tn.esprit.utils.Session;
+
+import java.sql.SQLException;
+
+public class ProduitCardController {
+    @FXML private Label nomLabel;
+    @FXML private Label prixLabel;
+    @FXML private Label stockLabel;
+    @FXML private Label Description;
+    @FXML private Button likeButton; // Like button from FXML
+    @FXML private Label discountLabel;
+
+    private Produit currentProduit;
+
+    private DiscountService discountService = new DiscountService();
+
+    public void setData(Produit produit) {
+        this.currentProduit = produit;
+        nomLabel.setText(produit.getNom());
+        prixLabel.setText("Price: $" + produit.getPrix());
+        stockLabel.setText("Stock: " + produit.getStock());
+        Description.setText(produit.getDescription());
+
+        Session session = Session.getInstance();
+        Utilisateur currentUser = session.getCurrentUser();
+
+        int currentUserId = currentUser.getId(); // Extract the user ID
+
+        try {
+            if (produit.getPromotionId() != 0) { // Check if promotionId is valid
+                Discount discount = discountService.getDiscountById(produit.getPromotionId());
+                if (discount != null) {
+                    double discountPercentage = discount.getDiscountPercentage();
+                    double discountedPrice = produit.getPrix() * (1 - discountPercentage / 100);
+                    discountLabel.setText(String.format("Discount: %.2f%% (New Price: $%.2f)", discountPercentage, discountedPrice));
+                } else {
+                    discountLabel.setText("No discount available");
+                }
+            } else {
+                discountLabel.setText("No discount available");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            discountLabel.setText("Error fetching discount");
+        }
+
+
+        //int currentUserId = 14;
+        LikeProduitService likeService = new LikeProduitService();
+
+        try {
+            // Check if the product is already liked by the current user
+            if (likeService.isLiked(currentUserId, produit.getId())) {
+                likeButton.setText("Liked");
+            } else {
+                likeButton.setText("Like");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Toggle like/dislike on left-click
+        likeButton.setOnAction(event -> {
+            try {
+                if (likeButton.getText().equals("Like")) {
+                    // Add like
+                    LikeProduit like = new LikeProduit(currentUserId, produit.getId());
+                    likeService.insert(like);
+                    likeButton.setText("Liked");
+                } else {
+                    // Remove like (dislike)
+                    likeService.delete(currentUserId, produit.getId());
+                    likeButton.setText("Like");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}

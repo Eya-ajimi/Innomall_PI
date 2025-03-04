@@ -4,37 +4,47 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DataBase {private static final String URL = "jdbc:mysql://localhost:3306/innomall"; // Update with your database name
-    private static final String USER = "root";  // Update with your MySQL username
-    private static final String PASSWORD = "";  // Update with your MySQL password
+public class DataBase {
 
+    private final String USER = "root"; // Nom d'utilisateur MySQL
+    private final String PWD = "root"; // Mot de passe MySQL
+    private final String URL = "jdbc:mysql://localhost:3306/innomall1"; // URL de la base de données
+
+    // Singleton instance
     private static DataBase instance;
-    private Connection connection;
 
-    // Private constructor to prevent direct instantiation
-    private DataBase() {
+    // Connexion à la base de données
+    private Connection cnx;
+
+    // Constructeur privé pour empêcher l'instanciation directe
+    private DataBase () {
         try {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("✅ Database connection established.");
+            // Charger le pilote JDBC MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Établir la connexion
+            cnx = DriverManager.getConnection(URL, USER, PWD);
+            System.out.println("Connexion à la base de données réussie !");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Erreur : Pilote JDBC MySQL non trouvé !");
+            e.printStackTrace();
         } catch (SQLException e) {
-            System.err.println("❌ Database connection failed: " + e.getMessage());
+            System.err.println("Erreur de connexion à la base de données : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    // Public method to provide global access to the instance
-    public static DataBase getInstance() {
+    // Méthode pour obtenir l'instance unique de MyDatabase
+    public static DataBase  getInstance() {
         if (instance == null) {
-            synchronized (DataBase.class) { // Thread safety
-                if (instance == null) {
-                    instance = new DataBase();
-                }
-            }
+            instance = new DataBase ();
         }
         return instance;
     }
 
-    // Method to get the database connection
-    public Connection getConnection() {
-        return connection;
+    // Méthode pour obtenir la connexion
+    public Connection getCnx() {
+        return cnx;
     }
+
 }

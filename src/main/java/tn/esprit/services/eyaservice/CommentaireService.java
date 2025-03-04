@@ -1,0 +1,173 @@
+package tn.esprit.services.eyaservice;
+
+
+
+import tn.esprit.entities.Commentaire;
+import tn.esprit.entities.SousCommentaire;
+import tn.esprit.entities.Utilisateur;
+import tn.esprit.utils.DataBase;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommentaireService implements CRUD<Commentaire> {
+
+    private Connection cnx = DataBase.getInstance().getCnx();
+    private Statement st;
+    private PreparedStatement ps;
+
+    @Override
+    public void create(Utilisateur user) throws SQLException {
+
+    }
+
+    public int insert(Commentaire commentaire) throws SQLException {
+        String req = "INSERT INTO `commentaires`(`post_id`, `utilisateur_id`, `contenu`) VALUES (?, ?, ?)";
+        ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, commentaire.getPosteId());
+        ps.setInt(2, commentaire.getUtilisateurId());
+        ps.setString(3, commentaire.getContenu());
+
+        int rowsAffected = ps.executeUpdate();
+
+        // Récupérer l'ID généré
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()) {
+            commentaire.setId(rs.getInt(1)); // Mettre à jour l'ID du commentaire
+        }
+
+        return rowsAffected;
+    }
+
+
+    @Override
+    public int update(Commentaire commentaire) throws SQLException {
+        // Check if the comment exists and the user is the owner
+        String checkComment = "SELECT id FROM commentaires WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkComment);
+        ps.setInt(1, commentaire.getId());
+        ps.setInt(2, commentaire.getUtilisateurId());
+
+        ResultSet rs = ps.executeQuery();
+        if (!rs.next()) {
+            throw new SQLException("Vous n'êtes pas autorisé à modifier ce commentaire.");
+        }
+
+        // Proceed with the update
+        String req = "UPDATE commentaires SET contenu = ? WHERE id = ?";
+        ps = cnx.prepareStatement(req);
+        ps.setString(1, commentaire.getContenu());
+        ps.setInt(2, commentaire.getId());
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected == 0) {
+            throw new SQLException("Aucune ligne n'a été mise à jour. Vérifiez si le contenu a changé.");
+        }
+
+        return rowsAffected;
+    }
+
+    public int delete(Commentaire commentaire) throws SQLException {
+        // Check if the comment exists and the user is the owner
+        String checkComment = "SELECT id FROM commentaires WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkComment);
+        ps.setInt(1, commentaire.getId());
+        ps.setInt(2, commentaire.getUtilisateurId());
+
+        ResultSet rs = ps.executeQuery();
+        if (!rs.next()) {
+            throw new SQLException("Vous n'êtes pas autorisé à supprimer ce commentaire.");
+        }
+
+        // Delete associated sous-commentaires
+        String deleteSousCommentaires = "DELETE FROM sous_commentaires WHERE commentaire_id = ?";
+        ps = cnx.prepareStatement(deleteSousCommentaires);
+        ps.setInt(1, commentaire.getId());
+        ps.executeUpdate();
+
+        // Delete the comment
+        String deleteQuery = "DELETE FROM commentaires WHERE id = ?";
+        ps = cnx.prepareStatement(deleteQuery);
+        ps.setInt(1, commentaire.getId());
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected == 0) {
+            throw new SQLException("Aucune ligne n'a été supprimée.");
+        }
+
+        return rowsAffected;
+    }
+
+
+
+    @Override
+    public List<Commentaire> showAll() throws SQLException {
+        List<Commentaire> temp = new ArrayList<>();
+        String req = "SELECT * FROM `commentaires`";
+
+        st = cnx.createStatement();
+        ResultSet rs = st.executeQuery(req);
+
+        while (rs.next()) {
+            Commentaire commentaire = new Commentaire();
+            commentaire.setId(rs.getInt("id"));
+            commentaire.setContenu(rs.getString("contenu"));
+            commentaire.setPostId(rs.getInt("post_id"));
+            commentaire.setUtilisateurId(rs.getInt("utilisateur_id"));
+            commentaire.setDateCreation(rs.getString("date_creation"));
+            temp.add(commentaire);
+
+        }
+
+        return temp;
+    }
+
+    @Override
+    public void delete(int id) throws SQLException {
+
+    }
+
+    @Override
+    public List<Utilisateur> getAll() throws SQLException {
+        return List.of();
+    }
+
+    @Override
+    public Utilisateur getOneById() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public Utilisateur getOneById(int id) throws SQLException {
+        return null;
+    }
+
+    public List<Commentaire> getCommentairesByPoste(int postId) throws SQLException {
+        List<Commentaire> commentaires = new ArrayList<>();
+        String query = "SELECT * FROM commentaires WHERE post_id = ?";  // Utilisation de post_id
+
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, postId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Commentaire commentaire = new Commentaire(
+                        rs.getInt("post_id"), // Changer postId en post_id
+                        rs.getInt("utilisateur_id"),
+                        rs.getString("contenu")
+                );
+                commentaire.setId(rs.getInt("id"));
+                commentaires.add(commentaire);
+            }
+        }
+        return commentaires;
+    }
+
+
+
+
+
+
+}
+

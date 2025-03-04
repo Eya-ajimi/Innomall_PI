@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000" prefWidth="999.0" style="-fx-background-color: #f5f6fa;" stylesheets="@css/commandestyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.gui.mariahosscontroller.CommandeController">
+
+
+    <children>
+        <VBox layoutY="13.0" prefHeight="607.0" prefWidth="999.0" spacing="15">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Top Bar with Padding & Border Radius -->
+            <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="2273.0" spacing="15" styleClass="header-container">
+                <padding>
+                    <Insets bottom="10" left="15" right="15" top="10" />
+                </padding>
+                <Label styleClass="header-title" text="Gestion des Commandes" textFill="black">
+                    <font>
+                        <Font name="System Bold" size="21" />
+                    </font>
+                </Label>
+
+                <!-- Filter par date -->
+                <Label styleClass="filter-label" text=" | Filtrer par date :" />
+                <DatePicker fx:id="datePicker" promptText="Sélectionner une date" />
+
+                <!-- Push to right -->
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="refreshButton" styleClass="action-button" text="Actualiser" />
+            </HBox>
+
+            <!-- Sorting & Results Info -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label fx:id="resultCountLabel" text="Affichage de 0 commandes" />
+                <Region HBox.hgrow="ALWAYS" />
+                <ComboBox fx:id="sortComboBox" promptText="Trier par" />
+            </HBox>
+
+            <TableView fx:id="tableView" prefHeight="401.0" prefWidth="875.0" styleClass="order-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="numeroTicketCol" prefWidth="100" text="№ Ticket" />
+                    <TableColumn fx:id="nomClientCol" prefWidth="150" text="Client" />
+                    <TableColumn fx:id="totalCommandeCol" prefWidth="100" text="Total" />
+                    <TableColumn fx:id="dateCommandeCol" prefWidth="120" text="Date" />
+                </columns>
+                <placeholder>
+                    <Label text="Aucune commande disponible" />
+                </placeholder>
+            </TableView>
+
+            <!-- Pagination -->
+            <HBox alignment="CENTER" spacing="10">
+                <Pagination fx:id="pagination" maxPageIndicatorCount="5" />
+                <ComboBox fx:id="pageSizeComboBox" promptText="10 par page" />
+            </HBox>
+
+        </VBox>
+    </children>
+</AnchorPane>

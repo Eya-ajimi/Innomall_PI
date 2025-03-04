@@ -12,7 +12,7 @@ import java.sql.Connection;
 public class Main extends Application {
 
     public static void main(String[] args) {
-        Connection conn = DataBase.getInstance().getConnection();
+        Connection conn = DataBase.getInstance().getCnx();
         if (conn != null) {
             System.out.println("✅ Connexion à la base de données réussie !");
             launch();
@@ -33,7 +33,7 @@ public class Main extends Application {
 
             Scene scene = new Scene(root, 1400, 600);
 
-            String cssPath = "/css/style.css";
+            String cssPath = "/css/styleuser.css";
             if (getClass().getResource(cssPath) != null) {
                 scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
                 System.out.println("✅ CSS chargé !");
