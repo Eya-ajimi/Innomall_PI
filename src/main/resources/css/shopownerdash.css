@@ -1,0 +1,113 @@
+/* Style global */
+.root {
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-background-color: #F4F4F9;
+}
+
+/* Carte de profil centrée et responsive */
+.card {
+    -fx-background-color: white;
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0.5, 0, 4);
+    -fx-min-width: 320px;
+    -fx-max-width: 450px;
+    -fx-pref-width: 90%; /* Responsive width */
+    -fx-transition: transform 0.3s ease;
+}
+
+.card:hover {
+    -fx-transform: scale(1.03);
+}
+
+/* Image de profil ronde */
+.profile-img {
+    -fx-clip-shape: circle;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.5, 0, 2);
+    -fx-border-color: #FFA500;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+}
+
+/* Titre de bienvenue */
+.welcome-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #353A56;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0.5, 0, 1);
+}
+
+/* Conteneur des informations */
+.info-container {
+    -fx-padding: 10px;
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 10px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+}
+
+/* Labels d'information */
+.info-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #555;
+    -fx-font-weight: bold;
+}
+
+/* Conteneur des boutons */
+.button-container {
+    -fx-spacing: 15px;
+    -fx-padding: 10px;
+}
+
+/* Bouton "Éditer le Profil" */
+.btn-modifier {
+    -fx-background-color: #FFA500;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 25px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2);
+    -fx-transition: background-color 0.3s ease;
+}
+
+.btn-modifier:hover {
+    -fx-background-color: #E69500;
+}
+
+.btn-modifier:pressed {
+    -fx-background-color: #D68900;
+}
+
+/* Bouton "Déconnexion" */
+.btn-deconnexion {
+    -fx-background-color: #353A56;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 25px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2);
+    -fx-transition: background-color 0.3s ease;
+}
+
+.btn-deconnexion:hover {
+    -fx-background-color: #2E3147;
+}
+
+.btn-deconnexion:pressed {
+    -fx-background-color: #262837;
+}
+
+/* Effet de survol pour les boutons */
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+/* Effet de clic pour les boutons */
+.button:pressed {
+    -fx-opacity: 0.8;
+}

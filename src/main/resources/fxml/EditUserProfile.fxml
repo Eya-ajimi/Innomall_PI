@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.ScrollPane?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.Pane?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Separator?>
+<VBox spacing="10" minWidth="-Infinity" prefHeight="904.0" prefWidth="1353.0" style="-fx-background-color: #E1F4FF;"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.azizcontroller.EditUserProfileController" stylesheets="@../css/editer.css" >
+
+    <!-- Top Navigation Bar -->
+    <HBox alignment="CENTER" prefHeight="73.0">
+        <children>
+            <!-- Logo Label -->
+            <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall"  >
+                <HBox.margin>
+                    <Insets left="-140.0" />
+                </HBox.margin>
+            </Label>
+
+            <!-- Separator -->
+            <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
+
+            <!-- Search Bar -->
+            <!-- Search Bar -->
+            <HBox alignment="CENTER" spacing="5.0">
+                <TextField fx:id="searchField" prefHeight="26.0" prefWidth="258.0" promptText="Search..."
+                           style="-fx-background-radius: 15; -fx-background-color: white;" />
+                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/searchbare.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="50.0" />
+
+            <!-- Navigation Labels -->
+            <HBox alignment="CENTER" spacing="30.0">
+                <Label fx:id="homeLabel" styleClass="nav-label" text="Home" />
+                <Label styleClass="nav-label" text="Shops" />
+                <Label styleClass="nav-label" text="Events" />
+                <Label styleClass="nav-label" text="Parking" />
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="105.0" />
+
+            <!-- Notifications Icon -->
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/notif.png" />
+                </image>
+            </ImageView>
+
+            <!-- User Profile -->
+            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="150.0" spacing="10.0">
+                <Label styleClass="user-label" text="Eyaaa" />
+                <ImageView fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/user3.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+        </children>
+    </HBox>
+
+
+    <!-- ScrollPane pour permettre le scrolling -->
+    <ScrollPane fitToWidth="true" styleClass="custom-scroll-pane">
+        <content>
+
+            <!-- Card principale -->
+            <VBox styleClass="card" spacing="15" alignment="CENTER">
+
+                <!-- Titre de la page -->
+                <Label styleClass="title-label" text="Modifier le Profil" />
+
+                <!-- Image de profil -->
+                <ImageView fx:id="profileImageView" fitHeight="100" fitWidth="100" styleClass="profile-img">
+                    <image>
+                        <Image url="@../assets/7.png" /> <!-- Default profile image -->
+                    </image>
+                </ImageView>
+
+                <!-- Bouton pour télécharger une nouvelle image -->
+                <Button onAction="#handleImageUpload" text="Changer la photo de profil" styleClass="btn-upload" />
+
+                <!-- Champs de texte pour les informations de base -->
+                <Label text="Nom :" styleClass="field-label"/>
+                <TextField fx:id="nomField" promptText="Nom" />
+
+                <Label text="Prénom :" styleClass="field-label"/>
+                <TextField fx:id="prenomField" promptText="Prénom" />
+
+                <Label text="Email :" styleClass="field-label"/>
+                <TextField fx:id="emailField" promptText="Email" />
+
+                <Label text="Téléphone :" styleClass="field-label"/>
+                <TextField fx:id="telephoneField" promptText="Téléphone" />
+
+                <Label text="Adresse :" styleClass="field-label"/>
+                <TextField fx:id="adresseField" promptText="Adresse" />
+
+                <!-- Séparation pour le changement de mot de passe -->
+                <Label styleClass="subtitle-label" text="Changer le Mot de Passe" />
+
+                <Label text="Mot de passe actuel :" styleClass="field-label"/>
+                <PasswordField fx:id="currentPasswordField" promptText="Mot de passe actuel" />
+
+                <Label text="Nouveau mot de passe :" styleClass="field-label"/>
+                <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" />
+
+                <Label text="Confirmer le nouveau mot de passe :" styleClass="field-label"/>
+                <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le nouveau mot de passe" />
+
+                <!-- Boutons d'action -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Button onAction="#handleSave" styleClass="btn-save" text="Enregistrer" />
+                    <Button onAction="#handleCancel" styleClass="btn-cancel" text="Annuler" />                </HBox>
+
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

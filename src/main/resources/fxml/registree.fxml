@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<HBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.azizcontroller.RegisterController">
+
+   <StackPane HBox.hgrow="ALWAYS">
+      <VBox alignment="CENTER" maxWidth="600" spacing="30" StackPane.alignment="CENTER">
+         <VBox.margin>
+            <Insets top="100.0" />
+         </VBox.margin>
+
+         <!-- Logo -->
+         <Pane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="146.0">
+            <children>
+               <ImageView fitHeight="139.0" fitWidth="154.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../assets/7.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </Pane>
+
+         <!-- Texte de bienvenue -->
+         <Text fx:id="welcomeText" text="Welcome to InnoMall!" textAlignment="CENTER" wrappingWidth="300">
+            <font>
+               <Font name="System Bold" size="26.0" />
+            </font>
+         </Text>
+
+         <!-- Sous-titre -->
+         <Text styleClass="text-blue" text="Create new account" textAlignment="CENTER" wrappingWidth="300">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+         </Text>
+
+         <!-- Boutons de sélection de rôle -->
+         <HBox alignment="CENTER" spacing="20">
+            <Button fx:id="utilisateurButton" onAction="#handleRoleSelection" styleClass="btn_signin" text="Utilisateur">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="shopOwnerButton" onAction="#handleRoleSelection" styleClass="btn_signup" text="Shop Owner">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+         </HBox>
+
+         <!-- Formulaire d'inscription -->
+         <VBox fx:id="formContainer" alignment="CENTER" spacing="10" styleClass="form-container" visible="false">
+            <!-- Catégorie (visible uniquement pour Shop Owner) -->
+            <Label fx:id="categorieLabel" style="-fx-font-size: 14px;" text="Catégorie:" visible="false" />
+            <ComboBox fx:id="categorieCombo" promptText="Sélectionnez une catégorie" styleClass="textfield" visible="false" />
+
+            <!-- Nom -->
+            <Label fx:id="nomLabel" style="-fx-font-size: 14px;" text="Nom:" />
+            <TextField fx:id="nomField" promptText="Entrez votre nom" styleClass="textfield">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+
+            <!-- Prénom (Utilisé pour la description dans le cas de Shop Owner) -->
+            <Label fx:id="prenomLabel" style="-fx-font-size: 14px;" text="Prénom:" />
+            <TextField fx:id="prenomField" promptText="Entrez votre prénom" styleClass="textfield">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+
+            <!-- Email -->
+            <Label style="-fx-font-size: 14px;" text="Email:" />
+            <TextField fx:id="emailField" promptText="Entrez votre email" styleClass="textfield">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+
+            <!-- Mot de passe -->
+            <Label style="-fx-font-size: 14px;" text="Mot de passe:" />
+            <PasswordField fx:id="passwordField" promptText="Entrez votre mot de passe" styleClass="passwordfield" />
+
+
+            <!-- Adresse -->
+            <Label fx:id="adresseLabel" style="-fx-font-size: 14px;" text="Adresse:" />
+            <TextField fx:id="adresseField" promptText="Entrez votre adresse" styleClass="textfield">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+
+            <!-- Téléphone -->
+            <Label fx:id="telephoneLabel" style="-fx-font-size: 14px;" text="Téléphone:" />
+            <TextField fx:id="telephoneField" promptText="Entrez votre téléphone" styleClass="textfield">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+
+
+
+            <!-- Bouton S'inscrire -->
+            <Button fx:id="registerButton" onAction="#handleRegister" styleClass="btn_signup" text="S'inscrire">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20" />
+               </VBox.margin>
+            </Button>
+
+            <!-- Bouton Connexion -->
+            <Button fx:id="loginButton" onAction="#redirectToLogin" styleClass="btn_signin" text="Connexion">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10" />
+               </VBox.margin>
+            </Button>
+         </VBox>
+      </VBox>
+   </StackPane>
+
+   <!-- Partie droite - Pane bleu -->
+   <HBox fx:id="pane" styleClass="pane" HBox.hgrow="ALWAYS" />
+</HBox>

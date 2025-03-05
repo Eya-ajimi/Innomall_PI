@@ -1,0 +1,179 @@
+/* Style global */
+.root {
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-background-color: #F4F4F9;
+}
+
+/* Style de la carte profil */
+.card {
+    -fx-background-color: white;
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0.5, 0, 4);
+    -fx-min-width: 320px;
+    -fx-max-width: 450px;
+    -fx-transition: transform 0.3s ease;
+}
+.card:hover {
+    -fx-transform: scale(1.03);
+}
+
+/* Image de profil ronde */
+.profile-img {
+    -fx-clip-shape: circle;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.5, 0, 2);
+    -fx-border-color: #FFA500;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+}
+
+/* Titre de bienvenue */
+.welcome-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #353A56;
+}
+
+/* Labels d'information */
+.info-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #555;
+}
+
+/* Boutons */
+.btn-modifier {
+    -fx-background-color: #FFA500;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2);
+    -fx-transition: background-color 0.3s ease;
+}
+.btn-modifier:hover {
+    -fx-background-color: #E69500;
+}
+
+.btn-deconnexion {
+    -fx-background-color: #353A56;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2);
+    -fx-transition: background-color 0.3s ease;
+}
+.btn-deconnexion:hover {
+    -fx-background-color: #2E3147;
+}
+/* Profile Image Styling */
+.profile-img {
+    -fx-scale-x: 1.2; /* Horizontal scaling */
+    -fx-scale-y: 1.2; /* Vertical scaling */
+}
+
+/* Upload Button Styling */
+.btn-upload {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+.btn-upload:hover {
+    -fx-background-color: #45a049;
+}
+
+/*---------------------------------- navbar--------------------------------------------- */
+
+.hbox {
+    -fx-background-color: #E1F4FF;
+    -fx-padding: 10px;
+}
+
+.round-layout {
+    -fx-border-radius: 50px;
+    -fx-border-color: white;
+}
+
+.vbox {
+    -fx-max-height: 20px;
+}
+/* Profile Picture */
+.profile-pic {
+    -fx-background-radius: 50%;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 1);
+}
+/* Navigation Labels */
+.nav-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-cursor: hand;
+}
+
+.nav-label:hover {
+    -fx-text-fill: #88d1e7;
+}
+
+
+
+.button1 {
+    -fx-background-color: #F0F0F0;
+    -fx-text-fill: #333;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    -fx-border-color: #ccc;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+}
+
+.text-field {
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-padding: 5px;
+}
+
+.button {
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-background-color: #F7D9C3;
+    -fx-text-fill: #373636;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+}
+
+.button:hover {
+    -fx-background-color: #bbc1c6;
+}
+
+/* Logo Label */
+.logo-label {
+    -fx-font-size: 24px;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-text-fill: #000000;
+    -fx-padding: 10px;
+}
+
+/* Navigation Labels */
+.nav-label {
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-text-fill: #7b7878;
+    -fx-padding: 10px 15px;
+    -fx-cursor: hand;
+}
+
+.nav-label:hover {
+    -fx-text-fill: gray;
+    -fx-underline: true;
+}

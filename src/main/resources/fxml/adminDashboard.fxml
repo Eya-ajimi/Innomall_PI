@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.azizcontroller.adminDashboardControlleur" stylesheets="@../css/admin.css">
+    <!-- Label pour afficher le message de bienvenue -->
+    <Label fx:id="welcomeLabel" layoutX="50" layoutY="50">
+        <font>
+            <Font name="System Bold" size="24"/>
+        </font>
+    </Label>
+
+    <!-- Bouton de déconnexion -->
+    <Button layoutX="50" layoutY="100" text="Déconnexion" onAction="#handleLogout"/>
+
+    <!-- TableView pour afficher les utilisateurs -->
+    <TableView fx:id="userTable" layoutX="50" layoutY="150" prefHeight="400" prefWidth="1000">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="100"/>
+            <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="100"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
+            <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="100"/>
+            <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="100"/>
+            <TableColumn fx:id="adresseColumn" text="Adresse" prefWidth="150"/>
+            <TableColumn fx:id="dateInscriptionColumn" text="Date Inscription" prefWidth="150"/>
+            <TableColumn fx:id="statutColumn" text="Statut" prefWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+        </columns>
+    </TableView>
+</AnchorPane>
