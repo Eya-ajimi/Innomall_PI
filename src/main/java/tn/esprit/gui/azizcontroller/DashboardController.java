@@ -2,45 +2,45 @@ package tn.esprit.gui.azizcontroller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import tn.esprit.entities.Utilisateur;
-import tn.esprit.services.azizservice.UserService;
-import tn.esprit.utils.Session;
+
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class DashboardController {
-    @FXML
-    private AnchorPane mainPane;
-    @FXML
-    private StackPane contentPane;
-    private final UserService userService = new UserService();
-    private Utilisateur currentUser;
+public class DashboardController implements Initializable {
 
-    public void initialize() {
-        Session session = Session.getInstance();
-        currentUser = session.getCurrentUser();
+    @FXML
+    private AnchorPane mainPane; // Ensure this matches the fx:id in FXML
+
+    @FXML
+    private StackPane contentPane; // Ensure this matches the fx:id in FXML
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Charger la vue des statistiques dès le démarrage
         showDashboardContent();
-        // Remove the handleLogout() call from here
     }
 
     private void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-            AnchorPane view = loader.load();
-            contentPane.getChildren().setAll(view);
+            Parent view = loader.load(); // Utilisez Parent pour une compatibilité avec tous les types de nœuds
+            contentPane.getChildren().setAll(view); // Remplace le contenu actuel par la nouvelle vue
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Erreur lors du chargement de la vue : " + fxmlFile);
         }
     }
 
     @FXML
     private void showDashboardContent() {
-        loadView("/fxml/DashboardContent.fxml");
+        loadView("/fxml/statistiques_inscriptions.fxml");
     }
 
     @FXML
@@ -50,38 +50,26 @@ public class DashboardController {
 
     @FXML
     private void showreclamationmanagement() {
-        loadView("/fxml/GestionReclamation.fxml");
+        loadView("/fxml/admin_reclamation.fxml");
     }
 
     @FXML
-    private void showstatistics() {
-        loadView("/fxml/Statiqtiques.fxml");
-    }
+    private void handleLogout() {
+        // Déconnecter l'utilisateur (si vous avez une classe Session)
+        // Session session = Session.getInstance();
+        // session.logout();
 
-    @FXML
-    public void handleLogout() {
-        Session.getInstance().logout();
-
+        // Rediriger vers la page de connexion
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-
-            // Ensure correct stage retrieval
-            Stage stage = (Stage) contentPane.getScene().getWindow();
+            Stage stage = (Stage) mainPane.getScene().getWindow(); // Utilisez mainPane pour obtenir la fenêtre actuelle
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la déconnexion.");
+            System.err.println("Erreur lors de la déconnexion : " + e.getMessage());
         }
-    }
-
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

@@ -33,7 +33,7 @@ public class Main extends Application {
 
             Scene scene = new Scene(root, 1400, 600);
 
-            String cssPath = "/css/styleuser.css";
+            String cssPath = "/css/loginmaria.css";
             if (getClass().getResource(cssPath) != null) {
                 scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
                 System.out.println("✅ CSS chargé !");

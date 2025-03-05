@@ -31,7 +31,7 @@ public class ProduitService {
                 produit.setStock(rs.getInt("stock"));
                 produit.setPrix(rs.getDouble("prix"));
                 produit.setImage_url(rs.getString("image_url"));
-               // produit.setDateAjout(rs.getTimestamp("date_ajout").toLocalDateTime());
+                // produit.setDateAjout(rs.getTimestamp("date_ajout").toLocalDateTime());
 
                 produits.add(produit);
             }

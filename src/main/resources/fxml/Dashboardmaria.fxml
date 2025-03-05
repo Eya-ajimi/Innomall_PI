@@ -38,7 +38,7 @@
                               </Pane>
                            </children>
                         </HBox>
-                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="266.0" style="-fx-font-weight:light" text="Bonjour Fatales !" textFill="#000000">
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="266.0" style="-fx-font-weight:light" text="Bonjour  !" textFill="#000000">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -128,25 +128,14 @@
                                  <Insets bottom="7.0" left="15.0" right="10.0" top="7.0" />
                              </padding>
                          </Button>
-                        <Button contentDisplay="LEFT" graphicTextGap="15.0" maxWidth="Infinity" onAction="#showProfil" styleClass="sidebar-button" text="Profil">
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/feedback.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <padding>
-                              <Insets bottom="7.0" left="15.0" right="10.0" top="7.0" />
-                           </padding>
-                        </Button>
+
                      </children>
                   </VBox>
 
                   <!-- Logout section with improved spacing -->
                   <VBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="Infinity" spacing="10.0">
                      <children>
-                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="45.0" prefWidth="260.0" style="-fx-font-size: 17px;" styleClass="logout-button" text="Se Déconnecter" textFill="WHITE">
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showProfil" prefHeight="45.0" prefWidth="260.0" style="-fx-font-size: 17px;" styleClass="logout-button" text="Profil" textFill="WHITE">
                            <font>
                               <Font name="Dubai light" />
                            </font>

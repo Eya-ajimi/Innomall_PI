@@ -101,7 +101,7 @@ AnchorPane {
 }
 
 /* Button styles */
-.btn-modifier, .btn-deconnexion, .btn-manage, .btn-photo {
+.btn-modifier, .btn-deconnexion, .btn-manage, .btn-photo, .btn-dis {
     -fx-padding: 10px 20px;
     -fx-background-radius: 15px;
     -fx-cursor: hand;
@@ -109,6 +109,10 @@ AnchorPane {
     -fx-min-width: 150px;
 }
 
+.btn-modifier {
+    -fx-background-color: rgba(255, 165, 0, 0.77);
+    -fx-text-fill: white;
+}
 .btn-modifier {
     -fx-background-color: rgba(255, 165, 0, 0.77);
     -fx-text-fill: white;
@@ -123,10 +127,14 @@ AnchorPane {
     -fx-background-color: rgba(191, 226, 246, 0.82);
     -fx-text-fill: #333333;
 }
-
 .btn-manage:hover {
     -fx-background-color: rgba(191, 226, 246, 0.95);
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.btn-dis {
+    -fx-background-color: rgba(255, 165, 0, 0.77);
+    -fx-text-fill: #333333;
 }
 
 .btn-deconnexion {
@@ -136,9 +144,7 @@ AnchorPane {
     -fx-border-width: 1px;
 }
 
-.btn-deconnexion:hover {
-    -fx-background-color: #e5e5e5;
-}
+
 
 .btn-photo {
     -fx-background-color: white;

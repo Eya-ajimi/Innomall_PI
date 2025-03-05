@@ -43,42 +43,61 @@ public class CommentaireService implements CRUD<Commentaire> {
 
     @Override
     public int update(Commentaire commentaire) throws SQLException {
-        String req = "UPDATE `commentaires` SET `contenu` = ? WHERE `id` = ?";
+        // Check if the comment exists and the user is the owner
+        String checkComment = "SELECT id FROM commentaires WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkComment);
+        ps.setInt(1, commentaire.getId());
+        ps.setInt(2, commentaire.getUtilisateurId());
 
+        ResultSet rs = ps.executeQuery();
+        if (!rs.next()) {
+            throw new SQLException("Vous n'êtes pas autorisé à modifier ce commentaire.");
+        }
+
+        // Proceed with the update
+        String req = "UPDATE commentaires SET contenu = ? WHERE id = ?";
         ps = cnx.prepareStatement(req);
         ps.setString(1, commentaire.getContenu());
         ps.setInt(2, commentaire.getId());
 
-        return ps.executeUpdate();
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected == 0) {
+            throw new SQLException("Aucune ligne n'a été mise à jour. Vérifiez si le contenu a changé.");
+        }
+
+        return rowsAffected;
     }
 
     public int delete(Commentaire commentaire) throws SQLException {
-        // Vérifier si le commentaire existe
-        String selectQuery = "SELECT COUNT(*) FROM commentaires WHERE id = ?";
-        try (PreparedStatement stmt = cnx.prepareStatement(selectQuery)) {
-            stmt.setInt(1, commentaire.getId());
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next() && rs.getInt(1) > 0) {
-                // Si le commentaire existe, supprimer d'abord les sous-commentaires associés
-                String deleteSousCommentaires = "DELETE FROM sous_commentaires WHERE commentaire_id = ?";
-                try (PreparedStatement deleteSousStmt = cnx.prepareStatement(deleteSousCommentaires)) {
-                    deleteSousStmt.setInt(1, commentaire.getId());
-                    deleteSousStmt.executeUpdate();
-                }
+        // Check if the comment exists and the user is the owner
+        String checkComment = "SELECT id FROM commentaires WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkComment);
+        ps.setInt(1, commentaire.getId());
+        ps.setInt(2, commentaire.getUtilisateurId());
 
-                // Supprimer ensuite le commentaire
-                String deleteQuery = "DELETE FROM commentaires WHERE id = ?";
-                try (PreparedStatement deleteStmt = cnx.prepareStatement(deleteQuery)) {
-                    deleteStmt.setInt(1, commentaire.getId());
-                    return deleteStmt.executeUpdate();
-                }
-            } else {
-                System.out.println("Le commentaire avec l'ID " + commentaire.getId() + " n'existe pas.");
-                return 0;  // Retourne 0 si le commentaire n'existe pas
-            }
+        ResultSet rs = ps.executeQuery();
+        if (!rs.next()) {
+            throw new SQLException("Vous n'êtes pas autorisé à supprimer ce commentaire.");
         }
-    }
 
+        // Delete associated sous-commentaires
+        String deleteSousCommentaires = "DELETE FROM sous_commentaires WHERE commentaire_id = ?";
+        ps = cnx.prepareStatement(deleteSousCommentaires);
+        ps.setInt(1, commentaire.getId());
+        ps.executeUpdate();
+
+        // Delete the comment
+        String deleteQuery = "DELETE FROM commentaires WHERE id = ?";
+        ps = cnx.prepareStatement(deleteQuery);
+        ps.setInt(1, commentaire.getId());
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected == 0) {
+            throw new SQLException("Aucune ligne n'a été supprimée.");
+        }
+
+        return rowsAffected;
+    }
 
 
 
@@ -98,6 +117,7 @@ public class CommentaireService implements CRUD<Commentaire> {
             commentaire.setUtilisateurId(rs.getInt("utilisateur_id"));
             commentaire.setDateCreation(rs.getString("date_creation"));
             temp.add(commentaire);
+
         }
 
         return temp;
@@ -146,31 +166,7 @@ public class CommentaireService implements CRUD<Commentaire> {
 
 
 
-    // Méthode pour récupérer les sous-commentaires d'un commentaire
-    public List<SousCommentaire> getSousCommentaires(int commentaireId) throws SQLException {
-        List<SousCommentaire> sousCommentaires = new ArrayList<>();
-        String query = "SELECT * FROM sous_commentaires WHERE commentaire_id = ?";
-
-        try (PreparedStatement ps = cnx.prepareStatement(query)) {
-            ps.setInt(1, commentaireId); // Paramètre pour l'ID du commentaire
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                SousCommentaire sousCommentaire = new SousCommentaire();
-                sousCommentaire.setId(rs.getInt("id"));
-                sousCommentaire.setCommentaireId(rs.getInt("commentaire_id"));
-                sousCommentaire.setUtilisateurId(rs.getInt("utilisateur_id"));
-                sousCommentaire.setContenu(rs.getString("contenu"));
-                //sousCommentaire.setDateCreation(rs.getTimestamp("date_creation"));
-
-                sousCommentaires.add(sousCommentaire);
-            }
-        }
-
-        return sousCommentaires;
-    }
 
 
 
 }
-

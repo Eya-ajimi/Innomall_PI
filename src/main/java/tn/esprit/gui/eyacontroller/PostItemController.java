@@ -6,18 +6,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tn.esprit.entities.Commentaire;
 import tn.esprit.entities.Poste;
 import tn.esprit.entities.Utilisateur;
+import tn.esprit.services.azizservice.UserService;
 import tn.esprit.services.eyaservice.CommentaireService;
 import tn.esprit.services.eyaservice.PostService;
 import tn.esprit.utils.Session;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +38,8 @@ public class PostItemController {
 
     @FXML
     private Label postUsername;  // Username label
-
+    @FXML
+    private ImageView  postUserprofile;
     @FXML
     private Label postDate;  // Date label
 
@@ -46,23 +54,79 @@ public class PostItemController {
 
     @FXML
     private Button editDeleteButton;  // Button to trigger context menu
-
+    @FXML
+    private ImageView postUserProfileImage;
     private Poste currentPost;  // Store the current post
     private final PostService postService = new PostService();  // Post service for CRUD operations
     private final CommentaireService commentaireService = new CommentaireService();  // Comment service
 
-
     public void setPostData(Poste post) {
         this.currentPost = post;  // Store the current post
-        postUsername.setText("Utilisateur " + post.getUtilisateurId());
         postDate.setText(post.getDateCreation());
         postContent.setText(post.getContenu());
-        setupEditDeleteMenu(post);  // Set up the edit/delete menu
+
+        // Fetch the user's name using their ID
+        UserService utilisateurService = new UserService();
+        try {
+            Utilisateur user= utilisateurService.getOneById(post.getUtilisateurId());
+            postUsername.setText(user.getNom());
+            loadProfileImage(user);
+            // Display the user's name
+        } catch (SQLException e) {
+            e.printStackTrace();
+            postUsername.setText("Utilisateur inconnu"); // Fallback in case of an error
+        }
+
+
+        /**profilepic**/
+
+
+        // Check if the current user is the creator of the post
+        Session session = Session.getInstance();
+        Utilisateur currentUser = session.getCurrentUser();
+
+        if (currentUser != null && currentUser.getId() == post.getUtilisateurId()) {
+            // Enable edit/delete button if the current user is the creator
+            editDeleteButton.setVisible(true);
+            setupEditDeleteMenu(post);  // Set up the edit/delete menu
+        } else {
+            // Hide the edit/delete button if the current user is not the creator
+            editDeleteButton.setVisible(false);
+        }
+
         loadComments(post.getId());  // Load comments for this post
     }
 
+    private void loadProfileImage(Utilisateur user) {
+        if (user.getProfilePicture() != null) {
+            // Charger l'image à partir du tableau de bytes
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
+            Image profileImage = new Image(inputStream);
+            postUserProfileImage.setImage(profileImage);
+        } else {
+            try {
+                // Load the default image from the resources
+                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
+                if (inputStream == null) {
+                    throw new FileNotFoundException("Default image not found at /assets/7.png");
+                }
+                Image defaultImage = new Image(inputStream);
+                postUserProfileImage.setImage(defaultImage);
+            } catch (Exception e) {
+                System.err.println("Error loading default image: " + e.getMessage());
+                // Optionally, set a placeholder image or leave the ImageView empty
+            }
+        }
+    }
 
 
+    private Image convertBytesToImage(byte[] imageBytes) {
+        if (imageBytes == null || imageBytes.length == 0) {
+            // Return a default image if no image is found
+            return new Image(getClass().getResourceAsStream("/assets/user3.png"));
+        }
+        return new Image(new ByteArrayInputStream(imageBytes));
+    }
 
     @FXML
     private void handleAddComment() {
@@ -104,6 +168,7 @@ public class PostItemController {
             showAlert("Erreur", "Problème lors de l'ajout du commentaire.", Alert.AlertType.ERROR);
         }
     }
+
     private void showAlert(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -148,7 +213,6 @@ public class PostItemController {
         }
     }
 
-
     private void setupEditDeleteMenu(Poste post) {
         // Create the context menu
         ContextMenu contextMenu = new ContextMenu();
@@ -169,7 +233,6 @@ public class PostItemController {
             contextMenu.show(editDeleteButton, event.getScreenX(), event.getScreenY());
         });
     }
-
 
     private void editPost(Poste post) {
         // Create a custom dialog
@@ -224,7 +287,6 @@ public class PostItemController {
         });
     }
 
-
     private void updatePostInDatabase(Poste post) {
         try {
             postService.update(post);  // Call the update method in the service
@@ -233,7 +295,6 @@ public class PostItemController {
             System.err.println("Erreur lors de la mise à jour du post : " + e.getMessage());
         }
     }
-
 
     private void deletePost(Poste post) {
         System.out.println("Deleting post: " + post.getId());

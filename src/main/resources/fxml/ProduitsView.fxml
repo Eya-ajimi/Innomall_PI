@@ -40,9 +40,10 @@
             <!-- Navigation Labels -->
             <HBox alignment="CENTER" spacing="30.0">
                 <Label fx:id="homeLabel"  styleClass="nav-label" text="Home" />
-                <Label   styleClass="nav-label" text="Shops"  />
-                <Label styleClass="nav-label" text="Events" />
-                <Label styleClass="nav-label" text="Parking" />
+                <Label  fx:id="shopLabel" styleClass="nav-label" text="Shops"  />
+                <Label fx:id="eventLabel" styleClass="nav-label" text="Events" />
+                <Label fx:id="parkingLabel" styleClass="nav-label" text="Parking" />
+                <Label fx:id="cartLabel" styleClass="nav-label" text="Cart" />
             </HBox>
 
             <!-- Spacer -->

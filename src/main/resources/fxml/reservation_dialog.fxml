@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.URL?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="10" styleClass="dialog-content" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets top="15" right="20" bottom="15" left="20"/>
+    </padding>
+
+    <Text styleClass="dialog-header" text="Reserve Parking"/>
+
+    <!-- Start Date/Time Section -->
+    <VBox spacing="2" styleClass="section-container">
+        <Label text="Start Date &amp; Time" styleClass="section-header"/>
+        <GridPane hgap="5" vgap="3">
+            <DatePicker fx:id="startDatePicker" promptText="Select date"
+                        GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+
+            <Label text="Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <HBox spacing="5" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Spinner fx:id="startHourSpinner" prefWidth="60" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23"
+                                                                        initialValue="12"
+                                                                        amountToStepBy="1"/>
+                    </valueFactory>
+                </Spinner>
+                <Label text=":" styleClass="time-separator"/>
+                <Spinner fx:id="startMinuteSpinner" prefWidth="60" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59"
+                                                                        initialValue="0"
+                                                                        amountToStepBy="5"/>
+                    </valueFactory>
+                </Spinner>
+            </HBox>
+        </GridPane>
+    </VBox>
+
+    <!-- End Date/Time Section -->
+    <VBox spacing="2" styleClass="section-container">
+        <Label text="End Date &amp; Time" styleClass="section-header"/>
+        <GridPane hgap="5" vgap="3">
+            <DatePicker fx:id="endDatePicker" promptText="Select date"
+                        GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+
+            <Label text="Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <HBox spacing="5" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Spinner fx:id="endHourSpinner" prefWidth="60" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="23"
+                                                                        initialValue="12"
+                                                                        amountToStepBy="1"/>
+                    </valueFactory>
+                </Spinner>
+                <Label text=":" styleClass="time-separator"/>
+                <Spinner fx:id="endMinuteSpinner" prefWidth="60" styleClass="time-spinner">
+                    <valueFactory>
+                        <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="59"
+                                                                        initialValue="0"
+                                                                        amountToStepBy="5"/>
+                    </valueFactory>
+                </Spinner>
+            </HBox>
+        </GridPane>
+    </VBox>
+
+    <!-- Vehicle Info and Car Wash in one row -->
+    <HBox spacing="10">
+        <!-- Vehicle Information -->
+        <VBox spacing="2" styleClass="section-container" HBox.hgrow="ALWAYS">
+            <Label text="Vehicle Information" styleClass="section-header"/>
+            <GridPane hgap="5" vgap="5">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="80"/>
+                    <ColumnConstraints hgrow="SOMETIMES"/>
+                </columnConstraints>
+                <Label text="Type:" styleClass="field-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="vehicleTypeCombo" promptText="Select type" maxWidth="Infinity"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            </GridPane>
+        </VBox>
+
+        <!-- Car Wash Service -->
+        <VBox spacing="2" styleClass="section-container" HBox.hgrow="ALWAYS">
+            <Label text="Car Wash Service" styleClass="section-header"/>
+            <CheckBox fx:id="carWashCheckBox" text="Add Car Wash" styleClass="car-wash-checkbox"/>
+            <ComboBox fx:id="carWashTypeCombo" promptText="Select wash type" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <!-- Additional Notes - made smaller -->
+    <VBox spacing="2" styleClass="section-container">
+        <Label text="Notes" styleClass="section-header"/>
+        <TextArea fx:id="notesArea" promptText="Special requirements"
+                  wrapText="true" prefRowCount="2" maxWidth="Infinity"/>
+    </VBox>
+
+    <!-- Reservation Summary - more compact -->
+    <VBox spacing="2" styleClass="summary-container">
+        <Label text="Summary" styleClass="section-header"/>
+        <GridPane hgap="5" vgap="3">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="100"/>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+            </columnConstraints>
+
+            <Label text="Duration:" styleClass="summary-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label fx:id="durationLabel" text="--" styleClass="summary-value"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Parking Fee:" styleClass="summary-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label fx:id="parkingPriceLabel" text="--" styleClass="summary-value"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Car Wash Fee:" styleClass="summary-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Label fx:id="carWashPriceLabel" text="--" styleClass="summary-value"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Separator GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3"/>
+
+            <Label text="Total:" styleClass="summary-label total-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <Label fx:id="totalPriceLabel" text="--" styleClass="summary-value total-value"
+                   GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        </GridPane>
+    </VBox>
+
+    <!-- Error Message - smaller font -->
+    <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false"
+           textFill="red" wrapText="true" maxWidth="Infinity"/>
+    <stylesheets>
+        <URL value="@/css/reservation_dialog_css.css" />
+    </stylesheets>
+</VBox>

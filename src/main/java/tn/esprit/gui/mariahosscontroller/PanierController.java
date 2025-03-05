@@ -28,7 +28,16 @@ public class PanierController {
     @FXML
     private Label homeLabel;
     @FXML
+    private Label shopsLabel;
+    @FXML
+    private Label eventsLabel;
+    @FXML
+    private Label parkingLabel;
+    @FXML
     private Label totalLabel;
+    @FXML
+    private Label itemCountLabel;
+
 
 
     private panierService panierService = new panierService();
@@ -42,6 +51,7 @@ public class PanierController {
         try {
             List<Panier> paniers = panierService.showAllClientPanier(idClient);
             if (paniers != null) {
+                itemCountLabel.setText(paniers.size()+" articles");
                 for (Panier panier : paniers) {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PanierCard.fxml"));
                     AnchorPane card = loader.load();
@@ -59,11 +69,63 @@ public class PanierController {
                     panierVBox.getChildren().add(card);
                 }
             }
+
             // Add event handler to the Home label
             homeLabel.setOnMouseClicked(event -> {
                 try {
                     // Load the Homepage.fxml file
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Homepage.fxml"));
+                    Parent root = loader.load();
+
+                    // Get the current stage (window)
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                    // Set the new scene
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            shopsLabel.setOnMouseClicked(event -> {
+                try {
+                    // Load the Homepage.fxml file
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/shops.fxml"));
+                    Parent root = loader.load();
+
+                    // Get the current stage (window)
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                    // Set the new scene
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            eventsLabel.setOnMouseClicked(event -> {
+                try {
+                    // Load the Homepage.fxml file
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_event_view.fxml"));
+                    Parent root = loader.load();
+
+                    // Get the current stage (window)
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                    // Set the new scene
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            parkingLabel.setOnMouseClicked(event -> {
+                try {
+                    // Load the Homepage.fxml file
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/parking_lot.fxml"));
                     Parent root = loader.load();
 
                     // Get the current stage (window)
@@ -92,6 +154,7 @@ public class PanierController {
         } else {
             // Si la commande est null, affichez un total de 0.00 dt
             totalLabel.setText("0.00 dt");
+            itemCountLabel.setText("0 articles");
         }
     }
 
@@ -135,13 +198,14 @@ public class PanierController {
     private int nbClicks = 0; // Variable de classe pour compter les clics
 
     @FXML
-    private void handlePasserCommande() throws SQLException {
+    private void handlePasserCommande() throws SQLException, IOException {
         commandeService.payerCommande(idClient);
         Commande cmd = commandeService.getCommandeEnCours(idClient);
 
         if (cmd == null && nbClicks == 0) {
             nbClicks++; // Incrémenter le compteur de clics
             updateTotal();
+            updatePanierCards();
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Commande passée avec succès !");
             alert.showAndWait();
         } else {
@@ -154,9 +218,10 @@ public class PanierController {
         panierVBox.getChildren().clear();
         List<Panier> paniers = panierService.showAllClientPanier(idClient);
         if (paniers != null) {
+            itemCountLabel.setText(paniers.size()+" articles");
             for (Panier panier : paniers) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/panierCard.fxml"));
-                HBox card = loader.load();
+                Parent  card = loader.load();
                 PanierCardController cardController = loader.getController();
 
                 cardController.setPanier(panier);

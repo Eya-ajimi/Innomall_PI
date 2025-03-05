@@ -113,7 +113,7 @@ public class SignInController {
             Scene scene = new Scene(root);
 
             // Appliquer le fichier CSS à la nouvelle scène
-            scene.getStylesheets().add(getClass().getResource("/css/styleuser.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/css/resgistre.css").toExternalForm());
 
             // Obtenir la fenêtre actuelle (stage)
             Stage stage = (Stage) btn_sigUp.getScene().getWindow();
@@ -138,7 +138,7 @@ public class SignInController {
             Scene scene = new Scene(root);
 
             // Appliquer le fichier CSS à la nouvelle scène
-            scene.getStylesheets().add(getClass().getResource("/css/styleuser.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/css/loginmaria.css").toExternalForm());
 
             // Créer une nouvelle fenêtre (stage) pour afficher la scène
             Stage stage = new Stage();

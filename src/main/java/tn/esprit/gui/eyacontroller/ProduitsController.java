@@ -20,7 +20,10 @@ import java.util.List;
 
 public class ProduitsController {
 
-    @FXML private Label shopNameLabel;
+    @FXML private Label shopLabel;
+    @FXML private Label eventLabel;
+    @FXML private Label cartLabel;
+    @FXML private Label produit;
     @FXML private GridPane produitsContainer; // Change VBox to GridPane
 
     private int shopId;
@@ -91,6 +94,57 @@ public class ProduitsController {
             try {
                 // Load the Homepage.fxml file
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Homepage.fxml"));
+                Parent root = loader.load();
+
+                // Get the current stage (window)
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Set the new scene
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        shopLabel.setOnMouseClicked(event -> {
+            try {
+                // Load the Homepage.fxml file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/shops.fxml"));
+                Parent root = loader.load();
+
+                // Get the current stage (window)
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Set the new scene
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        eventLabel.setOnMouseClicked(event -> {
+            try {
+                // Load the Homepage.fxml file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_event_view.fxml"));
+                Parent root = loader.load();
+
+                // Get the current stage (window)
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Set the new scene
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        cartLabel.setOnMouseClicked(event -> {
+            try {
+                // Load the Homepage.fxml file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Panier.fxml"));
                 Parent root = loader.load();
 
                 // Get the current stage (window)

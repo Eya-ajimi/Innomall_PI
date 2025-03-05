@@ -45,6 +45,7 @@ public class PanierCardController {
                 File file = new File(imagePath);
                 if (file.exists()) {
                     image = new Image(file.toURI().toString()); // Load from local file system
+                    imageView.setImage(image);
                 } else {
                     throw new FileNotFoundException("File not found: " + imagePath);
                 }
@@ -54,9 +55,9 @@ public class PanierCardController {
         } catch (Exception e) {
             System.out.println("Error loading image: " + e.getMessage());
             image = new Image(getClass().getResource("/assets/product.png").toExternalForm()); // Load default image
+            imageView.setImage(image);
         }
 
-        imageView.setImage(image);
 
     }
 

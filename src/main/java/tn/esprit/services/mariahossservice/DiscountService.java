@@ -142,4 +142,23 @@ public class DiscountService implements CRUD<Discount> {
         }
         return discounts;
     }
+
+    public Discount getDiscountById(int promotionId) throws SQLException {
+        String query = "SELECT * FROM Discount WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, promotionId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Discount(
+                        rs.getInt("id"),
+                        rs.getInt("shop_id"),
+                        rs.getFloat("discount_percentage"),
+                        rs.getDate("start_date"),
+                        rs.getDate("end_date")
+                );
+            }
+        }
+        return null; // Return null if no discount is found
+    }
 }

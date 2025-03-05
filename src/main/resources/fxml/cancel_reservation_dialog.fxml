@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:id="root" spacing="20" styleClass="cancel-reservation-dialog" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.sofienecontroller.CancelReservationDialogController" maxHeight="700" prefHeight="700">
+    <stylesheets>
+        <URL value="@/css/cancel_reservation_dialog_css.css" />
+    </stylesheets>
+    <padding>
+        <Insets bottom="25" left="25" right="25" top="25" />
+    </padding>
+
+    <StackPane styleClass="dialog-header-container">
+        <Rectangle arcHeight="10" arcWidth="10" height="60" styleClass="header-background" width="600" />
+        <HBox alignment="CENTER" spacing="15">
+            <Text styleClass="dialog-title" text="Cancel Reservation">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.1)" offsetX="0" offsetY="1" radius="2" />
+                </effect>
+            </Text>
+        </HBox>
+    </StackPane>
+
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="search-container">
+        <HBox alignment="CENTER_LEFT" styleClass="search-box" HBox.hgrow="ALWAYS">
+            <Label styleClass="search-icon" text="🔍" />
+            <TextField fx:id="searchField" promptText="Search by reservation ID, date, or destination..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+        </HBox>
+        <ComboBox fx:id="statusFilter" promptText="Filter by status" styleClass="status-filter" />
+    </HBox>
+
+    <StackPane styleClass="table-container" VBox.vgrow="ALWAYS">
+        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="custom-scroll-pane">
+            <TableView fx:id="reservationTableView" prefHeight="250.0" prefWidth="598.0" styleClass="reservation-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="spotColumn" text="Spot #" />
+                    <TableColumn fx:id="dateReservationColumn" text="Date Reservation" />
+                    <TableColumn fx:id="dateExpirationColumn" text="Date Expiration" />
+                    <TableColumn fx:id="statusColumn" text="Status" />
+                </columns>
+            </TableView>
+        </ScrollPane>
+    </StackPane>
+
+    <VBox fx:id="detailsContainer" spacing="15" styleClass="details-container" maxHeight="250">
+        <Label styleClass="details-section-title" text="Reservation Details" />
+
+        <HBox spacing="30">
+            <!-- Left column -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Reservation ID:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="idValueLabel" styleClass="detail-value" />
+                </HBox>
+
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Date of Reservation:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="dateValueLabel" styleClass="detail-value" />
+                </HBox>
+
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Date of Expiration:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="timeValueLabel" styleClass="detail-value" />
+                </HBox>
+            </VBox>
+
+            <!-- Right column -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Car Wash:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="locationValueLabel" styleClass="detail-value" />
+                </HBox>
+
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Vehicle Type:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="typeValueLabel" styleClass="detail-value" />
+                </HBox>
+
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Notes:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="notesValueLabel" styleClass="detail-value" />
+                </HBox>
+
+                <HBox styleClass="detail-row">
+                    <Label styleClass="detail-label" text="Price:" />
+                    <Region minWidth="10" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="priceValueLabel" styleClass="detail-value price-value" />
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <VBox spacing="5" styleClass="cancellation-policy">
+            <Label styleClass="policy-header" text="Cancellation Policy" />
+            <Label styleClass="policy-item" text="• Free cancellation up to 48 hours before reservation" />
+            <Label styleClass="policy-item" text="• 50% refund for cancellations between 24-48 hours before reservation" />
+            <Label styleClass="policy-item" text="• No refund for cancellations less than 24 hours before reservation" />
+        </VBox>
+    </VBox>
+
+    <Label fx:id="statusLabel" styleClass="status-message" wrapText="true" />
+
+    <HBox alignment="CENTER_RIGHT" spacing="15" styleClass="button-container">
+        <Button fx:id="backButton" styleClass="action-button, back-button" text="Go Back" />
+        <Button fx:id="cancelButton" onAction="#handleCancelReservationAction" styleClass="action-button, cancel-button" text="Cancel Reservation" />
+    </HBox>
+</VBox>

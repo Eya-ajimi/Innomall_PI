@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox fx:id="root" spacing="20" styleClass="main-container" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.sofienecontroller.ParkingLotController">
+    <padding>
+        <Insets bottom="30" left="30" right="30" top="30" />
+    </padding>
+
+    <!-- Navigation Bar -->
+    <HBox alignment="CENTER" prefHeight="73.0" styleClass="nav-bar">
+        <children>
+            <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall">
+                <HBox.margin>
+                    <Insets left="-140.0" />
+                </HBox.margin>
+            </Label>
+
+            <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
+
+            <HBox alignment="CENTER" spacing="5.0">
+                <TextField prefHeight="26.0" prefWidth="258.0" promptText="Search..."
+                           style="-fx-background-radius: 15; -fx-background-color: white;" />
+                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/searchbare.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+            <Pane prefWidth="50.0" />
+
+            <HBox alignment="CENTER" spacing="30.0">
+                <Label fx:id="homeLabel" styleClass="nav-label" text="Home" />
+                <Label fx:id="shopLabel" styleClass="nav-label" text="Shops" />
+                <Label fx:id="eventLabel" styleClass="nav-label" text="Events" />
+                <Label styleClass="nav-label" text="Parking" />
+                <Label fx:id="cartLabel" styleClass="nav-label" text="Cart" />
+            </HBox>
+
+            <Pane prefWidth="105.0" />
+
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../assets/notif.png" />
+                </image>
+            </ImageView>
+
+            <HBox alignment="CENTER" spacing="10.0">
+                <Label styleClass="user-label" text="Sofiene Zayati" />
+                <ImageView fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../assets/user3.png" />
+                    </image>
+                </ImageView>
+            </HBox>
+        </children>
+    </HBox>
+
+    <!-- Title -->
+    <HBox alignment="CENTER" spacing="20">
+        <Label styleClass="title-label" text="Parking Management System" />
+    </HBox>
+
+    <!-- Control Panel HBox -->
+    <HBox alignment="CENTER" spacing="20">
+        <!-- Left side: Floor selection -->
+        <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+            <Label text="Select Floor:" styleClass="floor-label" />
+            <ComboBox fx:id="floorComboBox" styleClass="floor-combo-box" />
+        </HBox>
+
+        <!-- Right side: Action buttons -->
+        <HBox alignment="CENTER_RIGHT" spacing="15">
+            <Button onAction="#handleCancelReservationButtonAction" styleClass="cancel-reservation-button" text="Cancel Reservation" />
+            <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="View Reserved Spots" />
+        </HBox>
+    </HBox>
+
+    <!-- Statistics Cards -->
+    <HBox alignment="CENTER" spacing="20">
+        <StackPane fx:id="statsCard1" styleClass="stats-card">
+            <Label fx:id="counterLabel" styleClass="stats-label" text="Available Spots: 20" />
+        </StackPane>
+
+        <StackPane fx:id="statsCard2" styleClass="stats-card">
+            <Label fx:id="occupancyLabel" styleClass="stats-label" text="Occupancy: 0%" />
+        </StackPane>
+    </HBox>
+
+    <!-- Parking Area -->
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" styleClass="main-scroll-pane">
+        <VBox fx:id="parkingArea" alignment="CENTER" spacing="30" styleClass="parking-container">
+            <!-- Legend -->
+            <HBox alignment="CENTER" spacing="20" styleClass="legend-container">
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
+                    <Rectangle height="20" styleClass="available-spot" width="20" />
+                    <Label styleClass="legend-label" text="Available" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
+                    <Rectangle height="20" styleClass="occupied-spot" width="20" />
+                    <Label styleClass="legend-label" text="Occupied" />
+                </HBox>
+            </HBox>
+
+            <!-- Top Row for Parking Spots -->
+            <VBox spacing="10">
+                <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row" />
+            </VBox>
+
+            <!-- Enhanced Driving Lane -->
+            <StackPane fx:id="passageContainer" styleClass="passage-container">
+                <Rectangle fx:id="passage" height="100" styleClass="passage" />
+                <Label styleClass="passage-label" text="⟵ Driving Lane ⟶" />
+            </StackPane>
+
+            <!-- Bottom Row for Parking Spots -->
+            <VBox spacing="10">
+                <HBox fx:id="bottomRow" alignment="CENTER" styleClass="parking-row" />
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <!-- CSS Stylesheet -->
+    <stylesheets>
+        <URL value="@/css/parking_lot_css.css" />
+    </stylesheets>
+</VBox>

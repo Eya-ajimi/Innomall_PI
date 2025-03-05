@@ -32,68 +32,62 @@
 <?import javafx.scene.shape.Circle?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="904.0" prefWidth="1353.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.eyacontroller.HomePageController">
 
-<top>
-   <HBox alignment="CENTER" prefHeight="73.0" prefWidth="1353.0" style="-fx-background-color: #E1F4FF;">
-      <children>
-         <!-- Logo Label -->
-         <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" stylesheets="@../css/Styles.css" text="InnoMall">
-            <HBox.margin>
-               <Insets left="-140.0" />
-            </HBox.margin></Label>
+   <top>
+      <HBox alignment="CENTER" prefHeight="73.0" prefWidth="1353.0" style="-fx-background-color: #E1F4FF;">
+         <children>
+            <!-- Logo Label -->
+            <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" stylesheets="@../css/Styles.css" text="InnoMall">
+               <HBox.margin>
+                  <Insets left="-140.0" />
+               </HBox.margin></Label>
 
-         <!-- Separator -->
-         <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
+            <!-- Separator -->
+            <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
 
-         <!-- Search Bar -->
-         <HBox alignment="CENTER" spacing="5.0">
-            <TextField prefHeight="26.0" prefWidth="258.0" promptText="Search..." style="-fx-background-radius: 15; -fx-background-color: white;" stylesheets="@../css/Styles.css" />
-            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+            <!-- Search Bar -->
+            <HBox alignment="CENTER" spacing="5.0">
+               <TextField prefHeight="26.0" prefWidth="258.0" promptText="Search..." style="-fx-background-radius: 15; -fx-background-color: white;" stylesheets="@../css/Styles.css" />
+               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../assets/searchbare.png" />
+                  </image>
+               </ImageView>
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="50.0" />
+
+            <!-- Navigation Labels -->
+            <HBox alignment="CENTER" spacing="30.0">
+               <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Home" />
+               <Label onMouseClicked="#handleShopsClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Shops" />
+               <Label onMouseClicked="#handleEventsClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Events"  />
+               <Label  fx:id="parkingLabel" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Parking"  />
+               <Label onMouseClicked="#handlePanierClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Cart" />
+            </HBox>
+
+            <!-- Spacer -->
+            <Pane prefWidth="105.0" />
+
+            <!-- Notifications Icon -->
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" >
                <image>
-                  <Image url="@../assets/searchbare.png" />
+                  <Image url="@../assets/notif.png" />
                </image>
             </ImageView>
-         </HBox>
 
-         <!-- Spacer -->
-         <Pane prefWidth="50.0" />
-
-         <!-- Navigation Labels -->
-<!--         <HBox alignment="CENTER" spacing="30.0">-->
-<!--            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Home" />-->
-<!--            <Label onMouseClicked="#handleShopsClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Shops" />-->
-<!--            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Events" />-->
-<!--            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Parking" />-->
-<!--         </HBox>-->
-         <!--i added partie houssem-->
-         <HBox alignment="CENTER" spacing="30.0">
-            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Home" />
-            <Label onMouseClicked="#handleShopsClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Shops" />
-            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Events" />
-            <Label styleClass="nav-label" stylesheets="@../css/Styles.css" text="Parking" />
-            <Label onMouseClicked="#handlePanierClick" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Panier" />
-         </HBox>
-         <!-- Spacer -->
-         <Pane prefWidth="105.0" />
-
-         <!-- Notifications Icon -->
-         <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@../assets/notif.png" />
-            </image>
-         </ImageView>
-
-         <!-- User Profile -->
-         <HBox alignment="CENTER" prefHeight="74.0" prefWidth="159.0" spacing="10.0">
-            <Label styleClass="user-label" stylesheets="@../css/Styles.css" text="Eyaaa" />
-            <ImageView fx:id="userProfileImage" fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/user3.png" />
-               </image>
-            </ImageView>
-         </HBox>
-      </children>
-   </HBox>
-</top>
+            <!-- User Profile -->
+            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="159.0" spacing="10.0">
+               <Label styleClass="user-label" stylesheets="@../css/Styles.css" text="Eyaaa" />
+               <ImageView fx:id="userProfileImage" fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#handleUserProfileClick">
+                  <image>
+                     <Image url="@../assets/user3.png" />
+                  </image>
+               </ImageView>
+            </HBox>
+         </children>
+      </HBox>
+   </top>
 
    <left>
       <!-- Chatbot Section Label -->
@@ -147,6 +141,28 @@
                </HBox>
             </VBox>
          </StackPane>
+         <StackPane  style="-fx-padding: 5px;" >
+            <Button onAction="#handleReclamationClick"
+                    style="-fx-background-color: rgba(138,220,140,0.99);
+                       -fx-text-fill: white;
+                       -fx-font-size: 18px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 100; /* Makes the button fully rounded */
+                       -fx-padding: 12 12;
+                       -fx-cursor: hand;
+                       -fx-alignment: center;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 2, 2);">
+               <graphic>
+                  <ImageView fitHeight="24" fitWidth="24" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/exclamation.png" /> <!-- Replace with your icon path -->
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </StackPane>
+         <!-- Reclamation Button (Improved UI) -->
+
       </VBox>
    </left>
 
@@ -168,52 +184,52 @@
                   <Insets top="31.0" />
                </VBox.margin>
             </WebView>
-         <!-- Atms activity -->
-         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="422.0" text="ATM'S Activity" textAlignment="CENTER" textFill="#484848">
-            <font>
-               <Font name="Arial Rounded MT Bold" size="18.0" />
-            </font>
-            <VBox.margin>
-               <Insets top="11.0" />
-            </VBox.margin>
-         </Label>
-         <VBox fx:id="atmVBox" spacing="10">
-            <!-- ATM entries will be dynamically added here -->
-         </VBox>
-      </children>
-   </VBox>
-</right>
+            <!-- Atms activity -->
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="422.0" text="ATM'S Activity" textAlignment="CENTER" textFill="#484848">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="11.0" />
+               </VBox.margin>
+            </Label>
+            <VBox fx:id="atmVBox" spacing="10">
+               <!-- ATM entries will be dynamically added here -->
+            </VBox>
+         </children>
+      </VBox>
+   </right>
 
-<center>
-   <VBox prefHeight="400.0" prefWidth="710.0" style="-fx-background-color: #FDFDFD;">
-      <children>
-         <!-- Input Section (Your Existing Code) -->
-         <HBox alignment="CENTER" prefHeight="147.0" prefWidth="711.0" spacing="10.0">
-            <TextField fx:id="postTextField" prefHeight="132.0" prefWidth="572.0" promptText="Add a post ..." style="-fx-background-color: white;" styleClass="round-layout" stylesheets="@../css/Styles.css">
-               <HBox.margin>
-                  <Insets bottom="20.0" top="20.0" />
-               </HBox.margin>
-            </TextField>
+   <center>
+      <VBox prefHeight="400.0" prefWidth="710.0" style="-fx-background-color: #FDFDFD;">
+         <children>
+            <!-- Input Section (Your Existing Code) -->
+            <HBox alignment="CENTER" prefHeight="147.0" prefWidth="711.0" spacing="10.0">
+               <TextField fx:id="postTextField" prefHeight="132.0" prefWidth="572.0" promptText="Add a post ..." style="-fx-background-color: white;" styleClass="round-layout" stylesheets="@../css/Styles.css">
+                  <HBox.margin>
+                     <Insets bottom="20.0" top="20.0" />
+                  </HBox.margin>
+               </TextField>
 
-            <Button fx:id="addPostButton" stylesheets="@../css/Styles.css" text="Add" />
+               <Button fx:id="addPostButton" stylesheets="@../css/Styles.css" text="Add" />
 
-            <VBox.margin>
-               <Insets top="1.0" />
-            </VBox.margin>
-         </HBox>
+               <VBox.margin>
+                  <Insets top="1.0" />
+               </VBox.margin>
+            </HBox>
 
-         <!-- ScrollPane to hold posts and comments -->
-         <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
-            <content>
-               <VBox fx:id="postsContainer" alignment="TOP_CENTER" prefHeight="622.0" prefWidth="569.0" spacing="10">
-                  <!-- Posts will be dynamically loaded here -->
-               </VBox>
-            </content>
-         </ScrollPane>
+            <!-- ScrollPane to hold posts and comments -->
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+               <content>
+                  <VBox fx:id="postsContainer" alignment="TOP_CENTER" prefHeight="622.0" prefWidth="569.0" spacing="10">
+                     <!-- Posts will be dynamically loaded here -->
+                  </VBox>
+               </content>
+            </ScrollPane>
 
-      </children>
-   </VBox>
-</center>
+         </children>
+      </VBox>
+   </center>
 
 
 </BorderPane>

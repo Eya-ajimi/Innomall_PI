@@ -23,8 +23,7 @@ public class EditUserProfileController {
     @FXML
     private TextField nomField;
 
-    @FXML
-    private TextField prenomField;
+
 
     @FXML
     private TextField emailField;
@@ -56,7 +55,7 @@ public class EditUserProfileController {
         this.currentUser = user;
         // Pré-remplir les champs avec les informations de l'utilisateur
         nomField.setText(user.getNom());
-        prenomField.setText(user.getPrenom());
+        //prenomField.setText(user.getPrenom());
         emailField.setText(user.getEmail());
         telephoneField.setText(user.getTelephone());
         adresseField.setText(user.getAdresse());
@@ -120,7 +119,6 @@ public class EditUserProfileController {
     private void handleSave() {
         // Mettre à jour les informations de base
         currentUser.setNom(nomField.getText());
-        currentUser.setPrenom(prenomField.getText());
         currentUser.setEmail(emailField.getText());
         currentUser.setTelephone(telephoneField.getText());
         currentUser.setAdresse(adresseField.getText());

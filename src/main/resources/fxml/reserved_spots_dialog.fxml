@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import java.net.URL?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.effect.DropShadow?>
+
+<VBox fx:id="root" spacing="20" styleClass="reserved-spots-dialog"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.sofienecontroller.ReservedSpotsController">
+    <stylesheets>
+        <URL value="@/css/reserved_spots_dialog.css" />
+    </stylesheets>
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <StackPane styleClass="dialog-header-container">
+        <Rectangle styleClass="header-background" arcWidth="10" arcHeight="10" width="600" height="60"/>
+        <HBox alignment="CENTER" spacing="15">
+            <Text styleClass="dialog-title" text="Reserved Parking Spots">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.1)" radius="2" offsetX="0" offsetY="1"/>
+                </effect>
+            </Text>
+        </HBox>
+    </StackPane>
+
+    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="search-container">
+        <HBox styleClass="search-box" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <Label styleClass="search-icon" text="🔍"/>
+            <TextField fx:id="searchField" promptText="Search reservations..."
+                       styleClass="search-field" HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <ComboBox fx:id="statusFilter" promptText="Filter by status"
+                  styleClass="status-filter"/>
+    </HBox>
+
+    <StackPane styleClass="table-container" VBox.vgrow="ALWAYS">
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="custom-scroll-pane">
+            <TableView fx:id="reservationTable" styleClass="reservation-table">
+                <columns>
+                    <TableColumn text="Spot #" prefWidth="80" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="idParking"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Reserved On" prefWidth="140" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="dateReservation"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Expires On" prefWidth="140" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="dateExpiration"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Status" prefWidth="100" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="statut"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Vehicle Type" prefWidth="120" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="vehicleType"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Car Wash Type" prefWidth="120" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="carWashType"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Notes" prefWidth="200" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="notes"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Price" prefWidth="80" styleClass="table-column">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="price"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </ScrollPane>
+    </StackPane>
+
+    <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="button-container">
+        <Button text="Refresh" onAction="#handleRefreshAction"
+                styleClass="action-button, refresh-button">
+            <graphic>
+                <Text text="↻" styleClass="button-icon"/>
+            </graphic>
+        </Button>
+        <Button text="Close" onAction="#handleCloseButtonAction"
+                styleClass="action-button, close-button"/>
+    </HBox>
+</VBox>

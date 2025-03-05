@@ -19,7 +19,7 @@ public class Utilisateur {
     private int idCategorie; // Nouvel attribut pour l'ID de la catégorie
     private String nomCategorie; // Nouvel attribut pour le nom de la catégorie
     private String description;
-    private static byte[] profilePicture;
+    private byte[] profilePicture;
     private double balance;
     private int numeroTicket;
     // Constructeur par défaut
@@ -165,7 +165,7 @@ public class Utilisateur {
     public void setRole(Role role) {
         this.role = role;
     }
-    public static byte[] getProfilePicture() {
+    public  byte[] getProfilePicture() {
         return profilePicture;
     }
 

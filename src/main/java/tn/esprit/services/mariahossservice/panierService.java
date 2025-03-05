@@ -69,7 +69,7 @@ public class panierService implements CRUD<Panier>{
     // Méthode pour ajouter un produit au panier
     @Override
     public int insert (Panier newProduct) throws SQLException {
-        String query = "INSERT INTO panier (`idCommande` , `idProduit`, `quantite`,`statut`) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO panier (idCommande , idProduit, quantite,`statut`) VALUES (?, ?, ?, ?)";
         ps = cnx.prepareStatement(query);
 
         ps.setInt(1, newProduct.getIdCommande());
@@ -418,6 +418,41 @@ public class panierService implements CRUD<Panier>{
 
         // Retourner la nouvelle quantité
         return newQuantite;
+    }
+
+//*********************MARIA STATISTICS THING**********************
+
+    public Produit getBestSelledProductToday(int shopId) throws SQLException {
+        String query = """
+        SELECT p.*, SUM(panier.quantite) AS total_sold
+        FROM panier
+        JOIN produit p ON panier.idProduit = p.id
+        JOIN commande c ON panier.idCommande = c.id
+        WHERE DATE(NOW()) = DATE(c.dateCommande) AND p.shopId = ?
+        GROUP BY p.id
+        ORDER BY total_sold DESC
+        LIMIT 1
+    """;
+
+        try (PreparedStatement pst = cnx.prepareStatement(query)) {
+            pst.setInt(1, shopId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                int promotionId = rs.getInt("promotionId");
+                return new Produit(
+                        rs.getInt("id"),
+                        rs.getInt("shopId"),
+                        rs.wasNull() ? 0 : promotionId,  // Ensure int
+                        rs.getString("nom"),
+                        rs.getString("description"),
+                        rs.getInt("stock"),
+                        rs.getFloat("prix"),
+                        rs.getString("image_url")
+                );
+            }
+        }
+        return null;
     }
 
 

@@ -5,57 +5,47 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DataBase {
-
-    private final String USER = "root"; // Nom d'utilisateur MySQL
-    private final String PWD = ""; // Mot de passe MySQL
-    private final String URL = "jdbc:mysql://localhost:3306/innomallnew"; // URL de la base de données
-
-    // Singleton instance
     private static DataBase instance;
-
-    // Connexion à la base de données
     private Connection cnx;
+     private final String USER = "root"; // Nom d'utilisateur MySQL
+    private final String PWD = ""; // Mot de passe MySQL
+    private final String URL = "jdbc:mysql://localhost:3306/innomallmaria"; // URL de la base de données
 
-    // Constructeur privé pour empêcher l'instanciation directe
-    private DataBase () {
-        try {
-            // Charger le pilote JDBC MySQL
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Établir la connexion
-            cnx = DriverManager.getConnection(URL, USER, PWD);
-            System.out.println("Connexion à la base de données réussie !");
-        } catch (ClassNotFoundException e) {
-            System.err.println("Erreur : Pilote JDBC MySQL non trouvé !");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.err.println("Erreur de connexion à la base de données : " + e.getMessage());
-            e.printStackTrace();
-        }
+    private DataBase() {
+        // Initialize the connection when the instance is created
+        initializeConnection();
     }
 
-    // Méthode pour obtenir l'instance unique de MyDatabase
-    public static DataBase  getInstance() {
+    public static DataBase getInstance() {
         if (instance == null) {
-            instance = new DataBase ();
+            instance = new DataBase();
         }
         return instance;
     }
 
-    // Méthode pour obtenir la connexion
     public Connection getCnx() {
+        try {
+            // Check if the connection is closed or null
+            if (cnx == null || cnx.isClosed()) {
+                initializeConnection(); // Reinitialize the connection
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Failed to check connection status: " + e.getMessage());
+        }
         return cnx;
     }
 
-    // Méthode pour fermer la connexion (optionnelle)
-    public void closeConnection() {
-        if (cnx != null) {
-            try {
-                cnx.close();
-                System.out.println("Connexion fermée avec succès !");
-            } catch (SQLException e) {
-                System.err.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());
-            }
+    private void initializeConnection() {
+        try {
+            // Explicitly register the driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Establish the connection
+            cnx = DriverManager.getConnection(URL, USER, PWD);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("Failed to connect to the database: " + e.getMessage());
         }
     }
+
 }

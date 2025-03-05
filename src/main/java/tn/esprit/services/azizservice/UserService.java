@@ -1,15 +1,16 @@
 package tn.esprit.services.azizservice;
 
+import tn.esprit.entities.Event;
 import tn.esprit.entities.Role;
+import tn.esprit.entities.Schedule;
 import tn.esprit.entities.Utilisateur;
-import tn.esprit.services.CRUD;
+import tn.esprit.entities.enums.Days;
+import tn.esprit.services.azizservice.CRUD;
 import tn.esprit.utils.DataBase;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class UserService implements CRUD<Utilisateur> {
     private final Connection connection;
@@ -18,10 +19,40 @@ public class UserService implements CRUD<Utilisateur> {
         this.connection = DataBase.getInstance().getCnx();
     }
 
-   /* @Override
-    public void create(User user) throws SQLException {
-        String req = "INSERT INTO utilisateur(nom, prenom, email, mot_de_passe, adresse, telephone, statut, role, id_categorie) " +
-                "VALUES(?,?,?,?,?,?,?,?,?)";
+    @Override
+    public void add(Event event) {
+
+    }
+
+    /* @Override
+        public void create(User user) throws SQLException {
+            String req = "INSERT INTO utilisateur(nom, prenom, email, mot_de_passe, adresse, telephone, statut, role, id_categorie) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?)";
+            try (PreparedStatement pst = connection.prepareStatement(req)) {
+                pst.setString(1, user.getNom());
+                pst.setString(2, user.getPrenom());
+                pst.setString(3, user.getEmail());
+                pst.setString(4, BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt())); // Hash du mot de passe
+                pst.setString(5, user.getAdresse());
+                pst.setString(6, user.getTelephone());
+                pst.setString(7, user.getStatut());
+                pst.setString(8, user.getRole());
+
+                // Gestion de la catégorie pour les Shop Owners
+                if (user.getRole().equals("Shop Owner")) {
+                    pst.setInt(9, getIdCategorieByName(user.getNomCategorie()));
+                } else {
+                    pst.setNull(9, Types.INTEGER); // Pas de catégorie pour les utilisateurs normaux
+                }
+
+                pst.executeUpdate(); // Exécuter la requête
+            }
+        }
+    */
+    @Override
+    public void create(Utilisateur user) throws SQLException {
+        String req = "INSERT INTO utilisateur(nom, prenom, email, mot_de_passe, adresse, telephone, statut, role, id_categorie, description) " +
+                "VALUES(?,?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setString(1, user.getNom());
             pst.setString(2, user.getPrenom());
@@ -30,49 +61,24 @@ public class UserService implements CRUD<Utilisateur> {
             pst.setString(5, user.getAdresse());
             pst.setString(6, user.getTelephone());
             pst.setString(7, user.getStatut());
-            pst.setString(8, user.getRole());
+            pst.setString(8, user.getRole().toString());
 
             // Gestion de la catégorie pour les Shop Owners
-            if (user.getRole().equals("Shop Owner")) {
+            if (user.getRole()== Role.SHOPOWNER) {
                 pst.setInt(9, getIdCategorieByName(user.getNomCategorie()));
             } else {
                 pst.setNull(9, Types.INTEGER); // Pas de catégorie pour les utilisateurs normaux
             }
+            if (user.getRole()== Role.SHOPOWNER) {
+                pst.setString(10, user.getDescription()); // Set description for Shop Owner
+            } else {
+                pst.setNull(10, Types.VARCHAR); // Set description to NULL for other roles
+            }
+
 
             pst.executeUpdate(); // Exécuter la requête
         }
     }
-*/
-   @Override
-   public void create(Utilisateur user) throws SQLException {
-       String req = "INSERT INTO utilisateur(nom, prenom, email, mot_de_passe, adresse, telephone, statut, role, id_categorie, description) " +
-               "VALUES(?,?,?,?,?,?,?,?,?,?)";
-       try (PreparedStatement pst = connection.prepareStatement(req)) {
-           pst.setString(1, user.getNom());
-           pst.setString(2, user.getPrenom());
-           pst.setString(3, user.getEmail());
-           pst.setString(4, BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt())); // Hash du mot de passe
-           pst.setString(5, user.getAdresse());
-           pst.setString(6, user.getTelephone());
-           pst.setString(7, user.getStatut());
-           pst.setString(8, user.getRole().toString());
-
-           // Gestion de la catégorie pour les Shop Owners
-           if (user.getRole()== Role.SHOPOWNER) {
-               pst.setInt(9, getIdCategorieByName(user.getNomCategorie()));
-           } else {
-               pst.setNull(9, Types.INTEGER); // Pas de catégorie pour les utilisateurs normaux
-           }
-           if (user.getRole()== Role.SHOPOWNER) {
-               pst.setString(10, user.getDescription()); // Set description for Shop Owner
-           } else {
-               pst.setNull(10, Types.VARCHAR); // Set description to NULL for other roles
-           }
-
-
-           pst.executeUpdate(); // Exécuter la requête
-       }
-   }
 
     @Override
     public int insert(Utilisateur utilisateur) throws SQLException {
@@ -146,6 +152,7 @@ public class UserService implements CRUD<Utilisateur> {
     }
 
     @Override
+
     public Utilisateur getOneById(int id) throws SQLException {
         String sql = "SELECT * FROM utilisateur WHERE id = ?";
         Utilisateur user = null;
@@ -155,27 +162,72 @@ public class UserService implements CRUD<Utilisateur> {
                 if (rs.next()) {
                     user = new Utilisateur();
                     mapResultSetToUser(rs, user);
+                    System.out.println("Fetched user points: " + user.getPoints()); // Debug statement
                 }
             }
         }
         return user;
     }
 
+    @Override
+    public Event getById(int id) {
+        return null;
+    }
+
     // Méthode helper pour mapper ResultSet -> User
     private void mapResultSetToUser(ResultSet rs, Utilisateur user) throws SQLException {
+        // Mapper les champs obligatoires
         user.setId(rs.getInt("id"));
         user.setNom(rs.getString("nom"));
         user.setPrenom(rs.getString("prenom"));
         user.setEmail(rs.getString("email"));
         user.setMotDePasse(rs.getString("mot_de_passe"));
-        user.setRole(Role.valueOf(rs.getString("role")));
         user.setTelephone(rs.getString("telephone"));
         user.setAdresse(rs.getString("adresse"));
-        user.setDateInscription(rs.getTimestamp("date_inscription").toLocalDateTime());
         user.setStatut(rs.getString("statut"));
-        user.setDescription(rs.getString("description"));
         user.setIdCategorie(rs.getInt("id_categorie"));
-        user.setProfilePicture(rs.getBytes("profilepicture"));
+        user.setPoints(rs.getInt("points"));
+
+
+        // Récupérer le nom de la catégorie à partir de l'ID
+        int idCategorie = user.getIdCategorie();
+        if (idCategorie > 0) { // Vérifier si l'ID de la catégorie est valide
+            String nomCategorie = getNomCategorieById(idCategorie); // Méthode pour récupérer le nom de la catégorie
+            user.setNomCategorie(nomCategorie);
+        } else {
+            user.setNomCategorie("N/A"); // Valeur par défaut si aucune catégorie n'est associée
+        }
+
+        // Gestion du rôle avec une valeur par défaut en cas d'erreur
+        String roleString = rs.getString("role");
+        try {
+            user.setRole(Role.valueOf(roleString)); // Convertit la chaîne en enum
+        } catch (IllegalArgumentException e) {
+            user.setRole(Role.CLIENT); // Rôle par défaut
+            System.err.println("Rôle inconnu : " + roleString);
+        }
+
+        // Gestion des champs optionnels (peuvent être NULL)
+        Timestamp dateInscription = rs.getTimestamp("date_inscription");
+        if (dateInscription != null) {
+            user.setDateInscription(dateInscription.toLocalDateTime());
+        } else {
+            user.setDateInscription(null);
+        }
+
+        String description = rs.getString("description");
+        if (description != null) {
+            user.setDescription(description);
+        } else {
+            user.setDescription("");
+        }
+
+        byte[] profilePicture = rs.getBytes("profilepicture");
+        if (profilePicture != null) {
+            user.setProfilePicture(profilePicture);
+        } else {
+            user.setProfilePicture(null);
+        }
     }
 
     public Utilisateur signIn(String email, String password) throws SQLException {
@@ -387,6 +439,22 @@ public class UserService implements CRUD<Utilisateur> {
     }
 
 
+    public int getCategoryIdByName(String categoryName) throws SQLException {
+        String query = "SELECT id_categorie FROM categorie WHERE nom = ?";
+        int categoryId = -1;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, categoryName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    categoryId = rs.getInt("id_categorie");
+                }
+            }
+        }
+        return categoryId;
+    }
+
+
     public List<Utilisateur> getAllShops() throws SQLException {
         List<Utilisateur> shops = new ArrayList<>();
         String req = "SELECT * FROM utilisateur WHERE role = 'SHOPOWNER'"; // Ensure role matches DB
@@ -406,6 +474,7 @@ public class UserService implements CRUD<Utilisateur> {
         return shops;
     }
 
+    // ajouter le profilepic ici
     public List<Utilisateur> getShopsByName(String name) throws SQLException {
         List<Utilisateur> shops = new ArrayList<>();
         String query = "SELECT * FROM utilisateur WHERE role = 'SHOPOWNER' AND nom LIKE ?";
@@ -418,9 +487,140 @@ public class UserService implements CRUD<Utilisateur> {
                 shop.setNom(rs.getString("nom"));
                 shop.setAdresse(rs.getString("adresse"));
                 shop.setTelephone(rs.getString("telephone"));
+                shop.setProfilePicture(rs.getBytes("profilepicture"));
                 shops.add(shop);
             }
         }
         return shops;
     }
+
+    /** horaire*/
+
+    public List<Schedule> getScheduleByShopId(int shopId) throws SQLException {
+        List<Schedule> schedules = new ArrayList<>();
+        String query = "SELECT * FROM schedule WHERE shopId = ? ";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, shopId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Schedule schedule = new Schedule(
+                        rs.getInt("id"),
+                        Days.valueOf(rs.getString("day_of_week")), // Convert string to enum
+                        rs.getTime("opening_time"),
+                        rs.getTime("closing_time"),
+                        rs.getInt("shopId")
+                );
+                schedules.add(schedule);
+            }
+        }
+        return schedules;
+    }
+
+
+    /** filter*/
+    public List<Utilisateur> getShopsByCategory(String category) throws SQLException {
+        List<Utilisateur> shops = new ArrayList<>();
+        String query = "SELECT u.* FROM utilisateur u JOIN categorie c ON u.id_categorie = c.id_categorie WHERE c.nom = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, category);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Utilisateur shop = new Utilisateur();
+                    shop.setId(rs.getInt("id"));
+                    shop.setNom(rs.getString("nom"));
+                    shop.setDescription(rs.getString("description"));
+                    shop.setIdCategorie(rs.getInt("id_categorie"));
+                    shop.setProfilePicture(rs.getBytes("profilepicture"));
+                    // Add other necessary fields
+                    shops.add(shop);
+                }
+            }
+        }
+
+        return shops;
+    }
+
+    /**points*/
+    public void resetUserPoints(int userId) throws SQLException {
+        String sql = "UPDATE utilisateur SET points = 0 WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void updateShopOwneradmin(Utilisateur user) throws SQLException {
+        String sql = "UPDATE utilisateur SET "
+                + "nom = ?, "
+                + "email = ?, "
+                + "role = ?, "
+                + "id_categorie = ? "
+                + "WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, user.getNom());
+            pstmt.setString(2, user.getEmail());
+            pstmt.setString(3, user.getRole().toString());
+            pstmt.setInt(4, user.getIdCategorie());
+            pstmt.setInt(5, user.getId());
+
+            pstmt.executeUpdate();
+        }
+    }
+    public void updateStandardUseradmin(Utilisateur user) throws SQLException {
+        String sql = "UPDATE utilisateur SET "
+                + "nom = ?, "
+                + "prenom = ?, "
+                + "email = ?, "
+                + "telephone = ?, "
+                + "adresse = ?, "
+                + "role = ? "
+                + "WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, user.getNom());
+            pstmt.setString(2, user.getPrenom());
+            pstmt.setString(3, user.getEmail());
+            pstmt.setString(4, user.getTelephone());
+            pstmt.setString(5, user.getAdresse());
+            pstmt.setString(6, user.getRole().toString());
+            pstmt.setInt(7, user.getId());
+
+            pstmt.executeUpdate();
+        }
+    }
+
+    public Map<String, Integer> getWeeklyRegistrationsByRole(Role role) throws SQLException {
+        Map<String, Integer> weeklyRegistrations = new HashMap<>();
+
+        // Requête SQL pour récupérer les inscriptions par semaine pour un rôle donné
+        String query = "SELECT YEARWEEK(date_inscription) AS week, COUNT(*) AS count " +
+                "FROM utilisateur " +
+                "WHERE role = ? " +
+                "GROUP BY YEARWEEK(date_inscription) " +
+                "ORDER BY week";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, role.toString()); // Convertir le rôle en chaîne pour la requête SQL
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String week = rs.getString("week"); // Récupérer la semaine (format YYYYWW)
+                    int count = rs.getInt("count"); // Récupérer le nombre d'inscriptions
+                    weeklyRegistrations.put(week, count); // Ajouter à la map
+                }
+            }
+        }
+
+        return weeklyRegistrations;
+    }
+
+
+
+
 }
+
+
+
+

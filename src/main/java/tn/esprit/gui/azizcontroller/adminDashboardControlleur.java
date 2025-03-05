@@ -55,6 +55,11 @@ public class adminDashboardControlleur {
     @FXML
     private TableColumn<Utilisateur, Void> actionsColumn;
 
+    @FXML
+    private TableColumn<Utilisateur, Void>  categorieColumn;
+
+    @FXML
+    private TableColumn<Utilisateur, Void>  descriptionColumn;
     public void initialize() {
         // Récupérer l'utilisateur connecté depuis la session
         Session session = Session.getInstance();
@@ -77,6 +82,8 @@ public class adminDashboardControlleur {
         adresseColumn.setCellValueFactory(new PropertyValueFactory<>("adresse"));
         dateInscriptionColumn.setCellValueFactory(new PropertyValueFactory<>("dateInscription"));
         statutColumn.setCellValueFactory(new PropertyValueFactory<>("statut"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        categorieColumn.setCellValueFactory(new PropertyValueFactory<>("nomCategorie")); // Colonne pour la catégorie
 
         // Configurer la colonne des actions
         actionsColumn.setCellFactory(new Callback<TableColumn<Utilisateur, Void>, TableCell<Utilisateur, Void>>() {
@@ -139,8 +146,14 @@ public class adminDashboardControlleur {
             ModifyUserController controller = loader.getController();
             controller.setUser(user);
 
+            // Création de la scène
+            Scene scene = new Scene(root);
+
+            // Ajouter le fichier CSS à la scène
+            //scene.getStylesheets().add(getClass().getResource("/css/modify_user.css").toExternalForm());
+
             Stage stage = new Stage();
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.setTitle("Modifier l'utilisateur");
             stage.initModality(Modality.APPLICATION_MODAL); // Rend la fenêtre modale
             stage.showAndWait(); // Attend que la fenêtre soit fermée
@@ -152,6 +165,7 @@ public class adminDashboardControlleur {
             e.printStackTrace();
         }
     }
+
 
     // Méthode pour gérer la suppression d'un utilisateur
     private void handleDeleteUser(Utilisateur user) {
@@ -165,24 +179,7 @@ public class adminDashboardControlleur {
         }
     }
 
-    @FXML
-    private void handleLogout() {
-        // Déconnecter l'utilisateur
-        Session session = Session.getInstance();
-        session.logout();
 
-        // Rediriger vers la page de connexion
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     private void refreshTable() {
         userTable.getItems().clear();
         try {

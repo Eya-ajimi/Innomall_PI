@@ -92,6 +92,7 @@ public class EventService implements CRUD<Event> {
                         rs.getString("emplacement")
                 );
                 events.add(event);
+                System.out.println(events);
             }
         } catch (SQLException e) {
             e.printStackTrace();

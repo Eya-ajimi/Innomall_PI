@@ -78,4 +78,8 @@ public class Schedule {
     public void setShopOwnerId(int shopOwnerId) {
         this.shopOwnerId = shopOwnerId;
     }
+
+    public String getDayOfWeek() {
+        return day.name();
+    }
 }

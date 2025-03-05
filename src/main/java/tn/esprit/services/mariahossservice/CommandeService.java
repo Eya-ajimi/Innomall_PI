@@ -31,7 +31,7 @@ public class CommandeService implements CRUD<Commande> {
     @Override
     public int insert(Commande cmd) throws SQLException {
 
-        String query = "INSERT INTO commande (`idClient`, `dateCommande`, `statut`, `total`) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO commande (idClient, dateCommande, statut, total) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setInt(1, cmd.getIdClient());
@@ -82,10 +82,6 @@ public class CommandeService implements CRUD<Commande> {
         return ps.executeUpdate();
 
     }
-
-
-
-
 
     @Override
     public int delete(Commande commande) throws SQLException {
@@ -639,12 +635,8 @@ public class CommandeService implements CRUD<Commande> {
     //cette methode dans le filtre par le jour
     public List<Commande> getCommandesPayeesselonJourPourShopOwner(int shopId, String dateDeJour) throws SQLException {
         List<Commande> commandes = new ArrayList<>();
-
-
-
         // Requête SQL pour récupérer les commandes payées aujourd'hui
         String queryCommandes = "SELECT * FROM commande WHERE dateCommande = ? AND statut = 'payee'";
-
         try (PreparedStatement psCommandes = cnx.prepareStatement(queryCommandes)) {
             psCommandes.setString(1, dateDeJour);
             try (ResultSet rsCommandes = psCommandes.executeQuery()) {
@@ -711,7 +703,70 @@ public class CommandeService implements CRUD<Commande> {
         Collections.sort(commandes);
         return commandes;
     }
+    /*#######################""this part is added by maria for my stats ################################## */
+    public int getNombreCommandesPayees(int shopId, String dateDeJour) throws SQLException {
+        String query = "SELECT COUNT(DISTINCT c.id) AS total FROM commande c " +
+                "JOIN panier p ON c.id = p.idCommande " +
+                "JOIN produit pr ON p.idProduit = pr.id " +
+                "WHERE c.dateCommande = ? AND c.statut = 'payee' " +
+                "AND pr.shopId = ? AND p.statut = 'payee'";
 
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, dateDeJour);
+            ps.setInt(2, shopId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        }
+        return 0;
+    }
+    public double getTotalCommandesPayees(int shopId, String dateDeJour) throws SQLException {
+        String query = "SELECT SUM(c.total) AS total FROM commande c " +
+                "JOIN panier p ON c.id = p.idCommande " +
+                "JOIN produit pr ON p.idProduit = pr.id " +
+                "WHERE c.dateCommande = ? AND c.statut = 'payee' " +
+                "AND pr.shopId = ? AND p.statut = 'payee'";
+
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, dateDeJour);
+            ps.setInt(2, shopId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("total");
+                }
+            }
+        }
+        return 0.0;
+    }
+    public List<Commande> getCommandesEnCoursByShop(int shopId) throws SQLException {
+        List<Commande> commandes = new ArrayList<>();
+        String query = "SELECT DISTINCT c.* FROM commande c " +
+                "JOIN panier p ON c.id = p.idCommande " +
+                "JOIN produit pr ON p.idProduit = pr.id " +
+                "WHERE pr.shopId = ? AND c.statut = 'enCours'";
+
+        try (Connection conn =DataBase.getInstance().getCnx();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, shopId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Commande commande = new Commande();
+                    commande.setId(rs.getInt("id"));
+                    commande.setTotal(rs.getDouble("total"));
+                    commande.setStatut(StatutCommande.valueOf(rs.getString("statut")));
+                    commande.setDateCommande(rs.getString("dateCommande"));
+                    commandes.add(commande);
+                }
+            }
+        }
+        return commandes;
+    }
+
+    /*#######################""this part is added by maria for my stats ################################## */
     /****************************les methodes pour le changement de statut de commande en recuperer *************************/
 //-----------------------------//
     public List<Panier> getPaniersByCommandeId(int idCommande) throws SQLException {

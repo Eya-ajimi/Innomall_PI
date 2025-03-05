@@ -3,14 +3,18 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane fx:id="shopCardPane" prefHeight="250" prefWidth="250" styleClass="card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.eyacontroller.ShopCardController">
+<AnchorPane fx:id="shopCardPane" prefHeight="400" prefWidth="250" styleClass="card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.eyacontroller.ShopCardController">
     <children>
         <VBox alignment="CENTER" layoutX="10" layoutY="10" spacing="12">
+            <!-- Shop Image -->
+            <ImageView fx:id="shopImage" fitWidth="100" fitHeight="100" preserveRatio="true" />
+
             <!-- Shop Name -->
             <Label fx:id="shopName" styleClass="shop-name" text="Shop Name" />
 
@@ -19,6 +23,11 @@
 
             <!-- Shop Contact -->
             <Label fx:id="description" styleClass="shop-info" text="Contact" />
+
+
+            <!-- Shop Hours -->
+            <Label fx:id="horaireLabel" styleClass="shop-name" text="Horaire" />
+            <VBox fx:id="scheduleContainer" alignment="CENTER_LEFT" spacing="5" />
 
             <!-- Rating Stars -->
             <HBox fx:id="ratingContainer" alignment="CENTER" styleClass="rating-container">

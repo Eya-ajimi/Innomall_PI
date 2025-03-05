@@ -1,0 +1,88 @@
+/* Style de base pour la VBox */
+.vbox {
+    -fx-background-color: #f0f8ff; /* Bleu ciel très clair */
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+/* Style pour les labels */
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333; /* Gris foncé pour le texte */
+}
+
+/* Style pour les champs de texte */
+.text-field {
+    -fx-background-color: #ffffff; /* Blanc */
+    -fx-border-color: #87ceeb; /* Bleu ciel */
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-border-color: #ffa500; /* Orange lorsque le champ est focusé */
+}
+
+/* Style pour les combobox */
+.combo-box {
+    -fx-background-color: #ffffff; /* Blanc */
+    -fx-border-color: #87ceeb; /* Bleu ciel */
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+    -fx-font-size: 14px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #ffa500; /* Orange lorsque la combobox est focusée */
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #333333; /* Gris foncé pour le texte */
+}
+
+.combo-box .list-view {
+    -fx-background-color: #ffffff; /* Blanc */
+    -fx-border-color: #87ceeb; /* Bleu ciel */
+}
+
+.combo-box .list-cell:filled:hover {
+    -fx-background-color: #87ceeb; /* Bleu ciel au survol */
+    -fx-text-fill: #ffffff; /* Texte blanc */
+}
+
+/* Style pour le bouton Sauvegarder */
+.button-sauvegarder {
+    -fx-background-color: #ffa500; /* Orange */
+    -fx-text-fill: #ffffff; /* Texte blanc */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.button-sauvegarder:hover {
+    -fx-background-color: #ff8c00; /* Orange plus foncé au survol */
+}
+
+.button-sauvegarder:pressed {
+    -fx-background-color: #ff6f00; /* Orange encore plus foncé lors du clic */
+}
+
+/* Style pour les éléments spécifiques aux propriétaires de boutique */
+#categorieLabel, #categorieComboBox {
+    -fx-text-fill: #333333; /* Gris foncé */
+}
+
+/* Style pour les éléments spécifiques aux utilisateurs standard */
+#telephoneLabel, #telephoneField, #adresseLabel, #adresseField {
+    -fx-text-fill: #333333; /* Gris foncé */
+}
+
+/* Style pour la grille */
+.grid-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}

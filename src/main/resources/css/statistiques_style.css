@@ -1,0 +1,131 @@
+/* Couleurs principales */
+.root {
+    -fx-background-color: #F5F5F5; /* Fond clair */
+    -fx-padding: 20px;
+}
+
+/* Titre */
+.title {
+    -fx-text-fill: #2C3E50; /* Couleur foncée pour le titre */
+    -fx-font-size: 24px;
+    -fx-font-weight: bold; /* Utilisation de "bold" au lieu de "normal" pour un titre */
+    -fx-padding: 0 0 20px 0; /* Espacement en bas */
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #34495E; /* Couleur foncée pour les labels */
+    -fx-font-size: 14px;
+}
+
+/* ComboBox */
+.combo-box {
+    -fx-background-color: #FFFFFF; /* Fond blanc */
+    -fx-border-color: #BDC3C7; /* Bordure grise */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+.combo-box:hover {
+    -fx-border-color: #A8D8FF; /* Bordure bleue au survol */
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #A8D8FF; /* Bouton flèche en bleu */
+}
+
+.combo-box .arrow {
+    -fx-background-color: #FFFFFF; /* Flèche blanche */
+}
+
+/* Graphique */
+.chart {
+    -fx-background-color: #FFFFFF; /* Fond blanc */
+    -fx-border-color: #BDC3C7; /* Bordure grise */
+    -fx-border-radius: 10px;
+    -fx-padding: 20px;
+}
+
+.chart-title {
+    -fx-text-fill: #2C3E50; /* Couleur foncée pour le titre du graphique */
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.axis-label {
+    -fx-text-fill: #34495E; /* Couleur foncée pour les labels des axes */
+    -fx-font-size: 14px;
+}
+
+.chart-legend {
+    -fx-background-color: transparent; /* Fond transparent pour la légende */
+}
+
+.default-color0.chart-bar {
+    -fx-bar-fill: #A8D8FF; /* Couleur des barres du graphique (bleu) */
+}
+
+.default-color1.chart-bar {
+    -fx-bar-fill: #FF791F; /* Nouvelle couleur orange pour les barres */
+}
+
+/* Boutons */
+.button {
+    -fx-background-color: #A8D8FF; /* Fond bleu */
+    -fx-text-fill: #FFFFFF; /* Texte blanc */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2); /* Ombre légère */
+    -fx-transition: all 0.3s ease; /* Animation fluide */
+}
+
+.button:hover {
+    -fx-background-color: #8CC0E8; /* Bleu plus clair au survol */
+    -fx-scale-x: 1.05; /* Légère augmentation de la taille */
+    -fx-scale-y: 1.05;
+}
+
+.button:pressed {
+    -fx-background-color: #6CA6D8; /* Bleu plus foncé au clic */
+    -fx-scale-x: 0.95; /* Légère réduction de la taille */
+    -fx-scale-y: 0.95;
+}
+
+/* Boutons spécifiques */
+.btn-primary {
+    -fx-background-color: #2C3E50; /* Fond foncé */
+    -fx-text-fill: #FFFFFF; /* Texte blanc */
+}
+
+.btn-primary:hover {
+    -fx-background-color: #34495E; /* Fond foncé plus clair au survol */
+}
+
+.btn-secondary {
+    -fx-background-color: #FFFFFF; /* Fond blanc */
+    -fx-text-fill: #2C3E50; /* Texte foncé */
+    -fx-border-color: #A8D8FF; /* Bordure bleue */
+    -fx-border-width: 2px;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #F5F5F5; /* Fond gris clair au survol */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .chart {
+        -fx-max-width: 100%;
+        -fx-padding: 15px;
+    }
+
+    .button {
+        -fx-font-size: 12px;
+        -fx-padding: 8px 16px;
+    }
+}

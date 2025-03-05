@@ -4,8 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,7 +17,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tn.esprit.entities.ATM;
 import tn.esprit.entities.MallData;
 import tn.esprit.entities.Poste;
@@ -57,7 +61,9 @@ public class HomePageController {
     private VBox postsContainer;  // This is the container for all posts
 
     @FXML
-    private TextField postTextField;  // TextField where the user writes the post content
+    private TextField postTextField;
+    @FXML
+    private Label parkingLabel;  // TextField where the user writes the post content
 
     @FXML
     private ImageView userProfileImage;
@@ -91,40 +97,63 @@ public class HomePageController {
             chatWindow.setVisible(false);
             chatIconButton.setVisible(true);
         });
+        parkingLabel.setOnMouseClicked(event -> {
+            try {
+                // Load the Homepage.fxml file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/parking_lot.fxml"));
+                Parent root = loader.load();
+
+                // Get the current stage (window)
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Set the new scene
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         initializeMap("Mall of Tunis");
 
-        // Set the onMouseClicked event for the user profile image
-        userProfileImage.setOnMouseClicked(this::handleUserProfileClick);
+
     }
-    @FXML
-    private void handleUserProfileClick(MouseEvent event) {
+
+
+    /******************popup reclamation *************/
+    public void handleReclamationClick(ActionEvent event) {
         try {
-            // Load the UserDashboard.fxml file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UserDashboard.fxml"));
+            // Load the FXML file for the reclamation form
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_reclamation.fxml"));
             Parent root = loader.load();
 
-            // Get the current stage (window) from the event source
-            Stage stage = (Stage) userProfileImage.getScene().getWindow();
+            // Create a new stage (popup window)
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Block interaction with the main window
+            popupStage.initStyle(StageStyle.UTILITY); // Remove window decorations (optional)
+            popupStage.setTitle("Add Reclamation"); // Set the title of the popup
+            popupStage.setScene(new Scene(root));
 
-            // Set the new scene
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
+            // Set the owner of the popup to the main window (optional)
+            Stage mainStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            popupStage.initOwner(mainStage);
+
+            // Show the popup and wait for it to be closed
+            popupStage.showAndWait();
+        } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Navigation Error", "Failed to load the user dashboard.");
+            System.err.println("Error loading client_reclamation.fxml: " + e.getMessage());
         }
     }
 
-
-/******** map part****/
-
+    /******** map part****/
 
 
 
-@FXML
-private WebView mapWebView;
+
+    @FXML
+    private WebView mapWebView;
 
     // ... existing fields and methods ...
 
@@ -206,7 +235,7 @@ private WebView mapWebView;
     /****/
 
 
-@FXML private Label mallInfoLabel;
+    @FXML private Label mallInfoLabel;
 
     private final MallService mallService = new MallService();
 
@@ -267,7 +296,7 @@ private WebView mapWebView;
 
 
 
-/*****aztms part****/
+    /*****aztms part****/
 
     private ATMService atmService; // Declare the service
 
@@ -371,6 +400,19 @@ private WebView mapWebView;
     }
 
     // Add the new post to the posts container (UI)
+    private void loadPosts() {
+        try {
+            List<Poste> posts = postService.showAll();  // Get all posts (already sorted by date_creation)
+
+            // Iterate through each post and add it to the UI
+            for (Poste post : posts) {
+                addPostToUI(post);  // Add the post to the UI
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // Log the error
+        }
+    }
+
     private void addPostToUI(Poste post) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PostItem.fxml"));
@@ -380,27 +422,13 @@ private WebView mapWebView;
             PostItemController controller = loader.getController();
             controller.setPostData(post);
 
-            // Add the post box with its comments to the posts container
-            postsContainer.getChildren().add(postBox);
+            // Add the post box with its comments to the top of the posts container
+            postsContainer.getChildren().add(0, postBox);  // Insert at the top
 
             // Clear the TextField after posting
             postTextField.clear();
         } catch (IOException e) {
             e.printStackTrace();  // Handle the exception properly
-        }
-    }
-
-    // Load posts and their associated comments
-    private void loadPosts() {
-        try {
-            List<Poste> posts = postService.showAll();  // Get all posts
-
-            // Iterate through each post
-            for (Poste post : posts) {
-                addPostToUI(post);  // Add the post to the UI
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();  // Log the error
         }
     }
     /**************** redirect****/
@@ -422,11 +450,52 @@ private WebView mapWebView;
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handlePanierClick() {
         try {
             // Load the Shops.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Panier.fxml"));
+            Pane shopsPage = loader.load();
+
+            // Get the current stage
+            Stage stage = (Stage) postsContainer.getScene().getWindow(); // Use an existing node to get the stage
+            stage.setScene(new Scene(shopsPage));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleUserProfileClick() {
+        try {
+            // Load the UserDashboard.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UserDashboard.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage (window) from the event source
+            Stage stage = (Stage) userProfileImage.getScene().getWindow();
+
+            // Set the new scene
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Navigation Error", "Failed to load the user dashboard.");
+        }
+    }
+    /*event navigation**/
+
+
+
+    @FXML
+    private void handleEventsClick() {
+        try {
+            // Load the Shops.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client_event_view.fxml"));
             Pane shopsPage = loader.load();
 
             // Get the current stage
@@ -508,4 +577,3 @@ private WebView mapWebView;
 
 
 }
-

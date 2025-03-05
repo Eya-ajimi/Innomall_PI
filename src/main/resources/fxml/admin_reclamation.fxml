@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="690.0" prefWidth="900.0" stylesheets="@../css/stylesoussema.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.oussemacontroller.AdminReclamationController">
+    <VBox alignment="CENTER" prefHeight="690.0" prefWidth="900.0" spacing="20" style="-fx-background-color: #E1F4FF; -fx-padding: 20;">
+        <!-- Title -->
+        <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #000000;" text="Reclamations" />
+
+        <!-- TableView with rounded corners and padding -->
+        <TableView fx:id="reclamationTable" prefHeight="578.0" prefWidth="861.0">
+            <columns>
+                <TableColumn fx:id="descriptionColumn" prefWidth="613.6000785827637" styleClass="description-column" text="Description">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="description" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="actionColumn" prefWidth="150" text="Action">
+                    <!-- No cellFactory defined here; it will be set in the controller -->
+                </TableColumn>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

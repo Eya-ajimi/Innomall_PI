@@ -10,7 +10,7 @@
       prefHeight="80.0" prefWidth="600.0" spacing="10" style="-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5;">
 
     <!-- Image de profil -->
-    <ImageView fx:id="profileImage" fitHeight="20.0" fitWidth="18.0" styleClass="profile-pic">
+    <ImageView fx:id="profileImage" fitHeight="20.0" fitWidth="18.0" styleClass="profile-pic" >
         <image>
             <Image url="@../assets/user3.png"/>
         </image>

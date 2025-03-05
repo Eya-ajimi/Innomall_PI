@@ -9,18 +9,26 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import tn.esprit.entities.Feedback;
+import tn.esprit.entities.Schedule;
 import tn.esprit.entities.Utilisateur;
 import tn.esprit.services.azizservice.UserService;
 import tn.esprit.services.eyaservice.FeedbackService;
 import tn.esprit.utils.Session;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ShopCardController {
     @FXML private Label shopName;
@@ -32,6 +40,7 @@ public class ShopCardController {
     @FXML private SVGPath star1, star2, star3, star4, star5;
     @FXML private Pane shopCardPane;
     @FXML public Button viewProductButton;
+    @FXML private ImageView shopImage; // Add ImageView for shop image
 
     private int selectedRating = 0; // Store the selected rating
     private int shopId; // Store the shop ID
@@ -41,10 +50,20 @@ public class ShopCardController {
     private FeedbackService feedbackService = new FeedbackService();
     private UserService userService = new UserService(); // Add UserService
 
+    @FXML private Label horaireLabel; // Add this label for displaying the schedule
+    @FXML private VBox scheduleContainer;
+
+
+
     @FXML
     public void initialize() {
         // Bind the visibility of the delete button to the hasFeedback property
         deleteFeedbackButton.visibleProperty().bind(hasFeedback);
+        if (horaireLabel == null) {
+            System.err.println("horaireLabel is null in initialize()!");
+        } else {
+            System.out.println("horaireLabel is initialized successfully.");
+        }
     }
 
     public void setData(Utilisateur shop) {
@@ -62,8 +81,8 @@ public class ShopCardController {
 
         shopName.setText(shop.getNom());
         description.setText(shop.getDescription());
+        loadProfileImage( currentUser);
 
-        // Fetch and display the category name
         try {
             String categoryName = userService.getNomCategorieById(shop.getIdCategorie());
             shopCategory.setText(categoryName); // Set the category name
@@ -71,6 +90,11 @@ public class ShopCardController {
             e.printStackTrace();
             shopCategory.setText("Category not found"); // Fallback in case of error
         }
+
+        shopName.setText(shop.getNom());
+        description.setText(shop.getDescription());
+
+
 
         // Check if the user has already submitted feedback for this shop
         try {
@@ -87,10 +111,88 @@ public class ShopCardController {
             e.printStackTrace();
         }
 
+        // Set the shop image
+        if (shop.getProfilePicture() != null && shop.getProfilePicture().length > 0) {
+            try {
+                Image image = new Image(new ByteArrayInputStream(shop.getProfilePicture()));
+                shopImage.setImage(image);
+            } catch (Exception e) {
+                // Fallback to a default image if there's an error loading the profile picture
+                shopImage.setImage(new Image(getClass().getResourceAsStream("/assets/logo.png")));
+                System.err.println("Error loading shop image: " + e.getMessage());
+            }
+        } else {
+            // Set a default image if no profile picture is available
+            shopImage.setImage(new Image(getClass().getResourceAsStream("/assets/logo.png")));
+            System.out.println("No profile picture found for shop: " + shop.getNom());
+        }
+
+        // Fetch and display the schedule
+        try {
+            List<Schedule> schedules = userService.getScheduleByShopId(shop.getId());
+            displaySchedule(schedules);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            horaireLabel.setText("No schedule available");
+        }
+
         // Initialize rating stars
         initializeRatingStars();
         updateRatingStars(); // Highlight stars based on existing feedback
     }
+    private void loadProfileImage(Utilisateur user) {
+        if (user.getProfilePicture() != null) {
+            // Charger l'image à partir du tableau de bytes
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
+            Image profileImage = new Image(inputStream);
+            shopImage.setImage(profileImage);
+        } else {
+            try {
+
+                // Load the default image from the resources
+                InputStream inputStream = getClass().getResourceAsStream("/assets/logo.png");
+                if (inputStream == null) {
+                    throw new FileNotFoundException("Default image not found at /assets/7.png");
+                }
+                Image defaultImage = new Image(inputStream);
+                shopImage.setImage(defaultImage);
+            } catch (Exception e) {
+                System.err.println("Error loading default image: " + e.getMessage());
+                // Optionally, set a placeholder image or leave the ImageView empty
+            }
+        }
+    }
+
+    private void displaySchedule(List<Schedule> schedules) {
+        if (horaireLabel == null) {
+            System.err.println("horaireLabel is not initialized!");
+            return;
+        }
+
+        scheduleContainer.getChildren().clear(); // Clear existing schedule data
+
+        if (schedules.isEmpty()) {
+            horaireLabel.setText("No schedule available");
+            return;
+        }
+
+        // Display the schedule for Friday and Monday only
+        for (Schedule schedule : schedules) {
+            String dayOfWeek = schedule.getDayOfWeek(); // Assuming getDayOfWeek() returns the day as a String
+
+            // Check if the day is Friday or Monday
+            if ("FRIDAY".equalsIgnoreCase(dayOfWeek) || "MONDAY".equalsIgnoreCase(dayOfWeek)) {
+                Label scheduleLabel = new Label(
+                        dayOfWeek + ": " +
+                                schedule.getOpeningTime() + " - " +
+                                schedule.getClosingTime()
+                );
+                scheduleLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #555555;");
+                scheduleContainer.getChildren().add(scheduleLabel);
+            }
+        }
+    }
+
 
     @FXML
     public void navigateToProductsView() throws IOException {
@@ -197,4 +299,7 @@ public class ShopCardController {
         if (selectedRating >= 4) star4.setFill(javafx.scene.paint.Color.GOLD);
         if (selectedRating >= 5) star5.setFill(javafx.scene.paint.Color.GOLD);
     }
+
+
+
 }

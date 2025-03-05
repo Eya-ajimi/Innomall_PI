@@ -32,11 +32,12 @@ public class PostService implements CRUD<Poste> {
             throw new SQLException("Erreur: L'utilisateur avec ID " + poste.getUtilisateurId() + " n'existe pas.");
         }
 
-        // Insérer le poste
-        String req = "INSERT INTO `postes`(`utilisateur_id`, `contenu`) VALUES (?, ?)";
+        // Insérer le poste avec la date de création
+        String req = "INSERT INTO `postes`(`utilisateur_id`, `contenu`, `date_creation`) VALUES (?, ?, ?)";
         ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, poste.getUtilisateurId());
         ps.setString(2, poste.getContenu());
+        ps.setString(3, java.time.LocalDateTime.now().toString());  // Ajouter la date de création actuelle
 
         ps.executeUpdate();
 
@@ -50,20 +51,20 @@ public class PostService implements CRUD<Poste> {
     }
 
 
-
     @Override
     public int update(Poste poste) throws SQLException {
-        // Vérifier si le poste existe avant de le mettre à jour
-        String checkPostExists = "SELECT id FROM postes WHERE id = ?";
-        ps = cnx.prepareStatement(checkPostExists);
+        // Check if the post exists and the user is the creator
+        String checkPost = "SELECT id FROM postes WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkPost);
         ps.setInt(1, poste.getId());
+        ps.setInt(2, poste.getUtilisateurId());
 
         ResultSet rs = ps.executeQuery();
         if (!rs.next()) {
-            throw new SQLException("Le poste avec ID " + poste.getId() + " n'existe pas.");
+            throw new SQLException("Vous n'êtes pas autorisé à modifier ce post.");
         }
 
-        // Mise à jour du contenu du poste
+        // Proceed with the update
         String req = "UPDATE postes SET contenu = ? WHERE id = ?";
         ps = cnx.prepareStatement(req);
         ps.setString(1, poste.getContenu());
@@ -77,31 +78,32 @@ public class PostService implements CRUD<Poste> {
         return rowsAffected;
     }
 
-
+    @Override
     public int delete(Poste post) throws SQLException {
-        // Vérifier si le poste existe
-        String checkPostExists = "SELECT id FROM postes WHERE id = ?";
-        ps = cnx.prepareStatement(checkPostExists);
+        // Check if the post exists and the user is the creator
+        String checkPost = "SELECT id FROM postes WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkPost);
         ps.setInt(1, post.getId());
+        ps.setInt(2, post.getUtilisateurId());
 
         ResultSet rs = ps.executeQuery();
         if (!rs.next()) {
-            throw new SQLException("Le poste avec ID " + post.getId() + " n'existe pas.");
+            throw new SQLException("Vous n'êtes pas autorisé à supprimer ce post.");
         }
 
-        // Supprimer d'abord les sous-commentaires associés au poste (via les commentaires)
+        // Delete associated sous-commentaires
         String deleteSousCommentaires = "DELETE FROM sous_commentaires WHERE commentaire_id IN (SELECT id FROM commentaires WHERE post_id = ?)";
         ps = cnx.prepareStatement(deleteSousCommentaires);
         ps.setInt(1, post.getId());
-        ps.executeUpdate();  // Supprimer tous les sous-commentaires associés au poste
+        ps.executeUpdate();
 
-        // Supprimer ensuite les commentaires associés au poste
+        // Delete associated commentaires
         String deleteComments = "DELETE FROM commentaires WHERE post_id = ?";
         ps = cnx.prepareStatement(deleteComments);
         ps.setInt(1, post.getId());
-        ps.executeUpdate();  // Supprimer tous les commentaires associés au poste
+        ps.executeUpdate();
 
-        // Supprimer enfin le poste
+        // Delete the post
         String deletePost = "DELETE FROM postes WHERE id = ?";
         ps = cnx.prepareStatement(deletePost);
         ps.setInt(1, post.getId());
@@ -123,7 +125,7 @@ public class PostService implements CRUD<Poste> {
     @Override
     public List<Poste> showAll() throws SQLException {
         List<Poste> posts = new ArrayList<>();
-        String req = "SELECT * FROM `postes`";
+        String req = "SELECT * FROM `postes` ORDER BY `date_creation` ASC ";  // Trier par date de création décroissante
 
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(req)) {
@@ -134,7 +136,7 @@ public class PostService implements CRUD<Poste> {
                 post.setId(rs.getInt("id"));
                 post.setContenu(rs.getString("contenu"));
                 post.setUtilisateurId(rs.getInt("utilisateur_id"));
-                post.setDateCreation(rs.getString("date_creation"));
+                post.setDateCreation(rs.getString("date_creation"));  // Récupérer la date de création
                 posts.add(post);
                 System.out.println("Post found: " + post.getContenu()); // Debug
             }
@@ -167,4 +169,3 @@ public class PostService implements CRUD<Poste> {
         return null;
     }
 }
-

@@ -22,11 +22,11 @@
     </VBox>
     <Region HBox.hgrow="ALWAYS" /> <!-- This will push the button to the right -->
     <Button fx:id="btnEditDelete" contentDisplay="RIGHT" style="-fx-background-color: transparent;" styleClass="edite-delete-button" text="⋮">
-      <HBox.margin>
-         <Insets left="304.0" />
-      </HBox.margin></Button>
-      <HBox.margin>
-         <Insets left="522.0" />
-      </HBox.margin>
+        <HBox.margin>
+            <Insets left="304.0" />
+        </HBox.margin></Button>
+    <HBox.margin>
+        <Insets left="522.0" />
+    </HBox.margin>
 
 </HBox>

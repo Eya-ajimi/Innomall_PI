@@ -1,11 +1,14 @@
-package tn.esprit.services;
+package tn.esprit.services.azizservice;
 
+import tn.esprit.entities.Event;
 import tn.esprit.entities.Utilisateur;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface CRUD<T>{
+    void add(Event event);
+
     void create(T t) throws SQLException;
 
     int insert(Utilisateur utilisateur) throws SQLException;
@@ -21,4 +24,6 @@ public interface CRUD<T>{
     T getOneById() throws SQLException;
 
     Utilisateur getOneById(int id) throws SQLException;
+
+    Event getById(int id);
 }

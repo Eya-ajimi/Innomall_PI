@@ -1,19 +1,20 @@
 package tn.esprit.gui.eyacontroller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent; // Add this import
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import tn.esprit.entities.SousCommentaire;
 import tn.esprit.entities.Utilisateur;
+import tn.esprit.services.azizservice.UserService;
+import tn.esprit.services.eyaservice.SousCommentaireService;
 import tn.esprit.utils.Session;
 
-
-import javafx.scene.control.*;
-import tn.esprit.services.eyaservice.SousCommentaireService;
-
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class SousCommentItemController {
@@ -27,8 +28,12 @@ public class SousCommentItemController {
     @FXML
     private Button btnEditDelete;
 
+    @FXML
+    private ImageView profileImage;
+
     private SousCommentaire sousCommentaire;
     private final SousCommentaireService sousCommentaireService = new SousCommentaireService();
+    private final UserService utilisateurService = new UserService();
 
     public void setSousCommentaire(SousCommentaire sousCommentaire) {
         this.sousCommentaire = sousCommentaire;
@@ -37,13 +42,49 @@ public class SousCommentItemController {
         Session session = Session.getInstance();
         Utilisateur currentUser = session.getCurrentUser();
 
-        if (currentUser != null) {
-            userIdLabel.setText(currentUser.getNom() + " " + currentUser.getPrenom()); // Display user's full name
-        } else {
-            userIdLabel.setText("Utilisateur " + sousCommentaire.getUtilisateurId()); // Fallback to user ID
+        // Fetch the sous-commentaire owner's name using their ID
+        try {
+            Utilisateur user = utilisateurService.getOneById(sousCommentaire.getUtilisateurId());
+            userIdLabel.setText(user.getNom());
+            loadProfileImage(user);// Display the sous-commentaire owner's name
+        } catch (SQLException e) {
+            e.printStackTrace();
+            userIdLabel.setText("Utilisateur inconnu"); // Fallback in case of an error
         }
+
         contentLabel.setText(sousCommentaire.getContenu());
         timeLabel.setText(sousCommentaire.getDateCreation());
+
+        // Check if the current user is the owner of the sous-commentaire
+        if (currentUser != null && currentUser.getId() == sousCommentaire.getUtilisateurId()) {
+            // Enable edit/delete button if the current user is the owner
+            btnEditDelete.setVisible(true);
+        } else {
+            // Hide the edit/delete button if the current user is not the owner
+            btnEditDelete.setVisible(false);
+        }
+    }
+
+    private void loadProfileImage(Utilisateur user) {
+        if (user.getProfilePicture() != null) {
+            // Charger l'image à partir du tableau de bytes
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
+            Image profile = new Image(inputStream);
+            profileImage.setImage(profile);
+        } else {
+            try {
+                // Load the default image from the resources
+                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
+                if (inputStream == null) {
+                    throw new FileNotFoundException("Default image not found at /assets/7.png");
+                }
+                Image defaultImage = new Image(inputStream);
+                profileImage.setImage(defaultImage);
+            } catch (Exception e) {
+                System.err.println("Error loading default image: " + e.getMessage());
+                // Optionally, set a placeholder image or leave the ImageView empty
+            }
+        }
     }
 
     @FXML
@@ -71,7 +112,7 @@ public class SousCommentItemController {
         Utilisateur currentUser = session.getCurrentUser();
 
         if (currentUser == null || currentUser.getId() != sousCommentaire.getUtilisateurId()) {
-            showAlert("Erreur", "Le sous-commentaire contient des mots inappropriés.");
+            showAlert("Erreur", "Vous n'êtes pas autorisé à modifier ce sous-commentaire.");
             return;
         }
 

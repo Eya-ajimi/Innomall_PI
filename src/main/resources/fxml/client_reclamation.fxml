@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.gui.oussemacontroller.ClientReclamationController"
+            style="-fx-background-color: linear-gradient(to bottom, #E1F4FF, #ADE2EE);">
+
+    <VBox alignment="CENTER" prefHeight="567.0" prefWidth="740.0" spacing="20"
+          style="-fx-padding: 30;
+                 -fx-background-color: rgba(255, 255, 255, 0.3);
+                 -fx-background-radius: 15;
+                 -fx-border-radius: 15;
+                 -fx-border-width: 2;
+                 -fx-border-color: rgba(255, 255, 255, 0.5);
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2);">
+
+        <!-- Title -->
+        <Label text="Ajouter Reclamation"
+               style="-fx-font-size: 26px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #2C3E50;
+                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 1, 1);" />
+
+        <!-- Description Field -->
+        <TextField fx:id="descriptionField" alignment="CENTER" prefHeight="180.0" prefWidth="650.0"
+                   promptText="Enter your complaint details..."
+                   style="-fx-background-color: rgba(255, 255, 255, 0.6);
+                          -fx-background-radius: 12;
+                          -fx-border-radius: 12;
+                          -fx-border-color: #ADE2EE;
+                          -fx-border-width: 2;
+                          -fx-font-size: 16px;
+                          -fx-text-fill: #333;
+                          -fx-padding: 10;">
+            <font>
+                <Font size="16" />
+            </font>
+        </TextField>
+
+        <!-- Shop Name Field -->
+        <TextField fx:id="nomshopField" alignment="CENTER" prefHeight="40.0" prefWidth="400.0"
+                   promptText="Shop Name"
+                   style="-fx-background-color: rgba(255, 255, 255, 0.6);
+                          -fx-background-radius: 12;
+                          -fx-border-radius: 12;
+                          -fx-border-color: #ADE2EE;
+                          -fx-border-width: 2;
+                          -fx-font-size: 16px;
+                          -fx-text-fill: #333;
+                          -fx-padding: 10;" />
+
+        <!-- Submit Button -->
+        <Button onAction="#handleSubmit" text="Submit"
+                style="-fx-background-color: linear-gradient(to right, #F9A66A, #F9844A);
+                       -fx-text-fill: white;
+                       -fx-font-size: 18px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 12;
+                       -fx-padding: 12 24;
+                       -fx-cursor: hand;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 2, 2);">
+            <VBox>
+                <style>
+                    button:hover {
+                    -fx-scale-x: 1.05;
+                    -fx-scale-y: 1.05;
+                    -fx-opacity: 0.9;
+                    }
+                </style>
+            </VBox>
+        </Button>
+
+    </VBox>
+</AnchorPane>

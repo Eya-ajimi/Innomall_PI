@@ -48,10 +48,12 @@
 
             <!-- Navigation Labels -->
             <HBox alignment="CENTER" spacing="30.0">
-                <Label fx:id="homeLabel" styleClass="nav-label" text="Home" />
-                <Label styleClass="nav-label" text="Shops" />
-                <Label styleClass="nav-label" text="Events" />
-                <Label styleClass="nav-label" text="Parking" />
+                <Label fx:id="homeLabel" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Home"  />
+                <Label fx:id="shopsLabel" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Shops" />
+                <Label fx:id="eventLabel" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Events"  />
+                <Label fx:id="parkingLabel" styleClass="nav-label" stylesheets="@../css/Styles.css" text="Parking" />
+                <Label fx:id="cartLabel"  styleClass="nav-label" stylesheets="@../css/Styles.css" text="Cart" />
+
             </HBox>
 
             <!-- Spacer -->
@@ -65,9 +67,9 @@
             </ImageView>
 
             <!-- User Profile -->
-            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="150.0" spacing="10.0">
-                <Label styleClass="user-label" text="Eyaaa" />
-                <ImageView fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="159.0" spacing="10.0">
+                <Label styleClass="user-label" stylesheets="@../css/Styles.css" text="Eyaaa" />
+                <ImageView fx:id="userProfileImage" fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#handleUserProfileClick">
                     <image>
                         <Image url="@../assets/user3.png" />
                     </image>
@@ -95,37 +97,23 @@
                 </HBox>
                 <!-- Category Chips -->
                 <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <Button text="Food" styleClass="chip-button"/>
-                    <Button text="Coffee" styleClass="chip-button"/>
-                    <Button text="Clothes" styleClass="chip-button"/>
+                    <Button text="Food" styleClass="chip-button" onAction="#handleCategoryFilter" />
+                    <Button text="Coffee" styleClass="chip-button" onAction="#handleCategoryFilter" />
+                    <Button text="Clothes" styleClass="chip-button" onAction="#handleCategoryFilter" />
                 </HBox>
                 <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <Button text="Beauty" styleClass="chip-button"/>
-                    <Button text="Jewelry" styleClass="chip-button"/>
+                    <Button text="Beauty" styleClass="chip-button" onAction="#handleCategoryFilter" />
+                    <Button text="Jewerly" styleClass="chip-button" onAction="#handleCategoryFilter" />
                 </HBox>
 
                 <Separator/>
 
-                <!-- Filter by Promotions -->
-                <Label text="Filter by Promotions..." styleClass="filter-title"/>
-                <HBox spacing="5.0" alignment="CENTER_LEFT">
-                    <TextField promptText="Filter by Promotions..." styleClass="filter-field" />
-                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../assets/searchbare.png" />
-                        </image>
-                    </ImageView>
-                </HBox>
-                <!-- Promotion Chips -->
-                <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <Button text="10%" styleClass="chip1-button"/>
-                    <Button text="20%" styleClass="chip1-button"/>
-                    <Button text="30%" styleClass="chip1-button"/>
-                </HBox>
-                <HBox spacing="10.0" alignment="CENTER_LEFT">
-                    <Button text="40%" styleClass="chip1-button"/>
-                    <Button text="All" styleClass="chip1-button"/>
-                </HBox>
+                <Label text="Opening Hours" styleClass="filter-title"/>
+                <VBox spacing="5.0" alignment="CENTER_LEFT">
+                    <Label text="Monday - Friday: 9:00 AM - 6:00 PM" styleClass="info-text"/>
+                    <Label text="Saturday: 10:00 AM - 4:00 PM" styleClass="info-text"/>
+                    <Label text="Sunday: Closed" styleClass="info-text"/>
+                </VBox>
             </VBox>
 
             <!-- ScrollPane for the shops (Right) -->

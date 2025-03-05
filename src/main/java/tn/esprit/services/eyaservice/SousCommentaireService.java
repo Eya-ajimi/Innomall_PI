@@ -3,10 +3,15 @@ package tn.esprit.services.eyaservice;
 import tn.esprit.entities.SousCommentaire;
 import tn.esprit.entities.Utilisateur;
 import tn.esprit.utils.DataBase;
+import tn.esprit.utils.EmailService;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class SousCommentaireService implements CRUD<SousCommentaire> {
 
@@ -21,7 +26,7 @@ public class SousCommentaireService implements CRUD<SousCommentaire> {
 
     @Override
     public int insert(SousCommentaire sousCommentaire) throws SQLException {
-        String req = "INSERT INTO `sous_commentaires`(`contenu`, `commentaire_id`, `utilisateur_id`) VALUES (?, ?, ?)";
+        String req = "INSERT INTO sous_commentaires (contenu, commentaire_id, utilisateur_id) VALUES (?, ?, ?)";
         ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, sousCommentaire.getContenu());
         ps.setInt(2, sousCommentaire.getCommentaireId());
@@ -52,33 +57,93 @@ public class SousCommentaireService implements CRUD<SousCommentaire> {
 
             // Si l'auteur du post répond au commentaire, donner 10 points à l’auteur du commentaire
             if (auteurPost == sousCommentaire.getUtilisateurId()) {
-                String updatePointsQuery = "UPDATE utilisateur SET points = points + 10 WHERE id = ?";
-                PreparedStatement psUpdate = cnx.prepareStatement(updatePointsQuery);
-                psUpdate.setInt(1, auteurCommentaire);
-                psUpdate.executeUpdate();
-                System.out.println("10 points ajoutés à l'utilisateur ID " + auteurCommentaire);
+                // Récupérer les points actuels et l'email de l'utilisateur
+                String getUserInfoQuery = "SELECT points, email FROM utilisateur WHERE id = ?";
+                PreparedStatement psUserInfo = cnx.prepareStatement(getUserInfoQuery);
+                psUserInfo.setInt(1, auteurCommentaire);
+                ResultSet rsUserInfo = psUserInfo.executeQuery();
+
+                if (rsUserInfo.next()) {
+                    int currentPoints = rsUserInfo.getInt("points");
+                    String email = rsUserInfo.getString("email");
+
+                    // Mettre à jour les points de l'utilisateur
+                    String updatePointsQuery = "UPDATE utilisateur SET points = points + 10 WHERE id = ?";
+                    PreparedStatement psUpdate = cnx.prepareStatement(updatePointsQuery);
+                    psUpdate.setInt(1, auteurCommentaire);
+                    psUpdate.executeUpdate();
+                    System.out.println("10 points ajoutés à l'utilisateur ID " + auteurCommentaire);
+
+                    // Envoyer un email à l'utilisateur avec les nouveaux points
+                    int newPoints = currentPoints + 10;
+
+                    String smtpHost = "smtp.gmail.com"; // Hôte SMTP de Gmail
+                    int smtpPort = 587; // Port SMTP de Gmail
+                    String smtpUsername = "Innomall.esprit@gmail.com"; // Votre email Gmail
+                    String smtpPassword = "wlbk qhlt gack trkr"; // Votre mot de passe Gmail
+
+                    sendEmail(email, newPoints, smtpHost, smtpPort, smtpUsername, smtpPassword);
+                }
             }
         }
 
         return rowsAffected;
     }
 
+    private void sendEmail(String email, int newPoints, String smtpHost, int smtpPort, String smtpUsername, String smtpPassword) {
+        // Sujet et contenu de l'email
+        String subject = "Vos points ont été mis à jour";
+        String message = "Félicitations ! Vous avez maintenant " + newPoints + " points.";
+
+        try {
+            // Configuration des propriétés SMTP
+            Properties props = new Properties();
+            props.put("mail.smtp.host", smtpHost); // Hôte SMTP (ex: smtp.gmail.com)
+            props.put("mail.smtp.port", smtpPort); // Port SMTP (ex: 587 pour Gmail)
+            props.put("mail.smtp.auth", "true"); // Authentification requise
+            props.put("mail.smtp.starttls.enable", "true"); // Activation de TLS
+
+            // Création de la session avec authentification
+            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(smtpUsername, smtpPassword); // Email et mot de passe SMTP
+                }
+            });
+
+            // Création du message
+            Message msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(smtpUsername)); // L'email de l'expéditeur
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email)); // L'email du destinataire
+            msg.setSubject(subject); // Sujet de l'email
+            msg.setText(message); // Contenu de l'email
+
+            // Envoi du message
+            Transport.send(msg);
+
+            System.out.println("Email envoyé à " + email);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Erreur lors de l'envoi de l'email : " + e.getMessage(), e);
+        }
+    }
+
+
 
 
     @Override
     public int update(SousCommentaire sousCommentaire) throws SQLException {
-        // Vérifier si le sous-commentaire existe
-        String checkExist = "SELECT id FROM sous_commentaires WHERE id = ?";
-        ps = cnx.prepareStatement(checkExist);
+        // Check if the sous-commentaire exists and the user is the owner
+        String checkSousCommentaire = "SELECT id FROM sous_commentaires WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkSousCommentaire);
         ps.setInt(1, sousCommentaire.getId());
-        ResultSet rs = ps.executeQuery();
+        ps.setInt(2, sousCommentaire.getUtilisateurId());
 
+        ResultSet rs = ps.executeQuery();
         if (!rs.next()) {
-            throw new SQLException("Erreur: Le sous-commentaire avec ID " + sousCommentaire.getId() + " n'existe pas.");
+            throw new SQLException("Vous n'êtes pas autorisé à modifier ce sous-commentaire.");
         }
 
-        // Mettre à jour le sous-commentaire
-        String req = "UPDATE `sous_commentaires` SET `contenu` = ? WHERE `id` = ?";
+        // Proceed with the update
+        String req = "UPDATE sous_commentaires SET contenu = ? WHERE id = ?";
         ps = cnx.prepareStatement(req);
         ps.setString(1, sousCommentaire.getContenu());
         ps.setInt(2, sousCommentaire.getId());
@@ -91,32 +156,33 @@ public class SousCommentaireService implements CRUD<SousCommentaire> {
         return rowsAffected;
     }
 
-
     @Override
     public int delete(SousCommentaire sousCommentaire) throws SQLException {
-        // Vérifier si le sous-commentaire existe avant de le supprimer
-        String checkExist = "SELECT id FROM sous_commentaires WHERE id = ?";
-        try (PreparedStatement psCheck = cnx.prepareStatement(checkExist)) {
-            psCheck.setInt(1, sousCommentaire.getId());
-            ResultSet rs = psCheck.executeQuery();
+        // Check if the sous-commentaire exists and the user is the owner
+        String checkSousCommentaire = "SELECT id FROM sous_commentaires WHERE id = ? AND utilisateur_id = ?";
+        ps = cnx.prepareStatement(checkSousCommentaire);
+        ps.setInt(1, sousCommentaire.getId());
+        ps.setInt(2, sousCommentaire.getUtilisateurId());
 
-            if (!rs.next()) {
-                throw new SQLException("Erreur: Le sous-commentaire avec ID " + sousCommentaire.getId() + " n'existe pas.");
-            }
+        ResultSet rs = ps.executeQuery();
+        if (!rs.next()) {
+            throw new SQLException("Vous n'êtes pas autorisé à supprimer ce sous-commentaire.");
         }
 
-        // Supprimer le sous-commentaire
+        // Proceed with the deletion
         String req = "DELETE FROM sous_commentaires WHERE id = ?";
-        try (PreparedStatement psDelete = cnx.prepareStatement(req)) {
-            psDelete.setInt(1, sousCommentaire.getId());
-            int rowsAffected = psDelete.executeUpdate();
+        ps = cnx.prepareStatement(req);
+        ps.setInt(1, sousCommentaire.getId());
 
-            if (rowsAffected == 0) {
-                throw new SQLException("Aucune suppression effectuée. Vérifiez l'ID.");
-            }
-            return rowsAffected;
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected == 0) {
+            throw new SQLException("Aucune suppression effectuée. Vérifiez l'ID.");
         }
+
+        return rowsAffected;
     }
+
+
     // Méthode pour récupérer les sous-commentaires d'un commentaire donné
     public List<SousCommentaire> getSousCommentairesByCommentaireId(int commentaireId) throws SQLException {
         List<SousCommentaire> sousCommentaires = new ArrayList<>();
@@ -144,7 +210,7 @@ public class SousCommentaireService implements CRUD<SousCommentaire> {
     @Override
     public List<SousCommentaire> showAll() throws SQLException {
         List<SousCommentaire> temp = new ArrayList<>();
-        String req = "SELECT * FROM `sous_commentaires`";
+        String req = "SELECT * FROM sous_commentaires";
 
         st = cnx.createStatement();
         ResultSet rs = st.executeQuery(req);
@@ -181,7 +247,7 @@ public class SousCommentaireService implements CRUD<SousCommentaire> {
     public Utilisateur getOneById(int id) throws SQLException {
         return null;
     }
-/************show comment by id *********/
+    /************show comment by id *********/
 
 
 

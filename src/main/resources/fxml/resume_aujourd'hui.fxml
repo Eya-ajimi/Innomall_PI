@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="12" alignment="CENTER"
+      prefWidth="450" prefHeight="600"
+      style="-fx-background-color: #f5f8fa; -fx-background-radius: 5; -fx-border-color: #d0e1f2; -fx-border-radius: 5; -fx-border-width: 1.5;"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tn.esprit.gui.mariahosscontroller.ResumeAujourdHuiController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <children>
+        <HBox alignment="CENTER" style="-fx-padding: 0 0 5 0;">
+            <Label text="Résumé Aujourd'hui"
+                   style="-fx-text-fill: #2c6aa0; -fx-font-weight: bold;">
+                <font>
+                    <Font name="System Bold" size="22.0" />
+                </font>
+            </Label>
+        </HBox>
+
+        <Separator style="-fx-background-color: rgba(191, 226, 246, 0.82);" />
+
+        <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 4; -fx-padding: 12; -fx-border-color: #d0e1f2; -fx-border-radius: 4;">
+            <Label fx:id="commandesPayeesLabel" text="Chargement..."
+                   style="-fx-font-weight: bold; -fx-text-fill: #444444;">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+            <Label fx:id="totalCommandesLabel" text="Chargement..."
+                   style="-fx-font-weight: bold; -fx-text-fill: #444444;">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+        </VBox>
+
+        <VBox style="-fx-background-color: white; -fx-background-radius: 4; -fx-border-color: #d0e1f2; -fx-border-radius: 4; -fx-padding: 10;">
+            <Label text="Commandes en cours"
+                   style="-fx-font-weight: bold; -fx-text-fill: #2c6aa0; -fx-padding: 0 0 8 0;">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+            <VBox fx:id="commandesEncoursBox" spacing="6.0">
+                <Label text="Chargement des commandes en cours..." />
+            </VBox>
+        </VBox>
+
+        <VBox style="-fx-background-color: white; -fx-background-radius: 4; -fx-border-color: #d0e1f2; -fx-border-radius: 4; -fx-padding: 10;">
+            <Label text="Alertes stock"
+                   style="-fx-font-weight: bold; -fx-text-fill: #2c6aa0; -fx-padding: 0 0 8 0;">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+
+            <VBox fx:id="soonOutOfStockBox" spacing="6.0" style="-fx-padding: 0 0 10 0;">
+                <Label text="Produits bientôt en rupture" style="-fx-font-weight: bold; -fx-text-fill: #ff791f;" />
+                <Label text="Chargement..." />
+            </VBox>
+
+            <Separator style="-fx-background-color: rgba(191, 226, 246, 0.5);" />
+
+            <VBox fx:id="outOfStockBox" spacing="6.0" style="-fx-padding: 10 0 0 0;">
+                <Label text="Produits en rupture de stock" style="-fx-font-weight: bold; -fx-text-fill: #ff791f;" />
+                <Label text="Chargement..." />
+            </VBox>
+        </VBox>
+
+        <VBox spacing="8" alignment="CENTER"
+              style="-fx-background-color: white; -fx-background-radius: 4; -fx-border-color: #d0e1f2; -fx-border-radius: 4; -fx-padding: 12;">
+            <Label text="Performance" style="-fx-font-weight: bold; -fx-text-fill: #2c6aa0;">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+            <Label fx:id="averageFeedbackLabel" text="Moyenne feedbacks aujourd'hui :" />
+            <Label fx:id="bestSellingProductLabel" text="Meilleur produit vendu aujourd'hui :" />
+        </VBox>
+
+        <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+            <Button text="Annuler" fx:id="cancelButton" prefWidth="110" prefHeight="35"
+                    style="-fx-background-color: #f2f2f2; -fx-text-fill: #555555; -fx-background-radius: 3; -fx-border-color: #dddddd; -fx-border-radius: 3; -fx-cursor: hand;" />
+            <Button text="Exporter PDF" fx:id="exportPdf" prefWidth="110" prefHeight="35"
+                    style="-fx-background-color: rgba(44, 106, 160, 0.85); -fx-text-fill: white; -fx-background-radius: 3; -fx-font-weight: bold; -fx-cursor: hand;" />
+        </HBox>
+    </children>
+</VBox>

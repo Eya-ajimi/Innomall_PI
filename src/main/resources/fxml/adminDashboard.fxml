@@ -7,30 +7,36 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.azizcontroller.adminDashboardControlleur" stylesheets="@../css/admin.css">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.gui.azizcontroller.adminDashboardControlleur"
+            stylesheets="@../css/admin.css">
+
     <!-- Label pour afficher le message de bienvenue -->
-    <Label fx:id="welcomeLabel" layoutX="50" layoutY="50">
+    <Label fx:id="welcomeLabel" layoutX="50" layoutY="30" text="Bienvenue, Admin">
         <font>
-            <Font name="System Bold" size="24"/>
+            <Font name="Segoe UI Bold" size="24"/>
         </font>
     </Label>
 
-    <!-- Bouton de déconnexion -->
-    <Button layoutX="50" layoutY="100" text="Déconnexion" onAction="#handleLogout"/>
+
 
     <!-- TableView pour afficher les utilisateurs -->
-    <TableView fx:id="userTable" layoutX="50" layoutY="150" prefHeight="400" prefWidth="1000">
+    <TableView fx:id="userTable" layoutX="50" layoutY="100" prefHeight="450" prefWidth="1000" styleClass="table-view">
         <columns>
-            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="100"/>
-            <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="100"/>
-            <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
-            <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="100"/>
-            <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="100"/>
-            <TableColumn fx:id="adresseColumn" text="Adresse" prefWidth="150"/>
-            <TableColumn fx:id="dateInscriptionColumn" text="Date Inscription" prefWidth="150"/>
-            <TableColumn fx:id="statutColumn" text="Statut" prefWidth="100"/>
-            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50" styleClass="column-center"/>
+            <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="120" styleClass="column-center"/>
+            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="180" styleClass="column-left"/>
+            <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="180" styleClass="column-left"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="250" styleClass="column-left"/>
+
+            <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="140" styleClass="column-center"/>
+            <TableColumn fx:id="adresseColumn" text="Adresse" prefWidth="220" styleClass="column-left"/>
+            <TableColumn fx:id="dateInscriptionColumn" text="Date Inscription" prefWidth="160" styleClass="column-center"/>
+            <TableColumn fx:id="statutColumn" text="Statut" prefWidth="120" styleClass="column-center"/>
+
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="250" styleClass="column-left"/>
+            <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="150" styleClass="column-left"/> <!-- Nouvelle colonne -->
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="180" styleClass="column-center"/>
         </columns>
     </TableView>
 </AnchorPane>

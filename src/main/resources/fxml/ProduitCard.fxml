@@ -10,10 +10,14 @@
       fx:controller="tn.esprit.gui.eyacontroller.ProduitCardController"
       spacing="10" styleClass="produit-card">
     <VBox spacing="5" alignment="CENTER">
+        <ImageView fx:id="imageView" fitHeight="80" fitWidth="80" preserveRatio="true" style="-fx-background-radius: 15; -fx-border-radius: 15;" />
         <Label fx:id="nomLabel" styleClass="produit-nom" />
         <Label fx:id="prixLabel" styleClass="produit-prix" />
         <Label fx:id="stockLabel" styleClass="produit-stock" />
         <Label fx:id="Description" styleClass="produit-Description" />
+        <!-- Add this Label for discount information -->
+        <Label fx:id="discountLabel" styleClass="produit-discount" />
+
 
         <!-- Like Button with Icon -->
         <Button fx:id="likeButton" styleClass="like-button" text="Like">

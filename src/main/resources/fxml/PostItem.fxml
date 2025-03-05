@@ -11,7 +11,8 @@
 <VBox fx:id="postCard" spacing="10.0" styleClass="post-card" stylesheets="@../css/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.eyacontroller.PostItemController">
     <!-- Post Header -->
     <HBox spacing="10.0">
-        <ImageView fitHeight="20.0" fitWidth="18.0" styleClass="profile-pic">
+        <ImageView fitHeight="20.0" fitWidth="18.0" styleClass="profile-pic" fx:id="postUserProfileImage">
+            <!-- Default image (fallback) -->
             <image>
                 <Image url="@../assets/user3.png" />
             </image>

@@ -4,9 +4,15 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +21,7 @@ import tn.esprit.entities.SousCommentaire;
 import tn.esprit.entities.Utilisateur;
 import tn.esprit.services.eyaservice.CommentaireService;
 import tn.esprit.services.eyaservice.SousCommentaireService;
+import tn.esprit.services.azizservice.UserService;
 import tn.esprit.utils.Session;
 
 public class CommentItemController {
@@ -33,9 +40,12 @@ public class CommentItemController {
     private TextArea txtSousCommentaire;
     @FXML
     private Button btnEnvoyer;
+    @FXML
+    private ImageView profileImage;
 
     private final SousCommentaireService sousCommentaireService = new SousCommentaireService();
     private final CommentaireService commentaireService = new CommentaireService();
+    private final UserService utilisateurService = new UserService();
     private Commentaire commentaire;
 
     public void setCommentData(Commentaire commentaire) throws SQLException {
@@ -45,23 +55,57 @@ public class CommentItemController {
         Session session = Session.getInstance();
         Utilisateur currentUser = session.getCurrentUser();
 
-        // Mise à jour des labels
-        if (currentUser != null) {
-            commentUser.setText(currentUser.getNom() + " " + currentUser.getPrenom()); // Display user's full name
-        } else {
-            commentUser.setText("Utilisateur " + commentaire.getUtilisateurId()); // Fallback to user ID
+        // Fetch the comment owner's name using their ID
+        try {
+            Utilisateur user = utilisateurService.getOneById(commentaire.getUtilisateurId());
+            commentUser.setText(user.getNom());
+            loadProfileImage(user);
+            // Display the comment owner's name
+        } catch (SQLException e) {
+            e.printStackTrace();
+            commentUser.setText("Utilisateur inconnu"); // Fallback in case of an error
         }
+
         commentContent.setText(commentaire.getContenu());
         commentTime.setText(commentaire.getDateCreation());
+
+        // Check if the current user is the owner of the comment
+        if (currentUser != null && currentUser.getId() == commentaire.getUtilisateurId()) {
+            // Enable edit/delete button if the current user is the owner
+            editDeleteButton.setVisible(true);
+            setupEditDeleteMenu();  // Set up the edit/delete menu
+        } else {
+            // Hide the edit/delete button if the current user is not the owner
+            editDeleteButton.setVisible(false);
+        }
 
         // Chargement des sous-commentaires
         loadSousCommentaires();
 
-        // Configuration du menu contextuel (Modifier/Supprimer)
-        setupEditDeleteMenu();
-
         // Add event handler for the "Envoyer" button
         btnEnvoyer.setOnAction(event -> addSousCommentaire());
+    }
+
+    private void loadProfileImage(Utilisateur user) {
+        if (user.getProfilePicture() != null) {
+            // Charger l'image à partir du tableau de bytes
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
+            Image profile = new Image(inputStream);
+            profileImage.setImage(profile);
+        } else {
+            try {
+                // Load the default image from the resources
+                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
+                if (inputStream == null) {
+                    throw new FileNotFoundException("Default image not found at /assets/7.png");
+                }
+                Image defaultImage = new Image(inputStream);
+                profileImage.setImage(defaultImage);
+            } catch (Exception e) {
+                System.err.println("Error loading default image: " + e.getMessage());
+                // Optionally, set a placeholder image or leave the ImageView empty
+            }
+        }
     }
 
     /***************** sous commentaire part ***********************/
@@ -193,6 +237,7 @@ public class CommentItemController {
             System.out.println("Commentaire mis à jour !");
         } catch (Exception e) {
             System.err.println("Erreur mise à jour : " + e.getMessage());
+            showAlert("Erreur", "Vous n'êtes pas autorisé à modifier ce commentaire.", Alert.AlertType.ERROR);
         }
     }
 
@@ -217,6 +262,7 @@ public class CommentItemController {
                 System.out.println("Commentaire supprimé !");
             } catch (Exception e) {
                 System.err.println("Erreur suppression : " + e.getMessage());
+                showAlert("Erreur", "Vous n'êtes pas autorisé à supprimer ce commentaire.", Alert.AlertType.ERROR);
             }
         }
     }

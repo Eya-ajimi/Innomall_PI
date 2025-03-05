@@ -175,4 +175,56 @@ public class ProductService implements CRUD<Produit> {
         }
         return topProducts;
     }
+
+    public List<Produit> getProductsSoonOutOfStock(int shopId) throws SQLException {
+        String query = "SELECT * FROM produit WHERE shopId = ? AND stock < 20"; // Updated condition
+        List<Produit> produits = new ArrayList<>();
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, shopId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                int promotionId = rs.getInt("promotionId");
+                Produit produit = new Produit(
+                        rs.getInt("id"),
+                        rs.getInt("shopId"),
+                        rs.wasNull() ? 0 : promotionId,
+                        rs.getString("nom"),
+                        rs.getString("description"),
+                        rs.getInt("stock"),
+                        rs.getFloat("prix"),
+                        rs.getString("image_url")
+                );
+                produits.add(produit);
+                System.out.println("Soon out of stock product: " + produit.getNom() + " - Stock: " + produit.getStock());
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching products soon out of stock: " + e.getMessage());
+            throw e;
+        }
+        return produits;
+    }
+
+    public List<Produit> getProductsOutOfStock(int shopId) throws SQLException {
+        String query = "SELECT * FROM produit WHERE shopId = ? AND stock = 0";
+        List<Produit> produits = new ArrayList<>();
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, shopId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                int promotionId = rs.getInt("promotionId");
+                produits.add(new Produit(
+                        rs.getInt("id"),
+                        rs.getInt("shopId"),
+                        rs.wasNull() ? 0 : promotionId,
+                        rs.getString("nom"),
+                        rs.getString("description"),
+                        rs.getInt("stock"),
+                        rs.getFloat("prix"),
+                        rs.getString("image_url")
+                ));
+            }
+        }
+        return produits;
+    }
+
 }

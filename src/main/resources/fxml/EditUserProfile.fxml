@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.ScrollPane?>
-
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.Pane?>
-
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Separator?>
-<VBox spacing="10" minWidth="-Infinity" prefHeight="904.0" prefWidth="1353.0" style="-fx-background-color: #E1F4FF;"
-      xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="tn.esprit.gui.azizcontroller.EditUserProfileController" stylesheets="@../css/editer.css" >
+
+<VBox minWidth="-Infinity" prefHeight="904.0" prefWidth="1353.0" spacing="10" style="-fx-background-color: #E1F4FF;" stylesheets="@../css/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.azizcontroller.EditUserProfileController">
 
     <!-- Top Navigation Bar -->
     <HBox alignment="CENTER" prefHeight="73.0">
         <children>
             <!-- Logo Label -->
-            <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall"  >
+            <Label prefHeight="50.0" prefWidth="133.0" styleClass="logo-label" text="InnoMall">
                 <HBox.margin>
                     <Insets left="-140.0" />
                 </HBox.margin>
@@ -35,10 +31,8 @@
             <Separator orientation="VERTICAL" prefHeight="74.0" prefWidth="21.0" />
 
             <!-- Search Bar -->
-            <!-- Search Bar -->
             <HBox alignment="CENTER" spacing="5.0">
-                <TextField fx:id="searchField" prefHeight="26.0" prefWidth="258.0" promptText="Search..."
-                           style="-fx-background-radius: 15; -fx-background-color: white;" />
+                <TextField fx:id="searchField" prefHeight="26.0" prefWidth="258.0" promptText="Search..." style="-fx-background-radius: 15; -fx-background-color: white;" />
                 <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../assets/searchbare.png" />
@@ -79,61 +73,119 @@
         </children>
     </HBox>
 
+    <!-- Conteneur principal -->
+    <AnchorPane prefHeight="800.0" style="-fx-background-color: #f4f4f4;">
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    style="-fx-background-color: transparent; -fx-padding: 5px;"
+                    AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0"
+                    AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" >
+            <!-- Card Container -->
+            <VBox alignment="CENTER" layoutX="50.0" layoutY="50.0" prefHeight="600.0" prefWidth="400.0" spacing="20"
+                  style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 30px; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 15, 0, 0, 5);"
+                  AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
 
-    <!-- ScrollPane pour permettre le scrolling -->
-    <ScrollPane fitToWidth="true" styleClass="custom-scroll-pane">
-        <content>
+                <!-- Profile Image -->
+                <StackPane>
+                    <ImageView fx:id="profileImageView" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true"
+                               style="-fx-background-radius: 75; -fx-border-radius: 75; -fx-border-color: #94bee4; -fx-border-width: 3;">
+                        <image>
+                            <Image url="@../assets/7.png" />
+                        </image>
+                    </ImageView>
+                    <!-- Circular Shadow Effect -->
+                    <StackPane style="-fx-background-radius: 75; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 5);" />
+                </StackPane>
 
-            <!-- Card principale -->
-            <VBox styleClass="card" spacing="15" alignment="CENTER">
-
-                <!-- Titre de la page -->
-                <Label styleClass="title-label" text="Modifier le Profil" />
-
-                <!-- Image de profil -->
-                <ImageView fx:id="profileImageView" fitHeight="100" fitWidth="100" styleClass="profile-img">
-                    <image>
-                        <Image url="@../assets/7.png" /> <!-- Default profile image -->
-                    </image>
-                </ImageView>
+                <!-- Title Label -->
+                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Edit Profile" />
 
                 <!-- Bouton pour télécharger une nouvelle image -->
-                <Button onAction="#handleImageUpload" text="Changer la photo de profil" styleClass="btn-upload" />
+                <Button onAction="#handleImageUpload" text="Changer la photo de profil" style="-fx-background-color: #94bee4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 20;" />
 
-                <!-- Champs de texte pour les informations de base -->
-                <Label text="Nom :" styleClass="field-label"/>
-                <TextField fx:id="nomField" promptText="Nom" />
+                <!-- User Information -->
+                <VBox alignment="CENTER" spacing="15" style="-fx-padding: 0 20px;">
+                    <!-- Name -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <image>
+                                <Image url="@../assets/usericon.png" />
+                            </image>
+                        </ImageView>
+                        <TextField fx:id="nomField" prefHeight="35.0" prefWidth="250.0" promptText="Nom" style="-fx-background-radius: 10; -fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-padding: 5px;" />
+                    </HBox>
 
-                <Label text="Prénom :" styleClass="field-label"/>
-                <TextField fx:id="prenomField" promptText="Prénom" />
+                    <!-- Email -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <image>
+                                <Image url="@../assets/mailicon.png" />
+                            </image>
+                        </ImageView>
+                        <TextField fx:id="emailField" prefHeight="35.0" prefWidth="250.0" promptText="Email" style="-fx-background-radius: 10; -fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-padding: 5px;" />
+                    </HBox>
 
-                <Label text="Email :" styleClass="field-label"/>
-                <TextField fx:id="emailField" promptText="Email" />
+                    <!-- Phone -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <image>
+                                <Image url="@../assets/phoneicon.png" />
+                            </image>
+                        </ImageView>
+                        <TextField fx:id="telephoneField" prefHeight="35.0" prefWidth="250.0" promptText="Téléphone" style="-fx-background-radius: 10; -fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-padding: 5px;" />
+                    </HBox>
 
-                <Label text="Téléphone :" styleClass="field-label"/>
-                <TextField fx:id="telephoneField" promptText="Téléphone" />
+                    <!-- Address -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <image>
+                                <Image url="@../assets/locationicon.png" />
+                            </image>
+                        </ImageView>
+                        <TextField fx:id="adresseField" prefHeight="35.0" prefWidth="250.0" promptText="Adresse" style="-fx-background-radius: 10; -fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-padding: 5px;" />
+                    </HBox>
+                </VBox>
 
-                <Label text="Adresse :" styleClass="field-label"/>
-                <TextField fx:id="adresseField" promptText="Adresse" />
+                <!-- Change Password Section -->
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Change Password" />
 
-                <!-- Séparation pour le changement de mot de passe -->
-                <Label styleClass="subtitle-label" text="Changer le Mot de Passe" />
+                <VBox alignment="CENTER" spacing="15" style="-fx-padding: 0 20px;">
+                    <!-- Current Password -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <image>
+                                <Image url="@../assets/lockicon.png" />
+                            </image>
+                        </ImageView>
+                        <PasswordField fx:id="currentPasswordField" prefHeight="35.0" prefWidth="250.0" promptText="Current Password" style="-fx-background-radius: 10; -fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-padding: 5px;" />
+                    </HBox>
 
-                <Label text="Mot de passe actuel :" styleClass="field-label"/>
-                <PasswordField fx:id="currentPasswordField" promptText="Mot de passe actuel" />
+                    <!-- New Password -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <image>
+                                <Image url="@../assets/lockicon.png" />
+                            </image>
+                        </ImageView>
+                        <PasswordField fx:id="newPasswordField" prefHeight="35.0" prefWidth="250.0" promptText="New Password" style="-fx-background-radius: 10; -fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-padding: 5px;" />
+                    </HBox>
 
-                <Label text="Nouveau mot de passe :" styleClass="field-label"/>
-                <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" />
+                    <!-- Confirm New Password -->
+                    <HBox alignment="CENTER" spacing="10">
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <image>
+                                <Image url="@../assets/lockicon.png" />
+                            </image>
+                        </ImageView>
+                        <PasswordField fx:id="confirmPasswordField" prefHeight="35.0" prefWidth="250.0" promptText="Confirm New Password" style="-fx-background-radius: 10; -fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-padding: 5px;" />
+                    </HBox>
+                </VBox>
 
-                <Label text="Confirmer le nouveau mot de passe :" styleClass="field-label"/>
-                <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le nouveau mot de passe" />
-
-                <!-- Boutons d'action -->
-                <HBox spacing="10" alignment="CENTER">
-                    <Button onAction="#handleSave" styleClass="btn-save" text="Enregistrer" />
-                    <Button onAction="#handleCancel" styleClass="btn-cancel" text="Annuler" />                </HBox>
-
+                <!-- Action Buttons -->
+                <HBox alignment="CENTER" spacing="20" style="-fx-padding: 20px 0;">
+                    <Button onAction="#handleSave" text="Save" style="-fx-background-color: #94bee4; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 20;" />
+                    <Button onAction="#handleCancel" text="Cancel" style="-fx-background-color: #f4f4f4; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 20; -fx-border-color: #94bee4; -fx-border-width: 2;" />
+                </HBox>
             </VBox>
-        </content>
-    </ScrollPane>
+        </ScrollPane>
+    </AnchorPane>
 </VBox>

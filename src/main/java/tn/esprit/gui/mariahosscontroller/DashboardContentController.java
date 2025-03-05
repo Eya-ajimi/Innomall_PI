@@ -1,5 +1,7 @@
 package tn.esprit.gui.mariahosscontroller;
 
+import com.google.api.client.util.DateTime;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,8 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -24,17 +25,30 @@ import javafx.stage.Stage;
 import tn.esprit.entities.Produit;
 import tn.esprit.services.mariahossservice.*;
 import tn.esprit.utils.Session;
-
-import java.io.IOException;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import java.io.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+
 
 public class DashboardContentController implements Initializable {
-
+    @FXML
+    private DatePicker eventDatePicker;
     @FXML
     private FlowPane topProductsPane;
 
@@ -58,18 +72,20 @@ public class DashboardContentController implements Initializable {
 
     @FXML
     private VBox ratingStatsContainer;
-
-    @FXML
-    private Button addProductButton;
-
     @FXML
     private Button refreshButton;
+    @FXML
+    private Button summaryButton;
 
     private ProductService productService;
     private LikedProductService likedProductService;
     private FeedbackService feedbackService;
 
     private Session session = Session.getInstance(); // set from login or session
+
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
     // Define chart colors array for consistent styling
     private static final String[] CHART_COLORS = {
@@ -80,11 +96,22 @@ public class DashboardContentController implements Initializable {
             "#9b59b6"  // Purple
     };
 
-    @Override
     public void initialize(URL location, ResourceBundle resources) {
         productService = new ProductService();
         likedProductService = new LikedProductService();
         feedbackService = new FeedbackService();
+        summaryButton.setOnAction(event -> showpopresume());
+        summaryButton.setOnMouseEntered(event -> summaryButton.setStyle("-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4;"));
+        summaryButton.setOnMouseExited(event -> summaryButton.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #ff791f; -fx-background-radius: 4;"));
+        summaryButton.setOnMousePressed(event -> summaryButton.setStyle("-fx-background-color: #cc5f1a; -fx-text-fill: white; -fx-background-radius: 4;"));
+        summaryButton.setOnMouseReleased(event -> summaryButton.setStyle("-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4;"));
+        //+++++++++++++++++++++
+        refreshButton.setOnMouseEntered(event -> refreshButton.setStyle("-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4;"));
+        refreshButton.setOnMouseExited(event -> refreshButton.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #ff791f; -fx-background-radius: 4;"));
+        refreshButton.setOnMousePressed(event -> refreshButton.setStyle("-fx-background-color: #cc5f1a; -fx-text-fill: white; -fx-background-radius: 4;"));
+        refreshButton.setOnMouseReleased(event -> refreshButton.setStyle("-fx-background-color: #ff791f; -fx-text-fill: white; -fx-background-radius: 4;"));
+
+
 
         // Set up chart styling
         setupChartStyling();
@@ -93,36 +120,44 @@ public class DashboardContentController implements Initializable {
         loadTopLikedProducts();
         loadStatistics();
         loadRatingStatistics();
+        // Initialize Google Calendar Service
+
+//        try {
+//            initGoogleCalendar();
+//        } catch (Exception e) {
+//            System.err.println("Failed to initialize Google Calendar: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+
     }
 
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    private void showpopresume() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/resume_aujourd'hui.fxml"));
+            Parent root = loader.load();
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("Ajouter un produit");
+            popupStage.setScene(new Scene(root));
 
+            // Add a listener to refresh the dashboard when the popup is closed
+            popupStage.setOnHidden(event -> refreshDashboard());
+
+            popupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error loading FXML: " + e.getMessage());
+        }
+    }
+    //*********************************************************
     @FXML
-    public void refreshDashboard(ActionEvent event) {
+    public void refreshDashboard() {
         loadTopLikedProducts();
         loadStatistics();
         loadRatingStatistics();
     }
 
-    @FXML
-    public void handleAddProductButton(ActionEvent event) {
-        try {
-            // This is a placeholder - implement your actual product form opening logic
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddProductForm.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Ajouter un Produit");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            // Refresh data after adding product
-            refreshDashboard(null);
-        } catch (IOException e) {
-            System.err.println("Couldn't load product form");
-            e.printStackTrace();
-        }
-    }
 
     private void setupChartStyling() {
         // Set chart styling properties
@@ -137,7 +172,7 @@ public class DashboardContentController implements Initializable {
     private void loadTopLikedProducts() {
         try {
             List<Integer> topProductIds = likedProductService.getTopLikedProductsByShopId(session.getCurrentUser().getId()); // Use current user's ID
-            System.out.println("*************************************"+topProductIds);
+            System.out.println("***********************************"+topProductIds);
             topProductsPane.getChildren().clear();
 
             if (topProductIds.isEmpty()) {
@@ -317,12 +352,12 @@ public class DashboardContentController implements Initializable {
         return card;
     }
 
-    /**
-     * Utility method to get a color for a given rating
-     * @param rating the rating (1-5)
-     * @return color string for the rating
-     */
+
     private String getColorForRating(int rating) {
         return CHART_COLORS[(rating - 1) % CHART_COLORS.length];
+
+
     }
+
+
 }
