@@ -68,7 +68,7 @@
 
             <!-- User Profile -->
             <HBox alignment="CENTER" prefHeight="74.0" prefWidth="159.0" spacing="10.0">
-                <Label styleClass="user-label" stylesheets="@../css/Styles.css" text="Eyaaa" />
+                <Label styleClass="user-label" stylesheets="@../css/Styles.css" text="" />
                 <ImageView fx:id="userProfileImage" fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#handleUserProfileClick">
                     <image>
                         <Image url="@../assets/user3.png" />

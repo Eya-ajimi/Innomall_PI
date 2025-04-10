@@ -14,18 +14,19 @@ public class ReservationService implements CRUD<Reservation> {
 
     @Override
     public int insert(Reservation reservation) throws SQLException {
-        String sql = "INSERT INTO Reservation (idUtilisateur, idParking, dateReservation, dateExpiration, statut, vehicleType, carWashType, notes, price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Reservation (idReservation, idUtilisateur, idParking, dateReservation, dateExpiration, statut, vehicleType, carWashType, notes, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DataBase.getInstance().getCnx();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, reservation.getIdUtilisateur());
-            statement.setInt(2, reservation.getIdParking());
-            statement.setTimestamp(3, reservation.getDateReservation());
-            statement.setTimestamp(4, reservation.getDateExpiration());
-            statement.setString(5, reservation.getStatut().toString());
-            statement.setString(6, reservation.getVehicleType());
-            statement.setString(7, reservation.getCarWashType());
-            statement.setString(8, reservation.getNotes());
-            statement.setDouble(9, reservation.getPrice());
+            statement.setInt(1, reservation.getIdReservation()); // Remove this line
+            statement.setInt(2, reservation.getIdUtilisateur());
+            statement.setInt(3, reservation.getIdParking());
+            statement.setTimestamp(4, reservation.getDateReservation());
+            statement.setTimestamp(5, reservation.getDateExpiration());
+            statement.setString(6, reservation.getStatut().toString());
+            statement.setString(7, reservation.getVehicleType());
+            statement.setString(8, reservation.getCarWashType());
+            statement.setString(9, reservation.getNotes());
+            statement.setDouble(10, reservation.getPrice());
 
             return statement.executeUpdate();
         }

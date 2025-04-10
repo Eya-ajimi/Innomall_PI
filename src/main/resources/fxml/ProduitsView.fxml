@@ -58,7 +58,7 @@
 
             <!-- User Profile -->
             <HBox alignment="CENTER" spacing="10.0">
-                <Label styleClass="user-label" text="Eyaaa" />
+                <Label styleClass="user-label" text="" />
                 <ImageView fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../assets/user3.png" />

@@ -102,80 +102,81 @@ public class EditUserProfileshopownerController implements Initializable {
 //            e.printStackTrace();
 //        }
 //    }
-@FXML
-private void handleSave() {
-    // Update user information
-    currentUser.setNom(nomField.getText());
-    currentUser.setEmail(emailField.getText());
-    currentUser.setNomCategorie(categorieComboBox.getValue()); // Save the selected category
-    currentUser.setDescription(descriptionField.getText());
-    String selectedCategory = categorieComboBox.getValue();
-    if (selectedCategory != null) {
+    @FXML
+    private void handleSave() {
+        // Update user information
+        currentUser.setNom(nomField.getText());
+        currentUser.setEmail(emailField.getText());
+        currentUser.setNomCategorie(categorieComboBox.getValue()); // Save the selected category
+        currentUser.setDescription(descriptionField.getText());
+        String selectedCategory = categorieComboBox.getValue();
+        currentUser.setProfilePicture(newProfilePicture);
+        if (selectedCategory != null) {
+            try {
+                int idCategorie = userService.getIdCategorieByName(selectedCategory);
+                currentUser.setIdCategorie(idCategorie); // Définir l'ID, pas seulement le nom
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Échec de la récupération de l'ID de la catégorie.");
+                return;
+            }
+        }
+
+        // Handle password change
+        String currentPassword = currentPasswordField.getText();
+        String newPassword = newPasswordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        boolean passwordUpdateRequested = !currentPassword.isEmpty() || !newPassword.isEmpty() || !confirmPassword.isEmpty();
+
+        if (passwordUpdateRequested) {
+            try {
+                if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                    showAlert("Error", "All password fields must be filled.");
+                    return;
+                }
+
+                if (!userService.verifyPassword(currentUser.getId(), currentPassword)) {
+                    showAlert("Error", "Current password is incorrect.");
+                    return;
+                }
+
+                if (!newPassword.equals(confirmPassword)) {
+                    showAlert("Error", "New passwords do not match.");
+                    return;
+                }
+
+                currentUser.setMotDePasse(newPassword); // Set new password
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to verify password.");
+                return;
+            }
+        } else {
+            currentUser.setMotDePasse(null); // Explicitly set password to null to avoid updating it
+        }
+
+        // Handle profile picture update
+        if (profileImage != null) {
+            currentUser.setProfilePicture(imageViewToByteArray(profileImageView)); // Update with new image
+        } else {
+            currentUser.setProfilePicture(null); // Explicitly set to null if no new image
+        }
+
+        // Debug logs
+        System.out.println("Password: " + currentUser.getMotDePasse()); // Should be null if not updating
+        System.out.println("Profile Picture: " + currentUser.getProfilePicture()); // Should be null if not updating
+
+        // Save changes
         try {
-            int idCategorie = userService.getIdCategorieByName(selectedCategory);
-            currentUser.setIdCategorie(idCategorie); // Définir l'ID, pas seulement le nom
+            userService.updateshopowner(currentUser);
+            showAlert("Success", "Profile updated successfully!");
+            popupStage.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Échec de la récupération de l'ID de la catégorie.");
-            return;
+            showAlert("Error", "Failed to update profile.");
         }
     }
-
-    // Handle password change
-    String currentPassword = currentPasswordField.getText();
-    String newPassword = newPasswordField.getText();
-    String confirmPassword = confirmPasswordField.getText();
-
-    boolean passwordUpdateRequested = !currentPassword.isEmpty() || !newPassword.isEmpty() || !confirmPassword.isEmpty();
-
-    if (passwordUpdateRequested) {
-        try {
-            if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
-                showAlert("Error", "All password fields must be filled.");
-                return;
-            }
-
-            if (!userService.verifyPassword(currentUser.getId(), currentPassword)) {
-                showAlert("Error", "Current password is incorrect.");
-                return;
-            }
-
-            if (!newPassword.equals(confirmPassword)) {
-                showAlert("Error", "New passwords do not match.");
-                return;
-            }
-
-            currentUser.setMotDePasse(newPassword); // Set new password
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to verify password.");
-            return;
-        }
-    } else {
-        currentUser.setMotDePasse(null); // Explicitly set password to null to avoid updating it
-    }
-
-    // Handle profile picture update
-    if (profileImage != null) {
-        currentUser.setProfilePicture(imageViewToByteArray(profileImageView)); // Update with new image
-    } else {
-        currentUser.setProfilePicture(null); // Explicitly set to null if no new image
-    }
-
-    // Debug logs
-    System.out.println("Password: " + currentUser.getMotDePasse()); // Should be null if not updating
-    System.out.println("Profile Picture: " + currentUser.getProfilePicture()); // Should be null if not updating
-
-    // Save changes
-    try {
-        userService.updateshopowner(currentUser);
-        showAlert("Success", "Profile updated successfully!");
-        popupStage.close();
-    } catch (SQLException e) {
-        e.printStackTrace();
-        showAlert("Error", "Failed to update profile.");
-    }
-}
 
     private byte[] imageViewToByteArray(ImageView imageView) {
         if (imageView.getImage() == null) {
@@ -208,7 +209,7 @@ private void handleSave() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Profile Picture");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("Image Files", ".png", ".jpg", "*.jpeg")
         );
 
         File selectedFile = fileChooser.showOpenDialog(popupStage); // This is where the file chooser dialog is shown

@@ -37,6 +37,8 @@ public class PanierController {
     private Label totalLabel;
     @FXML
     private Label itemCountLabel;
+    @FXML
+    Button produit;
 
 
 
@@ -139,6 +141,24 @@ public class PanierController {
                     e.printStackTrace();
                 }
             });
+            produit.setOnAction(event -> {
+                try {
+                    // Load the Homepage.fxml file
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Shops.fxml"));
+                    Parent root = loader.load();
+
+                    // Get the current stage (window)
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                    // Set the new scene
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
 
             updateTotal();
         } catch (SQLException | IOException e) {

@@ -2,6 +2,7 @@ package tn.esprit.gui.sofienecontroller;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import tn.esprit.entities.Utilisateur;
 import tn.esprit.services.sofieneservice.EmailReservationService;
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -609,7 +610,16 @@ public class ParkingLotController implements Initializable {
     }
 
     private List<Reservation> getUserReservations() throws SQLException {
-        int hardcodedUserId = 1; // Hardcoded user ID
-        return new ReservationService().getReservationsByUserId(hardcodedUserId);
+        // Get the current user from the session
+        Utilisateur currentUser = Session.getInstance().getCurrentUser();
+
+        // Check if a user is logged in
+        if (currentUser != null) {
+            int userId = currentUser.getId(); // Get the user ID from the session
+            return new ReservationService().getReservationsByUserId(userId);
+        } else {
+            // Handle the case where no user is logged in
+            throw new IllegalStateException("No user is currently logged in.");
+        }
     }
 }

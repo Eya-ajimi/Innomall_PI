@@ -61,7 +61,7 @@
 
             <!-- User Profile -->
             <HBox alignment="CENTER" prefHeight="74.0" prefWidth="159.0" spacing="10.0">
-                <Label styleClass="user-label" stylesheets="@../css/Styles.css" text="Eyaaa" />
+                <Label styleClass="user-label" stylesheets="@../css/Styles.css" text="" />
                 <ImageView fx:id="userProfileImage" fitHeight="33.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" >
                     <image>
                         <Image url="@../assets/user3.png" />
@@ -119,7 +119,7 @@
                     </HBox>
 
                     <HBox alignment="CENTER_RIGHT" spacing="15">
-                        <Button style="-fx-background-color: rgba(191, 226, 246, 0.82); -fx-text-fill: #333333; -fx-background-radius: 5; -fx-font-weight: bold;" styleClass="btn-secondary" text="Continuer les achats">
+                        <Button style="-fx-background-color: rgba(191, 226, 246, 0.82); -fx-text-fill: #333333; -fx-background-radius: 5; -fx-font-weight: bold;" styleClass="btn-secondary" text="Continuer les achats" fx:id="produit" >
                             <font>
                                 <Font size="14.0" />
                             </font>

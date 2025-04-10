@@ -121,7 +121,7 @@ public class EventController {
         titleBox.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(titleBox, javafx.scene.layout.Priority.ALWAYS);
 
-        Label titleLabel = new Label(event.getDescription());
+        Label titleLabel = new Label(event.getNomOrganisateur());
         titleLabel.setStyle("-fx-text-fill: #333333; " +
                 "-fx-font-size: 16px; " +
                 "-fx-font-weight: bold;");
