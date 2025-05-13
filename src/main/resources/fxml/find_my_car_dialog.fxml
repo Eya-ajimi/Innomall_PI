@@ -9,7 +9,7 @@
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="tn.esprit.gui.sofienecontroller.FindMyCarController"
-      spacing="20" styleClass="main-container">
+      spacing="20" styleClass="main-container" prefWidth="700" prefHeight="700">
 
     <padding>
         <Insets top="20" right="25" bottom="20" left="25" />

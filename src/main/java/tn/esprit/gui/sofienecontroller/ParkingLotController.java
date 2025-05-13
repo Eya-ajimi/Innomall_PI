@@ -115,6 +115,14 @@ public class ParkingLotController implements Initializable {
         setupStatsCardAnimation(statsCard1);
         setupStatsCardAnimation(statsCard2);
         enhanceDrivingLane();
+        Platform.runLater(() -> {
+            Stage stage = (Stage) parkingArea.getScene().getWindow();
+            stage.setWidth(1920);
+            stage.setHeight(1080);
+            stage.setX(0);
+            stage.setY(0);
+
+        });
         homeLabel.setOnMouseClicked(event -> {
             try {
                 // Load the Homepage.fxml file

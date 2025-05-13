@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<VBox fx:id="root" spacing="20" styleClass="main-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.sofienecontroller.ParkingLotController">
+<VBox fx:id="root" spacing="20" styleClass="main-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.sofienecontroller.ParkingLotController" >
     <padding>
         <Insets bottom="30" left="30" right="30" top="30" />
     </padding>
@@ -88,7 +88,7 @@
             <Button onAction="#handleCancelReservationButtonAction" styleClass="cancel-reservation-button" text="Cancel Reservation" />
             <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="My Reservations" />
             <Button text="Find My Car" onAction="#handleFindMyCarAction"
-                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    styleClass="find-car-button"/>
         </HBox>
     </HBox>
 

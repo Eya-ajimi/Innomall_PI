@@ -220,8 +220,23 @@
     -fx-cursor: hand;
 }
 
+
 .view-reserved-button:hover {
     -fx-background-color: #1976D2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0, 0, 3);
+}
+.find-car-button {
+    -fx-background-color: #4CAF50; /* A pleasant green */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+.find-car-button:hover {
+    -fx-background-color: #388E3C; /* A darker green for hover */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0, 0, 3);
 }
 
