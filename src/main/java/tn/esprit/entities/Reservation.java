@@ -4,9 +4,9 @@ import java.sql.Timestamp;
 
 public class Reservation {
     public enum StatutReservation {
-        reserved,
+        active, // Changed from 'reserved' to match PHP
         expired,
-        canceled,
+        cancelled // Note: PHP uses 'cancelled' (two L's)
     }
 
     private int idReservation;

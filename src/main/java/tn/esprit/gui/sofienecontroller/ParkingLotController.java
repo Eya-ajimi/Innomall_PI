@@ -470,7 +470,7 @@ public class ParkingLotController implements Initializable {
                     place.getId(),
                     Timestamp.valueOf(dateTime),
                     Timestamp.valueOf(expirationTime),
-                    Reservation.StatutReservation.reserved,
+                    Reservation.StatutReservation.active,
                     details.getVehicleType(),
                     details.getCarWashType(),
                     details.getNotes(),
