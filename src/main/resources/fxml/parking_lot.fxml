@@ -111,15 +111,17 @@
                     <Label styleClass="legend-label" text="Available" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
+                    <Rectangle height="20" styleClass="reserved-spot" width="20" />
+                    <Label styleClass="legend-label" text="Reserved" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
                     <Rectangle height="20" styleClass="occupied-spot" width="20" />
                     <Label styleClass="legend-label" text="Occupied" />
                 </HBox>
             </HBox>
 
             <!-- Top Row for Parking Spots -->
-            <VBox spacing="10">
-                <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row" />
-            </VBox>
+            <HBox fx:id="topRow" alignment="CENTER" spacing="20" styleClass="parking-row"/>
 
             <!-- Enhanced Driving Lane -->
             <StackPane fx:id="passageContainer" styleClass="passage-container">
@@ -128,9 +130,7 @@
             </StackPane>
 
             <!-- Bottom Row for Parking Spots -->
-            <VBox spacing="10">
-                <HBox fx:id="bottomRow" alignment="CENTER" styleClass="parking-row" />
-            </VBox>
+            <HBox fx:id="bottomRow" alignment="CENTER" spacing="20" styleClass="parking-row"/>
         </VBox>
     </ScrollPane>
 

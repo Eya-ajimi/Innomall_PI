@@ -42,6 +42,7 @@ import java.util.*;
 // Import Logger and Level
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ParkingLotController implements Initializable {
     private static final Logger logger = Logger.getLogger(ParkingLotController.class.getName());
@@ -66,6 +67,7 @@ public class ParkingLotController implements Initializable {
     @FXML private Label eventLabel;
     @FXML private Label cartLabel;
     @FXML private Label shopLabel;
+    @FXML private VBox zonesContainer;
 
     private int availableSpots = 0;
     private int totalSpots = 0;
@@ -292,44 +294,58 @@ public class ParkingLotController implements Initializable {
     }
 
     private void initializeFloorComboBox() {
-        floorComboBox.getItems().addAll("Level 1", "Level 2");
-        floorComboBox.setValue("Level 1"); // Default selection
-        floorComboBox.setOnAction(event -> loadParkingSpots());
+        try {
+            // Get all unique floors from database
+            List<String> floors = parkingService.showAll().stream()
+                    .map(PlaceParking::getFloor)
+                    .distinct()
+                    .sorted()
+                    .collect(Collectors.toList());
+
+            floorComboBox.getItems().addAll(floors);
+            floorComboBox.setValue(floors.get(0)); // Default to first floor
+            floorComboBox.setOnAction(event -> loadParkingSpots());
+        } catch (SQLException e) {
+            showErrorAlert("Error loading floors", e.getMessage());
+        }
     }
 
     private void loadParkingSpots() {
         try {
-            // Update parking spot status based on reservations
             updateParkingSpotStatusBasedOnReservations();
-
             String selectedFloor = floorComboBox.getValue();
             List<PlaceParking> parkingSpots = parkingService.showAll();
-            List<Reservation> reservations = new ReservationService().showAll(); // Fetch all reservations
+            List<Reservation> reservations = new ReservationService().showAll();
 
             topRow.getChildren().clear();
             bottomRow.getChildren().clear();
-
             resetCounters();
 
-            // Filter spots for the selected floor
-            List<PlaceParking> filteredSpots = new ArrayList<>();
-            for (PlaceParking spot : parkingSpots) {
-                if (spot.getFloor().equals(selectedFloor)) {
-                    filteredSpots.add(spot);
-                }
-            }
+            // Filter and sort spots for the selected floor
+            List<PlaceParking> filteredSpots = parkingSpots.stream()
+                    .filter(spot -> spot.getFloor().equals(selectedFloor))
+                    .sorted(Comparator.comparing(PlaceParking::getId)) // Sort by ID for consistent order
+                    .collect(Collectors.toList());
 
             totalSpots = filteredSpots.size();
 
-            int half = filteredSpots.size() / 2;
-            for (int i = 0; i < filteredSpots.size(); i++) {
-                PlaceParking place = filteredSpots.get(i);
-                StackPane spotContainer = createParkingSpot(place, reservations); // Pass reservations to createParkingSpot
+            // Add first 8 spots to top row
+            for (int i = 0; i < 8 && i < filteredSpots.size(); i++) {
+                PlaceParking spot = filteredSpots.get(i);
+                StackPane spotContainer = createParkingSpot(spot, reservations);
+                topRow.getChildren().add(spotContainer);
+                if (spot.getStatut() == StatutPlace.free) {
+                    availableSpots++;
+                }
+            }
 
-                if (i < half) {
-                    topRow.getChildren().add(spotContainer);
-                } else {
-                    bottomRow.getChildren().add(spotContainer);
+            // Add next 8 spots to bottom row
+            for (int i = 8; i < 16 && i < filteredSpots.size(); i++) {
+                PlaceParking spot = filteredSpots.get(i);
+                StackPane spotContainer = createParkingSpot(spot, reservations);
+                bottomRow.getChildren().add(spotContainer);
+                if (spot.getStatut() == StatutPlace.free) {
+                    availableSpots++;
                 }
             }
 
@@ -338,7 +354,6 @@ public class ParkingLotController implements Initializable {
             showErrorAlert("Error loading parking spots", e.getMessage());
         }
     }
-
     private void resetCounters() {
         availableSpots = 0;
         totalSpots = 0;
@@ -355,37 +370,40 @@ public class ParkingLotController implements Initializable {
         Label infoLabel = new Label(place.getZone() + "\nID: " + place.getId());
         infoLabel.getStyleClass().add("spot-info-label");
 
-        // Check if the spot is reserved for the current time
+        // Check reservation status
         boolean isReserved = isSpotReservedForCurrentTime(place.getId(), reservations);
 
-        // Check if the spot's statut is "taken"
-        boolean isTaken = place.getStatut() == StatutPlace.taken;
-
-        if (!isReserved && !isTaken && place.getStatut() == StatutPlace.free) {
-            Button reserveButton = createReserveButton(place);
+        // Set spot color based on status
+        if (place.getStatut() == StatutPlace.free) {
             spot.getStyleClass().add("available-spot");
             carView.setVisible(false);
-
-            // Add the label and reserve button to the spot container
-            VBox content = new VBox(5, infoLabel, reserveButton);
-            content.setAlignment(Pos.CENTER);
-            spotContainer.getChildren().addAll(spot, content);
-
-            availableSpots++;
-            setupSpotHoverAnimation(spotContainer);
-        } else {
+        } else if (place.getStatut() == StatutPlace.reserved || isReserved) {
+            spot.getStyleClass().add("reserved-spot");
+            carView.setVisible(true);
+        } else { // taken
             spot.getStyleClass().add("occupied-spot");
             carView.setVisible(true);
+        }
 
-            // Add the label and car image to the spot container
-            VBox content = new VBox(5, infoLabel, carView);
-            content.setAlignment(Pos.CENTER);
-            spotContainer.getChildren().addAll(spot, content);
+        // Always add reserve button (never disabled)
+        Button reserveButton = createReserveButton(place);
 
-            if (!animationPlayedMap.containsKey(place.getId())) {
-                setupCarEntranceAnimation(carView);
-                animationPlayedMap.put(place.getId(), true);
-            }
+        // Add all elements to spot container
+        VBox content = new VBox(5, infoLabel, reserveButton);
+        content.setAlignment(Pos.CENTER);
+        spotContainer.getChildren().addAll(spot, content, carView); // Add carView last so it's on top
+
+        // Count available spots
+        if (place.getStatut() == StatutPlace.free) {
+            availableSpots++;
+        }
+
+        setupSpotHoverAnimation(spotContainer);
+
+        // Always play animation for taken/reserved spots
+        if (place.getStatut() != StatutPlace.free && !animationPlayedMap.containsKey(place.getId())) {
+            setupCarEntranceAnimation(carView);
+            animationPlayedMap.put(place.getId(), true);
         }
 
         return spotContainer;
@@ -452,12 +470,25 @@ public class ParkingLotController implements Initializable {
     }
 
     private void showReservationDialog(PlaceParking place) {
+        // Show warning if spot is taken
+        if (place.getStatut() == StatutPlace.taken) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Spot Currently Occupied");
+            alert.setHeaderText("This parking spot is currently in use");
+            alert.setContentText("You can still reserve it for a future time.");
+            alert.showAndWait();
+        }
+
         Optional<ReservationDialog.ReservationDetails> result = ReservationDialog.showEnhancedReservationDialog();
         result.ifPresent(details -> confirmReservation(place, details.getStartDateTime(), details));
     }
 
     private void confirmReservation(PlaceParking place, LocalDateTime dateTime, ReservationDialog.ReservationDetails details) {
         try {
+            if (place.getStatut() == StatutPlace.taken && dateTime.isBefore(LocalDateTime.now().plusHours(1))) {
+                showErrorAlert("Invalid Reservation", "This spot is currently taken. Please select a future time.");
+                return;
+            }
             LocalDateTime expirationTime = dateTime.plusHours(2);
             int utilisateurId = Session.getInstance().getCurrentUser().getId(); // Get current user ID
 
@@ -560,7 +591,8 @@ public class ParkingLotController implements Initializable {
         for (Reservation reservation : reservations) {
             if (reservation.getIdParking() == spotId &&
                     now.isAfter(reservation.getDateReservation().toLocalDateTime()) &&
-                    now.isBefore(reservation.getDateExpiration().toLocalDateTime())) {
+                    now.isBefore(reservation.getDateExpiration().toLocalDateTime()) &&
+                    reservation.getStatut() == Reservation.StatutReservation.active) {
                 return true; // Spot is reserved for the current time
             }
         }
@@ -573,14 +605,15 @@ public class ParkingLotController implements Initializable {
             LocalDateTime now = LocalDateTime.now();
 
             for (Reservation reservation : reservations) {
-                if (now.isAfter(reservation.getDateReservation().toLocalDateTime()) &&
-                        now.isBefore(reservation.getDateExpiration().toLocalDateTime())) {
-                    // Update the parking spot status to "taken"
-                    parkingService.updateParkingSpotStatus(reservation.getIdParking(), StatutPlace.taken);
-                } else if (now.isAfter(reservation.getDateExpiration().toLocalDateTime())) {
-                    // Update the parking spot status to "free" and mark reservation as "expired"
-                    parkingService.updateParkingSpotStatus(reservation.getIdParking(), StatutPlace.free);
-                    new ReservationService().updateReservationStatus(reservation.getIdReservation(), Reservation.StatutReservation.expired);
+                if (now.isAfter(reservation.getDateReservation().toLocalDateTime())) {
+                    if (now.isBefore(reservation.getDateExpiration().toLocalDateTime())) {
+                        // Update the parking spot status to "reserved" if it's within reservation time
+                        parkingService.updateParkingSpotStatus(reservation.getIdParking(), StatutPlace.reserved);
+                    } else {
+                        // Update the parking spot status to "free" and mark reservation as "expired"
+                        parkingService.updateParkingSpotStatus(reservation.getIdParking(), StatutPlace.free);
+                        new ReservationService().updateReservationStatus(reservation.getIdReservation(), Reservation.StatutReservation.expired);
+                    }
                 }
             }
         } catch (SQLException e) {

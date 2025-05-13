@@ -81,8 +81,10 @@
 }
 
 .parking-row {
-    -fx-spacing: 20;
-    -fx-padding: 10;
+    -fx-spacing: 15px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-min-height: 200px;
 }
 
 .parking-spot {
@@ -90,8 +92,16 @@
     -fx-min-height: 180px;
     -fx-alignment: center;
     -fx-padding: 5px;
+    -fx-spacing: 10;
 }
-
+.parking-spot > .vbox {
+    -fx-spacing: 5;
+    -fx-alignment: center;
+    -fx-padding: 0 0 10 0; /* Add bottom padding */
+}
+.parking-spot .image-view {
+    -fx-translate-y: -20; /* Adjust as needed to position car */
+}
 .legend-container {
     -fx-padding: 15px;
     -fx-background-color: #f8f9fa;
@@ -144,6 +154,21 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 2, 0, 0, 1);
 }
+/* Add this to your CSS */
+.zones-container {
+    -fx-spacing: 20px;
+    -fx-padding: 10px;
+}
+
+.zone-box {
+    -fx-spacing: 5px;
+    -fx-padding: 0 0 15px 0;
+}
+
+.spots-row {
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
 
 .zone-label {
     -fx-font-size: 16px;
@@ -153,6 +178,8 @@
     -fx-background-radius: 8px;
     -fx-padding: 8px 15px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-min-width: 80px;
+    -fx-alignment: CENTER;
 }
 
 .spot-info-label {
@@ -173,8 +200,11 @@
     -fx-padding: 10px 20px;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.3), 8, 0, 0, 0);
+    -fx-translate-y: 20;
 }
-
+.car-image {
+    -fx-translate-y: -30; /* Adjust this value to position the car */
+}
 .reserve-button:hover {
     -fx-background-color: linear-gradient(to bottom right, #0056b3, #004085);
     -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.4), 10, 0, 0, 0);
@@ -504,4 +534,10 @@
 
 .date-picker .today {
     -fx-background-color: #E1F4FF;
+}
+.reserved-spot {
+    -fx-fill: linear-gradient(to bottom right, #2196F3, #1976D2);
+    -fx-arc-width: 10;
+    -fx-arc-height: 10;
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.3), 10, 0, 0, 0);
 }

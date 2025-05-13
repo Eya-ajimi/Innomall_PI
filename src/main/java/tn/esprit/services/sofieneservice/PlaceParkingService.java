@@ -50,7 +50,7 @@ public class PlaceParkingService implements CRUD<PlaceParking> {
     @Override
     public List<PlaceParking> showAll() throws SQLException {
         List<PlaceParking> places = new ArrayList<>();
-        String query = "SELECT * FROM PlaceParking";
+        String query = "SELECT * FROM PlaceParking ORDER BY floor, id"; // Important: order by ID
 
         try (Connection connection = DataBase.getInstance().getCnx();
              Statement st = connection.createStatement();
