@@ -101,7 +101,7 @@ public class ReservationService implements CRUD<Reservation> {
                 parkingId,
                 dateReservation,
                 dateExpiration,
-                StatutReservation.reserved,
+                StatutReservation.active,
                 null, // vehicleType (default value)
                 null, // carWashType (default value)
                 null, // notes (default value)
@@ -135,7 +135,7 @@ public class ReservationService implements CRUD<Reservation> {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, Reservation.StatutReservation.expired.name()); // Set status to "expired"
             statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now())); // Current time
-            statement.setString(3, Reservation.StatutReservation.reserved.name()); // Only update "reserved" status
+            statement.setString(3, Reservation.StatutReservation.active.name()); // Only update "reserved" status
             statement.executeUpdate();
         }
     }
@@ -184,7 +184,7 @@ public class ReservationService implements CRUD<Reservation> {
         String sql = "UPDATE Reservation SET statut = ? WHERE idReservation = ?";
         try (Connection connection = DataBase.getInstance().getCnx();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, StatutReservation.canceled.name());
+            statement.setString(1, StatutReservation.cancelled.name());
             statement.setInt(2, reservationId);
             statement.executeUpdate();
 

@@ -26,7 +26,7 @@ public class ReservedSpotsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize status filter
         statusFilter.setItems(FXCollections.observableArrayList(
-                "All", "reserved", "expired", "canceled"
+                "All", "active", "expired", "cancelled"
         ));
         statusFilter.setValue("All");
 

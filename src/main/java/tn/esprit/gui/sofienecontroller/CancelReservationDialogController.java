@@ -65,7 +65,7 @@ public class CancelReservationDialogController {
         // Initialize status filter dropdown
         if (statusFilter != null) {
             statusFilter.setItems(FXCollections.observableArrayList(
-                    "All", "reserved", "expired", "canceled"
+                    "All", "active", "expired", "cancelled"
             ));
             statusFilter.setValue("All");
 
@@ -173,7 +173,7 @@ public class CancelReservationDialogController {
         int currentUserId = Session.getInstance().getCurrentUser().getId(); // Get current user ID
         List<Reservation> filteredList = userReservations.stream()
                 .filter(reservation -> reservation.getIdUtilisateur() == currentUserId) // Filter by current user ID
-                .filter(reservation -> reservation.getStatut().toString().equals("reserved")) // Filter by status
+                .filter(reservation -> reservation.getStatut().toString().equals("active")) // Filter by status
                 .collect(Collectors.toList());
 
         this.filteredReservations = new FilteredList<>(FXCollections.observableArrayList(filteredList));
@@ -185,7 +185,7 @@ public class CancelReservationDialogController {
         Reservation selectedReservation = reservationTableView.getSelectionModel().getSelectedItem();
         if (selectedReservation != null) {
             // Check if the reservation is already canceled or expired
-            if (!selectedReservation.getStatut().toString().equals("reserved")) {
+            if (!selectedReservation.getStatut().toString().equals("active")) {
                 if (statusLabel != null) {
                     statusLabel.setText("Cannot cancel a reservation that is already canceled or expired.");
                     statusLabel.getStyleClass().clear();
@@ -204,7 +204,7 @@ public class CancelReservationDialogController {
                 // Recreate the filteredReservations list
                 List<Reservation> filteredList = userReservations.stream()
                         .filter(reservation -> reservation.getIdUtilisateur() == 1) // Filter by user ID
-                        .filter(reservation -> reservation.getStatut().toString().equals("reserved")) // Filter by status
+                        .filter(reservation -> reservation.getStatut().toString().equals("active")) // Filter by status
                         .collect(Collectors.toList());
 
                 this.filteredReservations = new FilteredList<>(FXCollections.observableArrayList(filteredList));

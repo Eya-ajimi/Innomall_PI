@@ -8,8 +8,8 @@ public class DataBase {
     private static DataBase instance;
     private Connection cnx;
      private final String USER = "root"; // Nom d'utilisateur MySQL
-    private final String PWD = "root"; // Mot de passe MySQL
-    private final String URL = "jdbc:mysql://localhost:3306/sofienebase"; // URL de la base de données
+    private final String PWD = ""; // Mot de passe MySQL
+    private final String URL = "jdbc:mysql://localhost:3306/webinnomall_mariav3"; // URL de la base de données
 
     private DataBase() {
         // Initialize the connection when the instance is created
