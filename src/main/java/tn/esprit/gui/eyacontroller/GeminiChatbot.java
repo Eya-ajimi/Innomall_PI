@@ -1,0 +1,75 @@
+package tn.esprit.gui.eyacontroller;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class GeminiChatbot {
+
+    private static final String API_KEY = "AIzaSyARLm_6I1eK9vdzeg0cvlrQrZF5AF42tLY"; // Replace with your Gemini API Key
+
+    public String getResponse(String userMessage) {
+        try {
+            URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            String jsonInputString = """
+                {
+                    "contents": [
+                        {
+                            "role": "user",
+                            "parts": [{
+                                "text": "Tu es InnoChat, un assistant virtuel pour InnoMall.\\nVoici ce que tu dois savoir :\\n- InnoMall est un centre commercial avec 100 magasins.\\n- Les magasins disponibles sont : Zara, Mango, KFC Stars, Fatales, Bershka, Musimo Duetti, Polo, Adidas, Florison, Cosmito, Papajones, et d'autres.\\n- InnoMall propose des cartes de fidélité.\\n- Un client peut gagner un produit gratuit après avoir accumulé 3000 points.\\n- Si un client te demande s'il y a des promotions, réponds poliment : \\"Oui, il est probable qu'il y ait des promotions ! Je vous conseille de consulter directement l'application pour voir les offres spécifiques des magasins.\\"\\nIMPORTANT :\\n- Tu dois répondre uniquement aux questions concernant InnoMall et ses services.\\n- Si quelqu'un pose une question hors sujet, réponds poliment : \\"Je suis désolé, je suis uniquement programmé pour répondre aux questions concernant InnoMall.\\"\\n- Reste toujours poli et professionnel dans toutes tes réponses."
+                            }]
+                        },
+                        {
+                            "role": "user",
+                            "parts": [{
+                                "text": "%s"
+                            }]
+                        }
+                    ]
+                }
+            """.formatted(userMessage);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            Scanner scanner = new Scanner(conn.getInputStream(), "utf-8");
+            String responseBody = scanner.useDelimiter("\\A").next();
+            scanner.close();
+
+// Parse JSON and extract reply
+            JSONObject json = new JSONObject(responseBody);
+            JSONArray candidates = json.getJSONArray("candidates");
+            if (candidates.length() > 0) {
+                JSONObject firstCandidate = candidates.getJSONObject(0);
+                JSONObject content = firstCandidate.getJSONObject("content");
+                JSONArray parts = content.getJSONArray("parts");
+                if (parts.length() > 0) {
+                    String reply = parts.getJSONObject(0).getString("text");
+                    return reply;
+                }
+                return "Réponse vide ou inattendue de l'API.";
+
+
+        } else {
+
+                return "Réponse non comprise par le bot.";
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erreur lors de la communication avec l'API Gemini.";
+        }
+    }
+}
+

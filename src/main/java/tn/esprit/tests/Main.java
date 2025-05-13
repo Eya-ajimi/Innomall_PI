@@ -31,7 +31,7 @@ public class Main extends Application {
 
             System.out.println("✅ login.fxml chargé avec succès !");
 
-            Scene scene = new Scene(root, 1400, 600);
+            Scene scene = new Scene(root, 1280, 720);;
 
             String cssPath = "/css/loginmaria.css";
             if (getClass().getResource(cssPath) != null) {
