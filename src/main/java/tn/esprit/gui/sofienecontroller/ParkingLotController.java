@@ -321,22 +321,25 @@ public class ParkingLotController implements Initializable {
             bottomRow.getChildren().clear();
             resetCounters();
 
-            // Filter and sort spots for the selected floor
+            // Filter spots for the selected floor
             List<PlaceParking> filteredSpots = parkingSpots.stream()
                     .filter(spot -> spot.getFloor().equals(selectedFloor))
-                    .sorted(Comparator.comparing(PlaceParking::getId)) // Sort by ID for consistent order
+                    .sorted(Comparator.comparing(PlaceParking::getId))
                     .collect(Collectors.toList());
 
-            totalSpots = filteredSpots.size();
+            totalSpots = filteredSpots.size(); // Total spots on this floor
+
+            // Reset counters
+            availableSpots = 0;
+            int takenSpots = 0;
+            int reservedSpots = 0;
 
             // Add first 8 spots to top row
             for (int i = 0; i < 8 && i < filteredSpots.size(); i++) {
                 PlaceParking spot = filteredSpots.get(i);
                 StackPane spotContainer = createParkingSpot(spot, reservations);
                 topRow.getChildren().add(spotContainer);
-                if (spot.getStatut() == StatutPlace.free) {
-                    availableSpots++;
-                }
+                updateSpotCounters(spot);
             }
 
             // Add next 8 spots to bottom row
@@ -344,14 +347,23 @@ public class ParkingLotController implements Initializable {
                 PlaceParking spot = filteredSpots.get(i);
                 StackPane spotContainer = createParkingSpot(spot, reservations);
                 bottomRow.getChildren().add(spotContainer);
-                if (spot.getStatut() == StatutPlace.free) {
-                    availableSpots++;
-                }
+                updateSpotCounters(spot);
             }
+
+            // Calculate available spots (free + reserved)
+            availableSpots = (int) filteredSpots.stream()
+                    .filter(spot -> spot.getStatut() == StatutPlace.free)
+                    .count();
 
             updateStatistics();
         } catch (SQLException e) {
             showErrorAlert("Error loading parking spots", e.getMessage());
+        }
+    }
+
+    private void updateSpotCounters(PlaceParking spot) {
+        if (spot.getStatut() == StatutPlace.free) {
+            availableSpots++;
         }
     }
     private void resetCounters() {
@@ -566,13 +578,16 @@ public class ParkingLotController implements Initializable {
     }
 
     private void updateStatistics() {
-        counterLabel.setText("Available Spots: " + availableSpots);
-
         if (totalSpots > 0) {
-            double occupancyRate = ((totalSpots - availableSpots) / (double) totalSpots) * 100;
+            // Calculate correctly
+            int occupiedSpots = totalSpots - availableSpots;
+            double occupancyRate = (occupiedSpots / (double) totalSpots) * 100;
+
+            counterLabel.setText("Available Spots: " + availableSpots + "/" + totalSpots);
             occupancyLabel.setText(String.format("Occupancy: %.1f%%", occupancyRate));
         } else {
-            occupancyLabel.setText("Occupancy: 0.0%"); // Handle division by zero
+            counterLabel.setText("Available Spots: 0/0");
+            occupancyLabel.setText("Occupancy: 0.0%");
         }
     }
 
