@@ -153,7 +153,7 @@ public class ReservationService implements CRUD<Reservation> {
     // New method to get reservations by user ID
     public List<Reservation> getReservationsByUserId(int userId) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT * FROM Reservation WHERE idUtilisateur = ?";
+        String sql = "SELECT * FROM Reservation WHERE idUtilisateur = ? ORDER BY dateReservation DESC";
 
         try (Connection connection = DataBase.getInstance().getCnx();
              PreparedStatement statement = connection.prepareStatement(sql)) {

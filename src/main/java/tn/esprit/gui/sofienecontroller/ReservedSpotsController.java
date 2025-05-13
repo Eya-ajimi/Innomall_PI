@@ -1,5 +1,7 @@
 package tn.esprit.gui.sofienecontroller;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -8,9 +10,12 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.entities.Reservation;
 import tn.esprit.services.sofieneservice.ReservationService;
-
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import java.sql.Timestamp;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ReservedSpotsController implements Initializable {
@@ -21,7 +26,10 @@ public class ReservedSpotsController implements Initializable {
 
     private ReservationService reservationService = new ReservationService();
     private FilteredList<Reservation> filteredReservations;
-
+    public void setReservations(List<Reservation> reservations) {
+        filteredReservations = new FilteredList<>(FXCollections.observableArrayList(reservations));
+        reservationTable.setItems(filteredReservations);
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize status filter
@@ -30,8 +38,8 @@ public class ReservedSpotsController implements Initializable {
         ));
         statusFilter.setValue("All");
 
-        loadReservations();
 
+        initializeTableColumns();
         setupSearch();
 
         setupStatusFilter();
@@ -98,5 +106,61 @@ public class ReservedSpotsController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    private void initializeTableColumns() {
+        // Clear existing columns
+        reservationTable.getColumns().clear();
+
+        // Spot #
+        TableColumn<Reservation, Integer> spotColumn = new TableColumn<>("Spot #");
+        spotColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIdParking()).asObject());
+
+        // Reserved On
+        TableColumn<Reservation, String> reservedColumn = new TableColumn<>("Reserved On");
+        reservedColumn.setCellValueFactory(cellData -> {
+            Timestamp timestamp = cellData.getValue().getDateReservation();
+            return new SimpleStringProperty(timestamp != null ? timestamp.toString() : "");
+        });
+
+        // Expires On
+        TableColumn<Reservation, String> expiresColumn = new TableColumn<>("Expires On");
+        expiresColumn.setCellValueFactory(cellData -> {
+            Timestamp timestamp = cellData.getValue().getDateExpiration();
+            return new SimpleStringProperty(timestamp != null ? timestamp.toString() : "");
+        });
+
+        // Status
+        TableColumn<Reservation, String> statusColumn = new TableColumn<>("Status");
+        statusColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStatut().toString()));
+
+        // Vehicle Type
+        TableColumn<Reservation, String> vehicleColumn = new TableColumn<>("Vehicle Type");
+        vehicleColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getVehicleType()));
+
+        // Car Wash Type
+        TableColumn<Reservation, String> washColumn = new TableColumn<>("Car Wash");
+        washColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCarWashType()));
+
+        // Price
+        TableColumn<Reservation, String> priceColumn = new TableColumn<>("Price");
+        priceColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.format("%.2f TND", cellData.getValue().getPrice())));
+
+        // Add all columns to the table
+        reservationTable.getColumns().addAll(
+                spotColumn,
+                reservedColumn,
+                expiresColumn,
+                statusColumn,
+                vehicleColumn,
+                washColumn,
+                priceColumn
+        );
+
+        // Set column resize policy
+        reservationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 }

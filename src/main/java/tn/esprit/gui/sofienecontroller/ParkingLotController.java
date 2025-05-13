@@ -79,10 +79,22 @@ public class ParkingLotController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/reserved_spots_dialog.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
-            stage.setTitle("Reserved Spots");
+            stage.setTitle("My Reserved Spots");
+
+            // Get current user ID
+            int currentUserId = Session.getInstance().getCurrentUser().getId();
+
+            // Get the controller and set the reservations
+            ReservedSpotsController controller = loader.getController();
+            List<Reservation> userReservations = new ReservationService()
+                    .getReservationsByUserId(currentUserId); // This already exists in your service
+
+            controller.setReservations(userReservations); // We'll update this method next
+
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
+            showErrorAlert("Error loading reservations", e.getMessage());
         }
     }
 
