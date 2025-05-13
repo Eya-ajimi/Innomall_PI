@@ -233,9 +233,9 @@ public class RegisterController {
         // Créer l'objet Utilisateur
         Utilisateur newUser;
         if (getSelectedRole() == Role.CLIENT) {
-            newUser = new Utilisateur(nom, prenom, email, password, adresse, telephone, "Actif", getSelectedRole(), "");
+            newUser = new Utilisateur(nom, prenom, email, password, adresse, telephone, "actif", getSelectedRole(), "");
         } else {
-            newUser = new Utilisateur(nom, "", email, password, "", "", "Actif", getSelectedRole(), prenom);
+            newUser = new Utilisateur(nom, "", email, password, "", "", "actif", getSelectedRole(), prenom);
             newUser.setNomCategorie(selectedCategorie);
         }
 

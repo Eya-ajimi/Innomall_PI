@@ -63,6 +63,7 @@ public class UserService implements CRUD<Utilisateur> {
             pst.setString(7, user.getStatut());
             pst.setString(8, user.getRole().toString());
 
+
             // Gestion de la catégorie pour les Shop Owners
             if (user.getRole()== Role.SHOPOWNER) {
                 pst.setInt(9, getIdCategorieByName(user.getNomCategorie()));
@@ -233,21 +234,30 @@ public class UserService implements CRUD<Utilisateur> {
     public Utilisateur signIn(String email, String password) throws SQLException {
         String sql = "SELECT * FROM utilisateur WHERE email = ?";
         Utilisateur user = null;
+
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, email);
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String hashedPassword = rs.getString("mot_de_passe");
-                    if (BCrypt.checkpw(password, hashedPassword)) { // Vérification du mot de passe
+
+                    // jBCrypt only supports $2a$, $2b$, etc.  Convert legacy $2y$ hashes
+                    if (hashedPassword != null && hashedPassword.startsWith("$2y$")) {
+                        hashedPassword = "$2a$" + hashedPassword.substring(4);
+                    }
+
+                    // Verify the password
+                    if (BCrypt.checkpw(password, hashedPassword)) {
                         user = new Utilisateur();
                         mapResultSetToUser(rs, user);
                     }
                 }
             }
         }
+
         return user;
     }
-
     public boolean emailExists(String email) throws SQLException {
         String query = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -329,11 +339,25 @@ public class UserService implements CRUD<Utilisateur> {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String hashedPassword = rs.getString("mot_de_passe");
-                    return BCrypt.checkpw(password, hashedPassword); // Vérifie si le mot de passe correspond
+                    if (hashedPassword == null || hashedPassword.isEmpty()) {
+                        return false;
+                    }
+                    
+                    // Handle different BCrypt versions
+                    if (hashedPassword.startsWith("$2y$")) {
+                        hashedPassword = "$2a$" + hashedPassword.substring(4);
+                    }
+                    
+                    try {
+                        return BCrypt.checkpw(password, hashedPassword);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Error verifying password: " + e.getMessage());
+                        return false;
+                    }
                 }
             }
         }
-        return false; // Si l'utilisateur n'est pas trouvé ou si le mot de passe ne correspond pas
+        return false;
     }
 
     // Méthode pour mettre à jour les informations de l'utilisateur
@@ -348,30 +372,26 @@ public class UserService implements CRUD<Utilisateur> {
         parameters.add(user.getTelephone());
         parameters.add(user.getAdresse());
 
-        // Debug logs
-        System.out.println("Password: " + user.getMotDePasse());
-        System.out.println("Profile Picture: " + user.getProfilePicture());
-
         // Handle password update
         if (user.getMotDePasse() != null && !user.getMotDePasse().isEmpty()) {
             query.append(", mot_de_passe = ?");
-            parameters.add(BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt()));
-            System.out.println("Updating password...");
+            try {
+                String hashedPassword = BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt(12));
+                parameters.add(hashedPassword);
+            } catch (IllegalArgumentException e) {
+                throw new SQLException("Error hashing password: " + e.getMessage());
+            }
         }
 
         // Handle profile picture update
-        if (user.getProfilePicture() != null) {
+        if (user.getProfilePicture() != null && user.getProfilePicture().length > 0) {
             query.append(", profilepicture = ?");
             parameters.add(user.getProfilePicture());
-            System.out.println("Updating profile picture...");
         }
 
         // Add the WHERE clause
         query.append(" WHERE id = ?");
         parameters.add(user.getId());
-
-        // Debug log for the final query
-        System.out.println("Final Query: " + query.toString());
 
         // Execute the query
         try (PreparedStatement pstmt = connection.prepareStatement(query.toString())) {
