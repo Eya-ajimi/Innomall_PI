@@ -496,7 +496,7 @@ public class ParkingLotController implements Initializable {
                     + "<li><strong>Type de véhicule :</strong> " + details.getVehicleType() + "</li>"
                     + "<li><strong>Service de lavage :</strong> " + (details.getCarWashType() != null ? details.getCarWashType() : "Aucun") + "</li>"
                     + "<li><strong>Notes :</strong> " + (details.getNotes() != null ? details.getNotes() : "Aucune") + "</li>"
-                    + "<li><strong>Coût total :</strong> " + totalPrice + " €</li>"
+                    + "<li><strong>Coût total :</strong> " + totalPrice + " TND</li>"
                     + "</ul>"
                     + "<p>Merci d'avoir utilisé notre service de parking.</p>";
 
