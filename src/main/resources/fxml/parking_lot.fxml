@@ -87,6 +87,8 @@
         <HBox alignment="CENTER_RIGHT" spacing="15">
             <Button onAction="#handleCancelReservationButtonAction" styleClass="cancel-reservation-button" text="Cancel Reservation" />
             <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="My Reservations" />
+            <Button text="Find My Car" onAction="#handleFindMyCarAction"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
         </HBox>
     </HBox>
 

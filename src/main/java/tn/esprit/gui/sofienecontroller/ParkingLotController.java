@@ -33,6 +33,7 @@ import tn.esprit.services.sofieneservice.ReservationService;
 import tn.esprit.utils.Session;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -114,7 +115,6 @@ public class ParkingLotController implements Initializable {
         setupStatsCardAnimation(statsCard1);
         setupStatsCardAnimation(statsCard2);
         enhanceDrivingLane();
-
         homeLabel.setOnMouseClicked(event -> {
             try {
                 // Load the Homepage.fxml file
@@ -680,6 +680,30 @@ public class ParkingLotController implements Initializable {
         } else {
             // Handle the case where no user is logged in
             throw new IllegalStateException("No user is currently logged in.");
+        }
+    }
+    @FXML
+    private void handleFindMyCarAction() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            // Use getResourceAsStream for more reliable loading
+            InputStream fxmlStream = getClass().getResourceAsStream("/fxml/find_my_car_dialog.fxml");
+            if (fxmlStream == null) {
+                throw new IOException("Can't find FXML file");
+            }
+            Parent root = loader.load(fxmlStream);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Find My Car");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace(); // This will show more details in console
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Failed to load dialog");
+            alert.setContentText("Error details: " + e.getMessage());
+            alert.showAndWait();
         }
     }
 }

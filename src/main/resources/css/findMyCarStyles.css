@@ -1,0 +1,134 @@
+/* Find My Car - Main Styles */
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-background-color: #f5f5f5;
+}
+
+/* Main container styling */
+.main-container {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-padding: 25px;
+}
+
+/* Header styling */
+.header-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 0 0 10px 0;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Form elements styling */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: medium;
+    -fx-text-fill: #34495E;
+    -fx-padding: 5px 0;
+}
+
+.text-field {
+    -fx-background-color: #ECEFF1;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: transparent;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #90A4AE;
+}
+
+.text-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #3498DB;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 5, 0, 0, 0);
+}
+
+/* Button styling */
+.button {
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-transition: all 0.2s ease;
+}
+
+.cancel-button {
+    -fx-background-color: #E0E0E0;
+    -fx-text-fill: #616161;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #BDBDBD;
+}
+
+.find-button {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+}
+
+.find-button:hover {
+    -fx-background-color: #2980B9;
+}
+
+/* Result label styling */
+.result-container {
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #E0E0E0;
+    -fx-padding: 15px;
+    -fx-spacing: 5px;
+    -fx-margin-top: 15px;
+}
+
+.result-label {
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+    -fx-text-fill: #2C3E50;
+}
+
+.success-text {
+    -fx-text-fill: #27AE60;
+    -fx-font-weight: bold;
+}
+
+.error-text {
+    -fx-text-fill: #E74C3C;
+}
+
+.info-text {
+    -fx-text-fill: #3498DB;
+    -fx-font-weight: bold;
+}
+
+/* Car location info styling */
+.location-container {
+    -fx-spacing: 10px;
+    -fx-padding: 10px 0;
+}
+
+.location-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+.time-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #7F8C8D;
+}
+
+/* Icons styling */
+.icon-container {
+    -fx-alignment: center;
+    -fx-padding: 5px;
+}
+
+.car-icon-container {
+    -fx-padding: 10px 0;
+}
