@@ -17,19 +17,18 @@ import java.util.Optional;
 public class ReservationDialog {
 
     // Pricing constants
-    private static final double BASE_HOURLY_RATE = 2.0;
+    private static final double BASE_HOURLY_RATE = 1.0;
     private static final Map<String, Double> VEHICLE_TYPE_MULTIPLIERS = new HashMap<String, Double>() {{
-        put("Sedan", 1.0);
-        put("SUV", 1.2);
-        put("Van", 1.5);
-        put("Motorcycle", 0.7);
-        put("Electric Vehicle", 1.1);
-        put("Truck", 1.8);
+        put("Motorcycle", 3.5);
+        put("Compact", 5.0);
+        put("SUV", 6.0);
+        put("Van", 7.5);
     }};
-    private static final double CAR_WASH_BASIC_PRICE = 8.99;
-    private static final double CAR_WASH_PREMIUM_PRICE = 14.99;
-    private static final double CAR_WASH_DELUXE_PRICE = 19.99;
-
+    private static final Map<String, Double> CAR_WASH_PRICES = new HashMap<String, Double>() {{
+        put("Basic", 10.0);
+        put("Premium", 20.0);
+        put("Deluxe", 30.0);
+    }};
     // Original method for backward compatibility
     public static Optional<LocalDateTime> showReservationDialog() {
         return showEnhancedReservationDialog().map(ReservationDetails::getStartDateTime);
@@ -158,22 +157,20 @@ public class ReservationDialog {
 
         // Set up vehicle types
         vehicleTypeCombo.getItems().addAll(
-                "Sedan",
-                "SUV",
-                "Van",
                 "Motorcycle",
-                "Electric Vehicle",
-                "Truck"
+                "Compact",
+                "SUV",
+                "Van"
         );
-        vehicleTypeCombo.setValue("Sedan"); // Default value
+        vehicleTypeCombo.setValue("Compact"); // Default value
 
         // Set up car wash options
         carWashTypeCombo.getItems().addAll(
-                "Basic Wash - 8.99 TND",
-                "Premium Wash - 14.99 TND",
-                "Deluxe Package - 19.99 TND"
+                "Basic - 10 TND",
+                "Premium - 20 TND",
+                "Deluxe - 30 TND"
         );
-        carWashTypeCombo.setValue("Basic Wash - 8.99 TND");
+        carWashTypeCombo.setValue("Basic - 10 TND");
         carWashTypeCombo.setDisable(true);
 
         // Connect car wash checkbox with combo box
@@ -256,8 +253,8 @@ public class ReservationDialog {
 
                 // Calculate parking price
                 double totalHours = hours + (minutes / 60.0);
-                double vehicleMultiplier = VEHICLE_TYPE_MULTIPLIERS.getOrDefault(vehicleTypeCombo.getValue(), 1.0);
-                double parkingPrice = totalHours * BASE_HOURLY_RATE * vehicleMultiplier;
+                double vehicleRate = VEHICLE_TYPE_MULTIPLIERS.getOrDefault(vehicleTypeCombo.getValue(), 5.0);
+                double parkingPrice = totalHours * BASE_HOURLY_RATE * vehicleRate;
                 parkingPriceLabel.setText(String.format("%.2f TND", parkingPrice));
 
                 // Calculate car wash price
@@ -301,9 +298,9 @@ public class ReservationDialog {
     private static double getCarWashPrice(String carWashType) {
         if (carWashType == null) return 0.0;
 
-        if (carWashType.contains("Basic")) return CAR_WASH_BASIC_PRICE;
-        if (carWashType.contains("Premium")) return CAR_WASH_PREMIUM_PRICE;
-        if (carWashType.contains("Deluxe")) return CAR_WASH_DELUXE_PRICE;
+        if (carWashType.contains("Basic")) return CAR_WASH_PRICES.get("Basic");
+        if (carWashType.contains("Premium")) return CAR_WASH_PRICES.get("Premium");
+        if (carWashType.contains("Deluxe")) return CAR_WASH_PRICES.get("Deluxe");
 
         return 0.0;
     }

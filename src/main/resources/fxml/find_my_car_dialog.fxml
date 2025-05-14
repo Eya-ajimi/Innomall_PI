@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tn.esprit.gui.sofienecontroller.FindMyCarController"
+      spacing="20" styleClass="main-container" prefWidth="700" prefHeight="700">
+
+    <padding>
+        <Insets top="20" right="25" bottom="20" left="25" />
+    </padding>
+
+    <Label text="Find My Car" styleClass="header-label"/>
+
+    <VBox spacing="8">
+        <Label text="Enter your phone number" styleClass="form-label"/>
+        <TextField fx:id="phoneNumberField" promptText="8-digit phone number" />
+        <Label text="We'll find your car based on your entry scan" styleClass="time-label"/>
+    </VBox>
+
+    <VBox fx:id="resultContainer" styleClass="result-container" visible="false" managed="false">
+        <VBox fx:id="carFoundContainer" spacing="10">
+            <HBox styleClass="location-container">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Your car location" styleClass="location-label"/>
+                    <Label fx:id="spotNumberLabel" text="Spot #" styleClass="info-text"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="5">
+                <Label text="Parking details:" styleClass="form-label"/>
+                <GridPane vgap="5" hgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="100" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="150" />
+                    </columnConstraints>
+
+                    <Label text="Scanned at:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="time-label"/>
+                    <Label fx:id="scannedAtLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="time-label"/>
+
+                    <Label text="Parked for:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="time-label"/>
+                    <Label fx:id="parkedForLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="time-label"/>
+                </GridPane>
+            </VBox>
+        </VBox>
+
+        <Label fx:id="resultLabel" styleClass="result-label" wrapText="true"/>
+    </VBox>
+
+    <Region VBox.vgrow="ALWAYS" />
+
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancelAction" styleClass="cancel-button"/>
+        <Button fx:id="findButton" text="Find My Car" onAction="#handleFindAction" styleClass="find-button"/>
+    </HBox>
+    <stylesheets>
+        <URL value="@/css/findMyCarStyles.css" />
+    </stylesheets>
+</VBox>

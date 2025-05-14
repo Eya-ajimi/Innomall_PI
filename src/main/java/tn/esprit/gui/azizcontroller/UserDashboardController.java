@@ -18,8 +18,7 @@ import tn.esprit.entities.Utilisateur;
 import tn.esprit.services.azizservice.UserService;
 import tn.esprit.utils.Session;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -246,25 +245,64 @@ public class UserDashboardController {
 
     // Méthode pour charger l'image de profil
     private void loadProfileImage(Utilisateur user) {
-        if (user.getProfilePicture() != null) {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
-            Image profileImage = new Image(inputStream);
-            profileImageView.setImage(profileImage);
-        } else {
-            try {
-                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
-                if (inputStream == null) {
-                    throw new FileNotFoundException("Default image not found at /assets/7.png");
+        try {
+            String imagePath = user.getProfilePicture();
+            if (imagePath != null && !imagePath.isEmpty()) {
+                Image image = null;
+                
+                // Essayer d'abord de charger depuis les ressources
+                try (InputStream resourceStream = getClass().getResourceAsStream(imagePath)) {
+                    if (resourceStream != null) {
+                        image = new Image(resourceStream);
+                        if (!image.isError()) {
+                            profileImageView.setImage(image);
+                            return;
+                        }
+                    }
+                } catch (IOException e) {
+                    System.err.println("Erreur lors de la lecture du flux de ressources: " + e.getMessage());
                 }
-                Image defaultImage = new Image(inputStream);
-                profileImageView.setImage(defaultImage);
-            } catch (Exception e) {
-                System.err.println("Error loading default image: " + e.getMessage());
+                
+                // Si l'image n'est pas trouvée dans les ressources, essayer le chemin absolu
+                String projectPath = System.getProperty("user.dir");
+                String fullPath = projectPath + "/src/main/resources" + imagePath;
+                File imageFile = new File(fullPath);
+                
+                if (imageFile.exists()) {
+                    try {
+                        image = new Image(imageFile.toURI().toString());
+                        if (!image.isError()) {
+                            profileImageView.setImage(image);
+                            return;
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Erreur lors du chargement de l'image depuis le fichier: " + e.getMessage());
+                    }
+                } else {
+                    System.err.println("Fichier image non trouvé: " + fullPath);
+                }
             }
+            
+            // Si on arrive ici, charger l'image par défaut
+            loadDefaultImage();
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
+            loadDefaultImage();
         }
     }
 
-
+    private void loadDefaultImage() {
+        try (InputStream defaultImageStream = getClass().getResourceAsStream("/assets/7.png")) {
+            if (defaultImageStream != null) {
+                Image defaultImage = new Image(defaultImageStream);
+                profileImageView.setImage(defaultImage);
+            } else {
+                System.err.println("Image par défaut introuvable");
+            }
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement de l'image par défaut: " + e.getMessage());
+        }
+    }
 
     @FXML
     private void handleLogout() {
@@ -312,6 +350,24 @@ public class UserDashboardController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void setUser(Utilisateur user) {
+        if (user != null) {
+            welcomeLabel.setText("Bienvenue, " + user.getNom() + "!");
+            nomLabel.setText("Nom: " + user.getNom());
+            emailLabel.setText("Email: " + user.getEmail());
+            telephoneLabel.setText("Téléphone: " + user.getTelephone());
+            adresseLabel.setText("Adresse: " + user.getAdresse());
+            
+            // Charger l'image de profil
+            loadProfileImage(user);
+            
+            // Mettre à jour la barre de progression des points
+            updatePointsProgressBar(user.getPoints());
+        } else {
+            welcomeLabel.setText("Aucun utilisateur connecté.");
+        }
     }
 
 }

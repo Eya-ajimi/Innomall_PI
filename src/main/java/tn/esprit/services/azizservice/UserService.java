@@ -63,6 +63,7 @@ public class UserService implements CRUD<Utilisateur> {
             pst.setString(7, user.getStatut());
             pst.setString(8, user.getRole().toString());
 
+
             // Gestion de la catégorie pour les Shop Owners
             if (user.getRole()== Role.SHOPOWNER) {
                 pst.setInt(9, getIdCategorieByName(user.getNomCategorie()));
@@ -222,32 +223,41 @@ public class UserService implements CRUD<Utilisateur> {
             user.setDescription("");
         }
 
-        byte[] profilePicture = rs.getBytes("profilepicture");
+        String profilePicture = rs.getString("profilepicture");
         if (profilePicture != null) {
             user.setProfilePicture(profilePicture);
         } else {
-            user.setProfilePicture(null);
+            user.setProfilePicture("/assets/7.png"); // Default profile picture path
         }
     }
 
     public Utilisateur signIn(String email, String password) throws SQLException {
         String sql = "SELECT * FROM utilisateur WHERE email = ?";
         Utilisateur user = null;
+
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, email);
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String hashedPassword = rs.getString("mot_de_passe");
-                    if (BCrypt.checkpw(password, hashedPassword)) { // Vérification du mot de passe
+
+                    // jBCrypt only supports $2a$, $2b$, etc.  Convert legacy $2y$ hashes
+                    if (hashedPassword != null && hashedPassword.startsWith("$2y$")) {
+                        hashedPassword = "$2a$" + hashedPassword.substring(4);
+                    }
+
+                    // Verify the password
+                    if (BCrypt.checkpw(password, hashedPassword)) {
                         user = new Utilisateur();
                         mapResultSetToUser(rs, user);
                     }
                 }
             }
         }
+
         return user;
     }
-
     public boolean emailExists(String email) throws SQLException {
         String query = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -329,51 +339,60 @@ public class UserService implements CRUD<Utilisateur> {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String hashedPassword = rs.getString("mot_de_passe");
-                    return BCrypt.checkpw(password, hashedPassword); // Vérifie si le mot de passe correspond
+                    if (hashedPassword == null || hashedPassword.isEmpty()) {
+                        return false;
+                    }
+                    
+                    // Handle different BCrypt versions
+                    if (hashedPassword.startsWith("$2y$")) {
+                        hashedPassword = "$2a$" + hashedPassword.substring(4);
+                    }
+                    
+                    try {
+                        return BCrypt.checkpw(password, hashedPassword);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Error verifying password: " + e.getMessage());
+                        return false;
+                    }
                 }
             }
         }
-        return false; // Si l'utilisateur n'est pas trouvé ou si le mot de passe ne correspond pas
+        return false;
     }
 
-    // Méthode pour mettre à jour les informations de l'utilisateur
-    public void updateUser(Utilisateur user) throws SQLException {
-        StringBuilder query = new StringBuilder("UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, telephone = ?, adresse = ?");
-        List<Object> parameters = new ArrayList<>();
+    // Nouvelle méthode pour mettre à jour uniquement l'image de profil
+    public void updateProfilePicture(int userId, String profilePicturePath) throws SQLException {
+        String query = "UPDATE utilisateur SET profilepicture = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, profilePicturePath);
+            pstmt.setInt(2, userId);
+            
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("La mise à jour de l'image de profil a échoué.");
+            }
+        }
+    }
 
-        // Add common fields
+    // Méthode modifiée pour la mise à jour des informations de l'utilisateur
+    public void updateUser(Utilisateur user) throws SQLException {
+        StringBuilder query = new StringBuilder("UPDATE utilisateur SET nom = ?, email = ?, telephone = ?, adresse = ?");
+        List<Object> parameters = new ArrayList<>();
+        
         parameters.add(user.getNom());
-        parameters.add(user.getPrenom());
         parameters.add(user.getEmail());
         parameters.add(user.getTelephone());
         parameters.add(user.getAdresse());
 
-        // Debug logs
-        System.out.println("Password: " + user.getMotDePasse());
-        System.out.println("Profile Picture: " + user.getProfilePicture());
-
-        // Handle password update
+        // Ajouter le mot de passe uniquement s'il est fourni
         if (user.getMotDePasse() != null && !user.getMotDePasse().isEmpty()) {
             query.append(", mot_de_passe = ?");
-            parameters.add(BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt()));
-            System.out.println("Updating password...");
+            parameters.add(BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt(12)));
         }
 
-        // Handle profile picture update
-        if (user.getProfilePicture() != null) {
-            query.append(", profilepicture = ?");
-            parameters.add(user.getProfilePicture());
-            System.out.println("Updating profile picture...");
-        }
-
-        // Add the WHERE clause
         query.append(" WHERE id = ?");
         parameters.add(user.getId());
 
-        // Debug log for the final query
-        System.out.println("Final Query: " + query.toString());
-
-        // Execute the query
         try (PreparedStatement pstmt = connection.prepareStatement(query.toString())) {
             for (int i = 0; i < parameters.size(); i++) {
                 pstmt.setObject(i + 1, parameters.get(i));
@@ -386,38 +405,33 @@ public class UserService implements CRUD<Utilisateur> {
         }
     }
     public void updateshopowner(Utilisateur user) throws SQLException {
-        String query;
+        StringBuilder query = new StringBuilder("UPDATE utilisateur SET nom = ?, email = ?, id_categorie = ?, description = ?");
+        List<Object> parameters = new ArrayList<>();
+
+        // Add basic fields
+        parameters.add(user.getNom());
+        parameters.add(user.getEmail());
+        parameters.add(user.getIdCategorie());
+        parameters.add(user.getDescription());
+
+        // Add password only if it's provided
         if (user.getMotDePasse() != null && !user.getMotDePasse().isEmpty()) {
-            // Update password
-            query = "UPDATE utilisateur SET nom = ?, email = ?, mot_de_passe = ?, id_categorie = ?, description = ?, profilepicture = ? WHERE id = ?";
-        } else {
-            // Do not update password
-            query = "UPDATE utilisateur SET nom = ?, email = ?, id_categorie = ?, description = ?, profilepicture = ? WHERE id = ?";
+            query.append(", mot_de_passe = ?");
+            parameters.add(BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt(12)));
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            if (user.getMotDePasse() != null && !user.getMotDePasse().isEmpty()) {
-                // With password
-                pstmt.setString(1, user.getNom());
-                pstmt.setString(2, user.getEmail());
-                pstmt.setString(3, BCrypt.hashpw(user.getMotDePasse(), BCrypt.gensalt())); // Hashed password
-                pstmt.setInt(4, user.getIdCategorie());
-                pstmt.setString(5, user.getDescription());
-                pstmt.setBytes(6, user.getProfilePicture());
-                pstmt.setInt(7, user.getId());
-            } else {
-                // Without password
-                pstmt.setString(1, user.getNom());
-                pstmt.setString(2, user.getEmail());
-                pstmt.setInt(3, user.getIdCategorie());
-                pstmt.setString(4, user.getDescription());
-                pstmt.setBytes(5, user.getProfilePicture());
-                pstmt.setInt(6, user.getId());
+        // Add WHERE clause
+        query.append(" WHERE id = ?");
+        parameters.add(user.getId());
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                pstmt.setObject(i + 1, parameters.get(i));
             }
 
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("La mise à jour de l'utilisateur a échoué, aucune ligne affectée.");
+                throw new SQLException("La mise à jour du profil shop owner a échoué.");
             }
         }
     }
@@ -487,7 +501,7 @@ public class UserService implements CRUD<Utilisateur> {
                 shop.setNom(rs.getString("nom"));
                 shop.setAdresse(rs.getString("adresse"));
                 shop.setTelephone(rs.getString("telephone"));
-                shop.setProfilePicture(rs.getBytes("profilepicture"));
+                shop.setProfilePicture(rs.getString("profilepicture"));
                 shops.add(shop);
             }
         }
@@ -531,7 +545,7 @@ public class UserService implements CRUD<Utilisateur> {
                     shop.setNom(rs.getString("nom"));
                     shop.setDescription(rs.getString("description"));
                     shop.setIdCategorie(rs.getInt("id_categorie"));
-                    shop.setProfilePicture(rs.getBytes("profilepicture"));
+                    shop.setProfilePicture(rs.getString("profilepicture"));
                     // Add other necessary fields
                     shops.add(shop);
                 }
@@ -616,8 +630,36 @@ public class UserService implements CRUD<Utilisateur> {
         return weeklyRegistrations;
     }
 
+    public void updateshopownerBasicInfo(Utilisateur user) throws SQLException {
+        String query = "UPDATE utilisateur SET nom = ?, email = ?, id_categorie = ?, description = ? WHERE id = ?";
+        
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, user.getNom());
+            pstmt.setString(2, user.getEmail());
+            pstmt.setInt(3, user.getIdCategorie());
+            pstmt.setString(4, user.getDescription());
+            pstmt.setInt(5, user.getId());
 
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("La mise à jour du profil shop owner a échoué.");
+            }
+        }
+    }
 
+    public void updateShopOwnerPassword(int userId, String newPassword) throws SQLException {
+        String query = "UPDATE utilisateur SET mot_de_passe = ? WHERE id = ?";
+        
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, BCrypt.hashpw(newPassword, BCrypt.gensalt(12)));
+            pstmt.setInt(2, userId);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("La mise à jour du mot de passe a échoué.");
+            }
+        }
+    }
 
 }
 

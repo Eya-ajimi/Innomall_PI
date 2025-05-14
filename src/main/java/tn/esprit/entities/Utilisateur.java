@@ -8,7 +8,7 @@ public class Utilisateur {
     private String nom;
     private String prenom;
     private String email;
-    private static String motDePasse;
+    private String motDePasse;
     private int points;
     private int nombreDeGain;
     private String adresse;
@@ -19,7 +19,7 @@ public class Utilisateur {
     private int idCategorie; // Nouvel attribut pour l'ID de la catégorie
     private String nomCategorie; // Nouvel attribut pour le nom de la catégorie
     private String description;
-    private byte[] profilePicture;
+    private String profilePicture;  // Changed to String to be consistent
     private double balance;
     private int numeroTicket;
     // Constructeur par défaut
@@ -34,7 +34,7 @@ public class Utilisateur {
         this.numeroTicket = numeroTicket;
     }
     // Constructeur avec tous les attributs
-    public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, int points, int nombreDeGain, String adresse, String telephone, LocalDateTime dateInscription, String statut, Role role, int idCategorie, String nomCategorie, String description, byte[] profilePicture) {
+    public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, int points, int nombreDeGain, String adresse, String telephone, LocalDateTime dateInscription, String statut, Role role, int idCategorie, String nomCategorie, String description, String profilePicture) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -102,7 +102,7 @@ public class Utilisateur {
         this.email = email;
     }
 
-    public static String getMotDePasse() {
+    public String getMotDePasse() {
         return motDePasse;
     }
 
@@ -165,11 +165,12 @@ public class Utilisateur {
     public void setRole(Role role) {
         this.role = role;
     }
-    public  byte[] getProfilePicture() {
+
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(byte[] profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 
@@ -189,6 +190,7 @@ public class Utilisateur {
     public void setNomCategorie(String nomCategorie) {
         this.nomCategorie = nomCategorie;
     }
+
     public String getDescription() {
         return description;
     }

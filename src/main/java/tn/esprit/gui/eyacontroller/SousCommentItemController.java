@@ -66,23 +66,25 @@ public class SousCommentItemController {
     }
 
     private void loadProfileImage(Utilisateur user) {
-        if (user.getProfilePicture() != null) {
-            // Charger l'image à partir du tableau de bytes
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
-            Image profile = new Image(inputStream);
-            profileImage.setImage(profile);
+        try {
+            String profilePicturePath = user.getProfilePicture();
+            if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+                // Charger l'image directement depuis le chemin de ressource
+                Image image = new Image(getClass().getResourceAsStream(profilePicturePath));
+                profileImage.setImage(image);
         } else {
-            try {
-                // Load the default image from the resources
-                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
-                if (inputStream == null) {
-                    throw new FileNotFoundException("Default image not found at /assets/7.png");
-                }
-                Image defaultImage = new Image(inputStream);
+                // Charger l'image par défaut
+                Image defaultImage = new Image(getClass().getResourceAsStream("/assets/7.png"));
                 profileImage.setImage(defaultImage);
-            } catch (Exception e) {
-                System.err.println("Error loading default image: " + e.getMessage());
-                // Optionally, set a placeholder image or leave the ImageView empty
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image : " + e.getMessage());
+            try {
+                // En cas d'erreur, charger l'image par défaut
+                Image defaultImage = new Image(getClass().getResourceAsStream("/assets/7.png"));
+                profileImage.setImage(defaultImage);
+            } catch (Exception ex) {
+                System.err.println("Erreur lors du chargement de l'image par défaut : " + ex.getMessage());
             }
         }
     }

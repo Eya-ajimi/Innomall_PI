@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<VBox fx:id="root" spacing="20" styleClass="main-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.sofienecontroller.ParkingLotController">
+<VBox fx:id="root" spacing="20" styleClass="main-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.gui.sofienecontroller.ParkingLotController" >
     <padding>
         <Insets bottom="30" left="30" right="30" top="30" />
     </padding>
@@ -86,7 +86,9 @@
         <!-- Right side: Action buttons -->
         <HBox alignment="CENTER_RIGHT" spacing="15">
             <Button onAction="#handleCancelReservationButtonAction" styleClass="cancel-reservation-button" text="Cancel Reservation" />
-            <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="View Reserved Spots" />
+            <Button onAction="#handleViewReservedSpotsButtonAction" styleClass="view-reserved-button" text="My Reservations" />
+            <Button text="Find My Car" onAction="#handleFindMyCarAction"
+                    styleClass="find-car-button"/>
         </HBox>
     </HBox>
 
@@ -111,15 +113,17 @@
                     <Label styleClass="legend-label" text="Available" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
+                    <Rectangle height="20" styleClass="reserved-spot" width="20" />
+                    <Label styleClass="legend-label" text="Reserved" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="legend-item">
                     <Rectangle height="20" styleClass="occupied-spot" width="20" />
                     <Label styleClass="legend-label" text="Occupied" />
                 </HBox>
             </HBox>
 
             <!-- Top Row for Parking Spots -->
-            <VBox spacing="10">
-                <HBox fx:id="topRow" alignment="CENTER" styleClass="parking-row" />
-            </VBox>
+            <HBox fx:id="topRow" alignment="CENTER" spacing="20" styleClass="parking-row"/>
 
             <!-- Enhanced Driving Lane -->
             <StackPane fx:id="passageContainer" styleClass="passage-container">
@@ -128,9 +132,7 @@
             </StackPane>
 
             <!-- Bottom Row for Parking Spots -->
-            <VBox spacing="10">
-                <HBox fx:id="bottomRow" alignment="CENTER" styleClass="parking-row" />
-            </VBox>
+            <HBox fx:id="bottomRow" alignment="CENTER" spacing="20" styleClass="parking-row"/>
         </VBox>
     </ScrollPane>
 

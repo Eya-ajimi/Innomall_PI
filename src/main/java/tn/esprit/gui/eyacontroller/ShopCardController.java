@@ -23,16 +23,13 @@ import tn.esprit.services.azizservice.UserService;
 import tn.esprit.services.eyaservice.FeedbackService;
 import tn.esprit.utils.Session;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
 public class ShopCardController {
     @FXML private Label shopName;
-    @FXML private Label shopCategory; // Changed from shopAddress to shopCategory
+    @FXML private Label shopCategory;
     @FXML private Label description;
     @FXML private Button feedbackButton;
     @FXML private Button deleteFeedbackButton;
@@ -40,24 +37,21 @@ public class ShopCardController {
     @FXML private SVGPath star1, star2, star3, star4, star5;
     @FXML private Pane shopCardPane;
     @FXML public Button viewProductButton;
-    @FXML private ImageView shopImage; // Add ImageView for shop image
+    @FXML private ImageView shopImage;
 
-    private int selectedRating = 0; // Store the selected rating
-    private int shopId; // Store the shop ID
-    private int utilisateurId; // Store the current user ID
-    private Feedback existingFeedback; // Store existing feedback (if any)
-    private BooleanProperty hasFeedback = new SimpleBooleanProperty(false); // Track if feedback exists
+    private int selectedRating = 0;
+    private int shopId;
+    private int utilisateurId;
+    private Feedback existingFeedback;
+    private BooleanProperty hasFeedback = new SimpleBooleanProperty(false);
     private FeedbackService feedbackService = new FeedbackService();
-    private UserService userService = new UserService(); // Add UserService
+    private UserService userService = new UserService();
 
-    @FXML private Label horaireLabel; // Add this label for displaying the schedule
+    @FXML private Label horaireLabel;
     @FXML private VBox scheduleContainer;
-
-
 
     @FXML
     public void initialize() {
-        // Bind the visibility of the delete button to the hasFeedback property
         deleteFeedbackButton.visibleProperty().bind(hasFeedback);
         if (horaireLabel == null) {
             System.err.println("horaireLabel is null in initialize()!");
@@ -67,7 +61,6 @@ public class ShopCardController {
     }
 
     public void setData(Utilisateur shop) {
-        // Get the current user from the session
         Session session = Session.getInstance();
         Utilisateur currentUser = session.getCurrentUser();
 
@@ -76,58 +69,36 @@ public class ShopCardController {
             return;
         }
 
-        this.shopId = shop.getId(); // Set the shop ID
-        this.utilisateurId = currentUser.getId(); // Set the current user ID from the session
+        this.shopId = shop.getId();
+        this.utilisateurId = currentUser.getId();
 
         shopName.setText(shop.getNom());
         description.setText(shop.getDescription());
-        loadProfileImage( currentUser);
 
         try {
             String categoryName = userService.getNomCategorieById(shop.getIdCategorie());
-            shopCategory.setText(categoryName); // Set the category name
+            shopCategory.setText(categoryName);
         } catch (SQLException e) {
             e.printStackTrace();
-            shopCategory.setText("Category not found"); // Fallback in case of error
+            shopCategory.setText("Category not found");
         }
 
-        shopName.setText(shop.getNom());
-        description.setText(shop.getDescription());
+        // Load shop image
+        loadProfileImage(shop);
 
-
-
-        // Check if the user has already submitted feedback for this shop
         try {
             existingFeedback = feedbackService.getFeedbackByUserAndShop(utilisateurId, shopId);
             if (existingFeedback != null) {
-                // If feedback exists, set the selected rating and update the button text
                 selectedRating = existingFeedback.getRating();
                 feedbackButton.setText("Modify Feedback");
-                hasFeedback.set(true); // Set hasFeedback to true
+                hasFeedback.set(true);
             } else {
-                hasFeedback.set(false); // Set hasFeedback to false
+                hasFeedback.set(false);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // Set the shop image
-        if (shop.getProfilePicture() != null && shop.getProfilePicture().length > 0) {
-            try {
-                Image image = new Image(new ByteArrayInputStream(shop.getProfilePicture()));
-                shopImage.setImage(image);
-            } catch (Exception e) {
-                // Fallback to a default image if there's an error loading the profile picture
-                shopImage.setImage(new Image(getClass().getResourceAsStream("/assets/logo.png")));
-                System.err.println("Error loading shop image: " + e.getMessage());
-            }
-        } else {
-            // Set a default image if no profile picture is available
-            shopImage.setImage(new Image(getClass().getResourceAsStream("/assets/logo.png")));
-            System.out.println("No profile picture found for shop: " + shop.getNom());
-        }
-
-        // Fetch and display the schedule
         try {
             List<Schedule> schedules = userService.getScheduleByShopId(shop.getId());
             displaySchedule(schedules);
@@ -136,30 +107,31 @@ public class ShopCardController {
             horaireLabel.setText("No schedule available");
         }
 
-        // Initialize rating stars
         initializeRatingStars();
-        updateRatingStars(); // Highlight stars based on existing feedback
+        updateRatingStars();
     }
-    private void loadProfileImage(Utilisateur user) {
-        if (user.getProfilePicture() != null) {
-            // Charger l'image à partir du tableau de bytes
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
-            Image profileImage = new Image(inputStream);
-            shopImage.setImage(profileImage);
-        } else {
-            try {
 
-                // Load the default image from the resources
-                InputStream inputStream = getClass().getResourceAsStream("/assets/logo.png");
-                if (inputStream == null) {
-                    throw new FileNotFoundException("Default image not found at /assets/7.png");
-                }
-                Image defaultImage = new Image(inputStream);
+    private void loadProfileImage(Utilisateur user) {
+        try {
+            String profilePicturePath = user.getProfilePicture();
+            if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+                Image image = new Image(getClass().getResourceAsStream(profilePicturePath));
+                shopImage.setImage(image);
+        } else {
+                loadDefaultImage();
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image: " + e.getMessage());
+            loadDefaultImage();
+        }
+    }
+
+    private void loadDefaultImage() {
+        try {
+            Image defaultImage = new Image(getClass().getResourceAsStream("/assets/logo.png"));
                 shopImage.setImage(defaultImage);
             } catch (Exception e) {
-                System.err.println("Error loading default image: " + e.getMessage());
-                // Optionally, set a placeholder image or leave the ImageView empty
-            }
+            System.err.println("Erreur lors du chargement de l'image par défaut: " + e.getMessage());
         }
     }
 
@@ -192,7 +164,6 @@ public class ShopCardController {
             }
         }
     }
-
 
     @FXML
     public void navigateToProductsView() throws IOException {
@@ -299,7 +270,4 @@ public class ShopCardController {
         if (selectedRating >= 4) star4.setFill(javafx.scene.paint.Color.GOLD);
         if (selectedRating >= 5) star5.setFill(javafx.scene.paint.Color.GOLD);
     }
-
-
-
 }

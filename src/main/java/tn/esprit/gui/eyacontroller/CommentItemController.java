@@ -46,9 +46,7 @@ public class CommentItemController {
     private final SousCommentaireService sousCommentaireService = new SousCommentaireService();
     private final CommentaireService commentaireService = new CommentaireService();
     private final UserService utilisateurService = new UserService();
-    private Commentaire commentaire;
-
-    public void setCommentData(Commentaire commentaire) throws SQLException {
+    public void setCommentData(Commentaire commentaire) {
         this.commentaire = commentaire;
 
         // Get the current user from the session
@@ -56,55 +54,79 @@ public class CommentItemController {
         Utilisateur currentUser = session.getCurrentUser();
 
         // Fetch the comment owner's name using their ID
+        Utilisateur user = null;
         try {
-            Utilisateur user = utilisateurService.getOneById(commentaire.getUtilisateurId());
-            commentUser.setText(user.getNom());
-            loadProfileImage(user);
-            // Display the comment owner's name
+            user = utilisateurService.getOneById(commentaire.getUtilisateurId());
         } catch (SQLException e) {
             e.printStackTrace();
-            commentUser.setText("Utilisateur inconnu"); // Fallback in case of an error
+        }
+
+        if (user != null) {
+            commentUser.setText(user.getNom());
+            loadProfileImage(user);
+        } else {
+            commentUser.setText("Utilisateur inconnu");
+            // optionally clear or set a default avatar
+            profileImage.setImage(null);
         }
 
         commentContent.setText(commentaire.getContenu());
         commentTime.setText(commentaire.getDateCreation());
 
-        // Check if the current user is the owner of the comment
-        if (currentUser != null && currentUser.getId() == commentaire.getUtilisateurId()) {
-            // Enable edit/delete button if the current user is the owner
-            editDeleteButton.setVisible(true);
-            setupEditDeleteMenu();  // Set up the edit/delete menu
-        } else {
-            // Hide the edit/delete button if the current user is not the owner
-            editDeleteButton.setVisible(false);
+        // Show edit/delete only if session user owns this comment
+        boolean isOwner = currentUser != null
+                && currentUser.getId() == commentaire.getUtilisateurId();
+        editDeleteButton.setVisible(isOwner);
+        if (isOwner) {
+            setupEditDeleteMenu();
         }
 
-        // Chargement des sous-commentaires
-        loadSousCommentaires();
+        // Load replies
+        try {
+            loadSousCommentaires();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        // Add event handler for the "Envoyer" button
-        btnEnvoyer.setOnAction(event -> addSousCommentaire());
+        // Reply action
+        btnEnvoyer.setOnAction(evt -> addSousCommentaire());
     }
 
+
+    private Commentaire commentaire;
+
     private void loadProfileImage(Utilisateur user) {
-        if (user.getProfilePicture() != null) {
-            // Charger l'image à partir du tableau de bytes
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
-            Image profile = new Image(inputStream);
-            profileImage.setImage(profile);
+        try {
+            String profilePicturePath = user.getProfilePicture();
+            if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+                // Charger l'image depuis le chemin de ressource
+                InputStream inputStream = getClass().getResourceAsStream(profilePicturePath);
+                if (inputStream != null) {
+                    Image image = new Image(inputStream);
+                    profileImage.setImage(image);
         } else {
-            try {
-                // Load the default image from the resources
-                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
-                if (inputStream == null) {
-                    throw new FileNotFoundException("Default image not found at /assets/7.png");
+                    loadDefaultImage();
                 }
+            } else {
+                loadDefaultImage();
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image de profil : " + e.getMessage());
+            loadDefaultImage();
+        }
+    }
+
+    private void loadDefaultImage() {
+        try {
+                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
+            if (inputStream != null) {
                 Image defaultImage = new Image(inputStream);
                 profileImage.setImage(defaultImage);
-            } catch (Exception e) {
-                System.err.println("Error loading default image: " + e.getMessage());
-                // Optionally, set a placeholder image or leave the ImageView empty
+            } else {
+                System.err.println("Image par défaut non trouvée : /assets/7.png");
             }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image par défaut : " + e.getMessage());
         }
     }
 

@@ -98,34 +98,38 @@ public class PostItemController {
     }
 
     private void loadProfileImage(Utilisateur user) {
-        if (user.getProfilePicture() != null) {
-            // Charger l'image à partir du tableau de bytes
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(user.getProfilePicture());
-            Image profileImage = new Image(inputStream);
-            postUserProfileImage.setImage(profileImage);
+        try {
+            String profilePicturePath = user.getProfilePicture();
+            if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+                // Charger l'image depuis le chemin de ressource
+                InputStream inputStream = getClass().getResourceAsStream(profilePicturePath);
+                if (inputStream != null) {
+                    Image image = new Image(inputStream);
+                    postUserProfileImage.setImage(image);
         } else {
-            try {
-                // Load the default image from the resources
-                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
-                if (inputStream == null) {
-                    throw new FileNotFoundException("Default image not found at /assets/7.png");
+                    loadDefaultImage();
                 }
-                Image defaultImage = new Image(inputStream);
-                postUserProfileImage.setImage(defaultImage);
-            } catch (Exception e) {
-                System.err.println("Error loading default image: " + e.getMessage());
-                // Optionally, set a placeholder image or leave the ImageView empty
+            } else {
+                loadDefaultImage();
             }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image de profil : " + e.getMessage());
+            loadDefaultImage();
         }
     }
 
-
-    private Image convertBytesToImage(byte[] imageBytes) {
-        if (imageBytes == null || imageBytes.length == 0) {
-            // Return a default image if no image is found
-            return new Image(getClass().getResourceAsStream("/assets/user3.png"));
+    private void loadDefaultImage() {
+        try {
+                InputStream inputStream = getClass().getResourceAsStream("/assets/7.png");
+            if (inputStream != null) {
+                Image defaultImage = new Image(inputStream);
+                postUserProfileImage.setImage(defaultImage);
+            } else {
+                System.err.println("Image par défaut non trouvée : /assets/7.png");
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image par défaut : " + e.getMessage());
         }
-        return new Image(new ByteArrayInputStream(imageBytes));
     }
 
     @FXML

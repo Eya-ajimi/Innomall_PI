@@ -7,12 +7,11 @@ import java.sql.SQLException;
 public class DataBase {
     private static DataBase instance;
     private Connection cnx;
-     private final String USER = "root"; // Nom d'utilisateur MySQL
-    private final String PWD = ""; // Mot de passe MySQL
-    private final String URL = "jdbc:mysql://localhost:3306/webinnomall_mariav3"; // URL de la base de données
+    private final String USER = "root";
+    private final String PWD = "";
+    private final String URL = "jdbc:mysql://localhost:3306/webjava?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
 
     private DataBase() {
-        // Initialize the connection when the instance is created
         initializeConnection();
     }
 
@@ -25,27 +24,38 @@ public class DataBase {
 
     public Connection getCnx() {
         try {
-            // Check if the connection is closed or null
             if (cnx == null || cnx.isClosed()) {
-                initializeConnection(); // Reinitialize the connection
+                initializeConnection();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("Failed to check connection status: " + e.getMessage());
+            System.err.println("Erreur lors de la vérification de la connexion : " + e.getMessage());
+            throw new RuntimeException("Erreur de connexion à la base de données", e);
         }
         return cnx;
     }
 
     private void initializeConnection() {
         try {
-            // Explicitly register the driver
+            // Vérifier si le driver est disponible
             Class.forName("com.mysql.cj.jdbc.Driver");
-            // Establish the connection
+            
+            // Tentative de connexion avec timeout de 5 secondes
+            DriverManager.setLoginTimeout(5);
             cnx = DriverManager.getConnection(URL, USER, PWD);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("Failed to connect to the database: " + e.getMessage());
+            
+            System.out.println("Connexion à la base de données établie avec succès!");
+        } catch (ClassNotFoundException e) {
+            String message = "Driver MySQL introuvable : " + e.getMessage();
+            System.err.println(message);
+            throw new RuntimeException(message, e);
+        } catch (SQLException e) {
+            String message = "Impossible de se connecter à la base de données : " + e.getMessage() +
+                           "\nVérifiez que :" +
+                           "\n1. Le serveur MySQL est démarré" +
+                           "\n2. Les identifiants sont corrects" +
+                           "\n3. La base de données 'webjava' existe";
+            System.err.println(message);
+            throw new RuntimeException(message, e);
         }
     }
-
 }
