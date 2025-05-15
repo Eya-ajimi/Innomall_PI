@@ -46,9 +46,12 @@
 ---
 
 ### 🅿️ Réservation de Parking
-- Réservation via interface graphique
-- Confirmation via **SMS Twilio**
-- Simulation de capteurs (**IoT**)
+- Réservation intuitive via interface graphique
+- Confirmations instantanées par Email et SMS (Twilio)
+- Monitoring temps réel avec capteurs IoT
+- Services additionnels : lavage auto (3 options)
+- Fonction "Find My Car" pour localisation
+- Gestion automatique des expirations
 
 ---
 
